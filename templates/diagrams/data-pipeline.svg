@@ -1,0 +1,77 @@
+<svg viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Data pipeline diagram" id="pipeline-diagram">
+  <title>Data Pipeline</title>
+  <style>
+    .pipe-node { transition: filter 0.2s ease; cursor: pointer; }
+    .pipe-node:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .pipe-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: #fff; }
+    .pipe-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2.5; fill: none; }
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -20; }
+    }
+    .pipe-connector-animated {
+      stroke-dasharray: 10, 5;
+      animation: dash-flow 0.8s linear infinite;
+    }
+  </style>
+
+  <defs>
+    <marker id="pipe-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="pipe-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Node 1 -->
+  <g id="node-1-group">
+    <rect class="pipe-node" x="30" y="110" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#pipe-shadow)" />
+    <text id="node-1-label" x="110" y="146" text-anchor="middle" class="pipe-label">Ingest</text>
+  </g>
+
+  <!-- Arrow 1->2 -->
+  <line x1="190" y1="140" x2="240" y2="140" class="pipe-connector pipe-connector-animated" marker-end="url(#pipe-arrow)" />
+
+  <!-- Node 2 -->
+  <g id="node-2-group">
+    <rect class="pipe-node" x="250" y="110" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#pipe-shadow)" />
+    <text id="node-2-label" x="330" y="146" text-anchor="middle" class="pipe-label">Transform</text>
+  </g>
+
+  <!-- Arrow 2->3 -->
+  <line x1="410" y1="140" x2="460" y2="140" class="pipe-connector pipe-connector-animated" marker-end="url(#pipe-arrow)" />
+
+  <!-- Node 3 -->
+  <g id="node-3-group">
+    <rect class="pipe-node" x="470" y="110" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#pipe-shadow)" />
+    <text id="node-3-label" x="550" y="146" text-anchor="middle" class="pipe-label">Validate</text>
+  </g>
+
+  <!-- Arrow 3->4 -->
+  <line x1="630" y1="140" x2="680" y2="140" class="pipe-connector pipe-connector-animated" marker-end="url(#pipe-arrow)" />
+
+  <!-- Node 4 -->
+  <g id="node-4-group">
+    <rect class="pipe-node" x="690" y="110" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#pipe-shadow)" />
+    <text id="node-4-label" x="770" y="146" text-anchor="middle" class="pipe-label">Store</text>
+  </g>
+
+  <!-- Node 5 (hidden by default) -->
+  <g id="node-5-group" style="display:none;">
+    <rect class="pipe-node" x="30" y="210" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-red, #DC5A5A)" filter="url(#pipe-shadow)" />
+    <text id="node-5-label" x="110" y="246" text-anchor="middle" class="pipe-label">Node 5</text>
+  </g>
+
+  <!-- Node 6 (hidden by default) -->
+  <g id="node-6-group" style="display:none;">
+    <rect class="pipe-node" x="250" y="210" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#pipe-shadow)" />
+    <text id="node-6-label" x="330" y="246" text-anchor="middle" class="pipe-label">Node 6</text>
+  </g>
+</svg>

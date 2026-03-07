@@ -1,0 +1,99 @@
+<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Layered architecture diagram" id="layered-arch-diagram">
+  <title>Layered Architecture</title>
+  <style>
+    .layer-band { opacity: 0.12; }
+    .layer-item { transition: filter 0.2s ease; cursor: pointer; }
+    .layer-item:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .layer-name-text {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px; font-weight: 700; fill: var(--diagram-text, #ccc);
+      writing-mode: vertical-rl; text-orientation: mixed;
+    }
+    .item-label {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px; font-weight: 600; fill: #fff;
+    }
+    .la-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="la-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="la-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Layer 1: Presentation -->
+  <g id="layer-1-group">
+    <!-- Background band -->
+    <rect class="layer-band" x="90" y="30" width="690" height="120" rx="8"
+          fill="var(--diagram-primary, #4A90D9)" />
+    <!-- Layer name (left side) -->
+    <text id="layer-1-name" x="60" y="95" text-anchor="middle"
+          class="layer-name-text" style="writing-mode:tb; text-orientation:mixed;">Presentation</text>
+    <!-- Items -->
+    <rect class="layer-item" x="150" y="55" width="200" height="55" rx="8" ry="8"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#la-shadow)" />
+    <text id="layer-1-item-1" x="250" y="88" text-anchor="middle" class="item-label">React SPA</text>
+
+    <rect class="layer-item" x="410" y="55" width="200" height="55" rx="8" ry="8"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#la-shadow)" />
+    <text id="layer-1-item-2" x="510" y="88" text-anchor="middle" class="item-label">Admin Dashboard</text>
+
+    <rect class="layer-item" x="670" y="55" height="55" rx="8" ry="8"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#la-shadow)" style="display:none;" />
+    <text id="layer-1-item-3" x="670" y="88" text-anchor="middle" class="item-label" style="display:none;"></text>
+  </g>
+
+  <!-- Vertical arrows: Layer 1 -> Layer 2 -->
+  <line x1="250" y1="110" x2="250" y2="195" class="la-connector" marker-end="url(#la-arrow)" />
+  <line x1="510" y1="110" x2="510" y2="195" class="la-connector" marker-end="url(#la-arrow)" />
+
+  <!-- Layer 2: Business Logic -->
+  <g id="layer-2-group">
+    <rect class="layer-band" x="90" y="180" width="690" height="120" rx="8"
+          fill="var(--diagram-secondary, #50C878)" />
+    <text id="layer-2-name" x="60" y="245" text-anchor="middle"
+          class="layer-name-text" style="writing-mode:tb; text-orientation:mixed;">Business Logic</text>
+
+    <rect class="layer-item" x="120" y="205" width="170" height="55" rx="8" ry="8"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#la-shadow)" />
+    <text id="layer-2-item-1" x="205" y="238" text-anchor="middle" class="item-label">Auth Service</text>
+
+    <rect class="layer-item" x="320" y="205" width="170" height="55" rx="8" ry="8"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#la-shadow)" />
+    <text id="layer-2-item-2" x="405" y="238" text-anchor="middle" class="item-label">Order Engine</text>
+
+    <rect class="layer-item" x="520" y="205" width="170" height="55" rx="8" ry="8"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#la-shadow)" />
+    <text id="layer-2-item-3" x="605" y="238" text-anchor="middle" class="item-label">Analytics</text>
+  </g>
+
+  <!-- Vertical arrows: Layer 2 -> Layer 3 -->
+  <line x1="205" y1="260" x2="205" y2="345" class="la-connector" marker-end="url(#la-arrow)" />
+  <line x1="405" y1="260" x2="405" y2="345" class="la-connector" marker-end="url(#la-arrow)" />
+  <line x1="605" y1="260" x2="605" y2="345" class="la-connector" marker-end="url(#la-arrow)" />
+
+  <!-- Layer 3: Data Layer -->
+  <g id="layer-3-group">
+    <rect class="layer-band" x="90" y="330" width="690" height="120" rx="8"
+          fill="var(--diagram-amber, #F5A623)" />
+    <text id="layer-3-name" x="60" y="395" text-anchor="middle"
+          class="layer-name-text" style="writing-mode:tb; text-orientation:mixed;">Data Layer</text>
+
+    <rect class="layer-item" x="120" y="355" width="170" height="55" rx="8" ry="8"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#la-shadow)" />
+    <text id="layer-3-item-1" x="205" y="388" text-anchor="middle" class="item-label">PostgreSQL</text>
+
+    <rect class="layer-item" x="320" y="355" width="170" height="55" rx="8" ry="8"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#la-shadow)" />
+    <text id="layer-3-item-2" x="405" y="388" text-anchor="middle" class="item-label">Redis Cache</text>
+
+    <rect class="layer-item" x="520" y="355" width="170" height="55" rx="8" ry="8"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#la-shadow)" />
+    <text id="layer-3-item-3" x="605" y="388" text-anchor="middle" class="item-label">S3 Storage</text>
+  </g>
+</svg>

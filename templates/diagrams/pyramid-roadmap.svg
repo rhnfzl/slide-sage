@@ -1,0 +1,65 @@
+<svg viewBox="0 0 700 450" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stacked pyramid maturity stages diagram" id="pyramid-roadmap-diagram">
+  <title>Pyramid Roadmap</title>
+  <style>
+    .pr-box { transition: filter 0.2s ease; cursor: pointer; }
+    .pr-box:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .pr-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: #fff; }
+    .pr-status { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
+    .pr-axis { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: var(--diagram-text, #e0e0e0); }
+    .pr-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="pr-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="pr-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Maturity axis (left side) -->
+  <line x1="12" y1="40" x2="12" y2="410" class="pr-connector" stroke-dasharray="6,4" marker-end="url(#pr-arrow)" />
+  <text id="axis-label" x="12" y="430" text-anchor="middle" class="pr-axis">Maturity</text>
+
+  <!-- Level 5 (top, narrowest — most advanced) -->
+  <g id="level-5-group">
+    <rect class="pr-box" x="240" y="30" width="220" height="60" rx="10" ry="10"
+          fill="var(--diagram-red, #DC5A5A)" filter="url(#pr-shadow)" />
+    <text id="level-5-label" x="350" y="66" text-anchor="middle" class="pr-label">Level 5</text>
+    <text id="level-5-status" x="470" y="66" text-anchor="start" class="pr-status">Optimizing</text>
+  </g>
+
+  <!-- Level 4 -->
+  <g id="level-4-group">
+    <rect class="pr-box" x="180" y="110" width="340" height="60" rx="10" ry="10"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#pr-shadow)" />
+    <text id="level-4-label" x="350" y="146" text-anchor="middle" class="pr-label">Level 4</text>
+    <text id="level-4-status" x="530" y="146" text-anchor="start" class="pr-status">Managed</text>
+  </g>
+
+  <!-- Level 3 -->
+  <g id="level-3-group">
+    <rect class="pr-box" x="120" y="190" width="460" height="60" rx="10" ry="10"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#pr-shadow)" />
+    <text id="level-3-label" x="350" y="226" text-anchor="middle" class="pr-label">Level 3</text>
+    <text id="level-3-status" x="590" y="226" text-anchor="start" class="pr-status">Defined</text>
+  </g>
+
+  <!-- Level 2 -->
+  <g id="level-2-group">
+    <rect class="pr-box" x="60" y="270" width="580" height="60" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#pr-shadow)" />
+    <text id="level-2-label" x="350" y="306" text-anchor="middle" class="pr-label">Level 2</text>
+    <text id="level-2-status" x="650" y="306" text-anchor="start" class="pr-status">Repeatable</text>
+  </g>
+
+  <!-- Level 1 (bottom, widest) -->
+  <g id="level-1-group">
+    <rect class="pr-box" x="20" y="350" width="660" height="60" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#pr-shadow)" />
+    <text id="level-1-label" x="350" y="386" text-anchor="middle" class="pr-label">Level 1</text>
+    <text id="level-1-status" x="690" y="386" text-anchor="start" class="pr-status">Initial</text>
+  </g>
+</svg>

@@ -1,0 +1,228 @@
+<!--
+  Slide-Sage Template: Split View Comparison
+
+  Two-column comparison slide with optional VS divider.
+
+  Usage:
+    - Replace heading, sub-headings, and list items with your content
+    - Toggle VS divider: add/remove the .vs-divider element
+    - Adjust column ratio: change flex values on .compare-col
+    - Color coding uses --color-accent (column A) and --color-accent-secondary (column B)
+-->
+
+<div class="slide">
+  <div class="slide-content">
+
+    <!-- Heading (full width) -->
+    <h2 class="compare-heading">Option A vs Option B</h2>
+
+    <!-- Comparison Container -->
+    <div class="compare-container">
+
+      <!-- Column A -->
+      <div class="compare-col col-a">
+        <h3 class="compare-sub-heading">Option A</h3>
+        <ul class="compare-list">
+          <li>Fast cold starts</li>
+          <li>Lower memory footprint</li>
+          <li>Static type checking</li>
+          <li>Native compilation</li>
+        </ul>
+      </div>
+
+      <!-- VS Divider (optional - remove this element to hide) -->
+      <div class="vs-divider">
+        <span>VS</span>
+      </div>
+
+      <!-- Column B -->
+      <div class="compare-col col-b">
+        <h3 class="compare-sub-heading">Option B</h3>
+        <ul class="compare-list">
+          <li>Rich ecosystem</li>
+          <li>Faster development cycle</li>
+          <li>Dynamic typing flexibility</li>
+          <li>Extensive library support</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* === Split View Comparison Styles === */
+
+  .compare-heading {
+    text-align: center;
+    margin-bottom: clamp(1rem, 2.5vw, 2rem);
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+  }
+
+  .compare-container {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .compare-col {
+    flex: 1 1 50%;
+    padding: clamp(0.8rem, 2vw, 1.5rem);
+    border-radius: var(--radius, 12px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  /* Column A: accent color */
+  .col-a {
+    background: color-mix(in srgb, var(--color-accent, #61afef) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent, #61afef) 25%, transparent);
+  }
+
+  .col-a .compare-sub-heading {
+    color: var(--color-accent, #61afef);
+  }
+
+  .col-a .compare-list li::before {
+    color: var(--color-accent, #61afef);
+  }
+
+  /* Column B: secondary accent color */
+  .col-b {
+    background: color-mix(in srgb, var(--color-accent-secondary, #c678dd) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent-secondary, #c678dd) 25%, transparent);
+  }
+
+  .col-b .compare-sub-heading {
+    color: var(--color-accent-secondary, #c678dd);
+  }
+
+  .col-b .compare-list li::before {
+    color: var(--color-accent-secondary, #c678dd);
+  }
+
+  /* Sub-heading */
+  .compare-sub-heading {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    margin: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Bullet list */
+  .compare-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .compare-list li {
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    line-height: 1.5;
+    padding-left: 1.4em;
+    position: relative;
+  }
+
+  .compare-list li::before {
+    content: "\2022"; /* bullet */
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 1.3;
+  }
+
+  /* VS Divider */
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: clamp(2.5rem, 4vw, 3.5rem);
+    position: relative;
+  }
+
+  .vs-divider::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 50%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(-50%);
+  }
+
+  .vs-divider span {
+    background: var(--color-bg, #0f0f1a);
+    color: rgba(255, 255, 255, 0.35);
+    font-size: clamp(0.65rem, 1vw, 0.85rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.4em 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === Responsive: stack vertically on narrow viewports === */
+  @media (max-width: 600px) {
+    .compare-container {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .compare-col {
+      flex: none;
+      width: 100%;
+    }
+
+    .vs-divider {
+      width: 100%;
+      height: 2rem;
+      flex-direction: row;
+    }
+
+    .vs-divider::before {
+      top: 50%;
+      bottom: auto;
+      left: 10%;
+      right: 10%;
+      width: auto;
+      height: 1px;
+      transform: translateY(-50%);
+    }
+  }
+
+  /* === Light slide variant === */
+  [data-theme="light"] .col-a {
+    background: color-mix(in srgb, var(--color-accent, #4078f2) 8%, transparent);
+    border-color: color-mix(in srgb, var(--color-accent, #4078f2) 20%, transparent);
+  }
+
+  [data-theme="light"] .col-b {
+    background: color-mix(in srgb, var(--color-accent-secondary, #a626a4) 8%, transparent);
+    border-color: color-mix(in srgb, var(--color-accent-secondary, #a626a4) 20%, transparent);
+  }
+
+  [data-theme="light"] .compare-sub-heading {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="light"] .vs-divider::before {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="light"] .vs-divider span {
+    color: rgba(0, 0, 0, 0.3);
+    background: var(--color-bg, #ffffff);
+  }
+</style>

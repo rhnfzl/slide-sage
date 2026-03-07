@@ -1,0 +1,70 @@
+<svg viewBox="0 0 700 400" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Client-server architecture diagram" id="client-server-diagram">
+  <title>Client-Server Architecture</title>
+  <style>
+    .cs-box { transition: filter 0.2s ease; cursor: pointer; }
+    .cs-box:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .cs-title { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; fill: #fff; }
+    .cs-sublabel { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
+    .cs-arrow-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #ccc); }
+    .cs-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="cs-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <marker id="cs-arrow-rev" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="cs-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Client 1 -->
+  <g id="client-1-group">
+    <rect class="cs-box" x="40" y="80" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#cs-shadow)" />
+    <text id="client-1-label" x="120" y="116" text-anchor="middle" class="cs-title">Web App</text>
+  </g>
+
+  <!-- Client 2 -->
+  <g id="client-2-group">
+    <rect class="cs-box" x="40" y="200" width="160" height="60" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#cs-shadow)" />
+    <text id="client-2-label" x="120" y="236" text-anchor="middle" class="cs-title">Mobile App</text>
+  </g>
+
+  <!-- Request arrows (client -> server) -->
+  <line x1="200" y1="100" x2="410" y2="140" class="cs-connector" marker-end="url(#cs-arrow)" />
+  <line x1="200" y1="240" x2="410" y2="180" class="cs-connector" marker-end="url(#cs-arrow)" />
+
+  <!-- Request label -->
+  <text id="request-label" x="310" y="108" text-anchor="middle" class="cs-arrow-label">REST API</text>
+
+  <!-- Response arrows (server -> client), offset vertically -->
+  <line x1="410" y1="155" x2="200" y2="118" class="cs-connector" stroke-dasharray="6,4" marker-end="url(#cs-arrow-rev)" />
+  <line x1="410" y1="195" x2="200" y2="252" class="cs-connector" stroke-dasharray="6,4" marker-end="url(#cs-arrow-rev)" />
+
+  <!-- Response label -->
+  <text id="response-label" x="310" y="248" text-anchor="middle" class="cs-arrow-label">JSON</text>
+
+  <!-- Server -->
+  <g id="server-group">
+    <rect class="cs-box" x="420" y="120" width="200" height="70" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#cs-shadow)" />
+    <text id="server-label" x="520" y="161" text-anchor="middle" class="cs-title">API Server</text>
+  </g>
+
+  <!-- Server to DB connector -->
+  <line x1="520" y1="190" x2="520" y2="275" class="cs-connector" marker-end="url(#cs-arrow)" />
+
+  <!-- Database cylinder -->
+  <g id="db-group">
+    <ellipse cx="520" cy="280" rx="55" ry="12" fill="var(--diagram-amber, #F5A623)" />
+    <rect x="465" y="280" width="110" height="45" fill="var(--diagram-amber, #F5A623)" />
+    <ellipse cx="520" cy="325" rx="55" ry="12" fill="#d4900e" />
+    <text id="db-label" x="520" y="308" text-anchor="middle" class="cs-title" style="font-size:13px;">PostgreSQL</text>
+  </g>
+</svg>

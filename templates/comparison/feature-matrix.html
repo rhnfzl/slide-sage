@@ -1,0 +1,280 @@
+<!--
+  Slide-Sage Template: Feature Comparison Matrix
+
+  A table-based feature comparison with checkmarks/crosses.
+
+  Usage:
+    - Replace heading and table content with your data
+    - Add class="highlight-col" to a <col> or header to emphasize a recommended option
+    - Checkmarks: use data-check="yes", data-check="no", or data-check="partial"
+    - Alternating row colors are applied automatically
+    - Responsive: horizontal scroll on narrow viewports
+-->
+
+<div class="slide">
+  <div class="slide-content">
+
+    <!-- Heading -->
+    <h2 class="matrix-heading">Feature Comparison</h2>
+
+    <!-- Matrix Table Wrapper (enables constrained horizontal scroll) -->
+    <div class="matrix-wrapper">
+      <table class="feature-matrix">
+        <colgroup>
+          <col class="feature-name-col">
+          <col>
+          <col class="highlight-col"> <!-- highlighted / recommended -->
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="feature-label">Feature</th>
+            <th>Basic</th>
+            <th class="highlight-header">Pro <span class="badge">Recommended</span></th>
+            <th>Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-name">API Access</td>
+            <td data-check="yes"></td>
+            <td data-check="yes"></td>
+            <td data-check="yes"></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Custom Integrations</td>
+            <td data-check="no"></td>
+            <td data-check="yes"></td>
+            <td data-check="yes"></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Analytics Dashboard</td>
+            <td data-check="partial"></td>
+            <td data-check="yes"></td>
+            <td data-check="yes"></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Priority Support</td>
+            <td data-check="no"></td>
+            <td data-check="yes"></td>
+            <td data-check="yes"></td>
+          </tr>
+          <tr>
+            <td class="feature-name">SSO / SAML</td>
+            <td data-check="no"></td>
+            <td data-check="no"></td>
+            <td data-check="yes"></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Dedicated Instance</td>
+            <td data-check="no"></td>
+            <td data-check="no"></td>
+            <td data-check="yes"></td>
+          </tr>
+          <tr>
+            <td class="feature-name">SLA Guarantee</td>
+            <td data-check="no"></td>
+            <td data-check="partial"></td>
+            <td data-check="yes"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* === Feature Matrix Styles === */
+
+  .matrix-heading {
+    text-align: center;
+    margin-bottom: clamp(0.8rem, 2vw, 1.5rem);
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+  }
+
+  .matrix-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius, 12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .feature-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.75rem, 1.3vw, 1rem);
+    min-width: 400px; /* ensures readability before scroll kicks in */
+  }
+
+  /* Column widths */
+  .feature-name-col {
+    width: 35%;
+  }
+
+  /* Header */
+  .feature-matrix thead th {
+    padding: clamp(0.5rem, 1.2vw, 0.9rem) clamp(0.6rem, 1.5vw, 1.2rem);
+    text-align: center;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.4vw, 1.05rem);
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text, #cdd6f4);
+    white-space: nowrap;
+  }
+
+  .feature-matrix thead th.feature-label {
+    text-align: left;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+
+  /* Highlight column header */
+  .feature-matrix thead th.highlight-header {
+    background: color-mix(in srgb, var(--color-accent, #61afef) 15%, transparent);
+    color: var(--color-accent, #61afef);
+    position: relative;
+  }
+
+  /* Recommended badge */
+  .badge {
+    display: inline-block;
+    background: var(--color-accent, #61afef);
+    color: #fff;
+    font-size: 0.6em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.15em 0.5em;
+    border-radius: 3px;
+    margin-left: 0.4em;
+    vertical-align: middle;
+  }
+
+  /* Body rows */
+  .feature-matrix tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.15s;
+  }
+
+  /* Alternating row colors */
+  .feature-matrix tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .feature-matrix tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  /* Cells */
+  .feature-matrix td {
+    padding: clamp(0.4rem, 1vw, 0.75rem) clamp(0.6rem, 1.5vw, 1.2rem);
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .feature-matrix td.feature-name {
+    text-align: left;
+    font-weight: 500;
+    color: var(--color-text, #cdd6f4);
+  }
+
+  /* Highlight column cells */
+  .highlight-col,
+  .feature-matrix td:nth-child(3) { /* matches the 3rd col = highlight */
+    background: color-mix(in srgb, var(--color-accent, #61afef) 5%, transparent);
+  }
+
+  /* === Check / Cross / Partial Icons === */
+
+  /* Checkmark (yes) */
+  td[data-check="yes"]::before {
+    content: "\2713";
+    color: #50c878;
+    font-size: 1.3em;
+    font-weight: 700;
+  }
+
+  /* Cross (no) */
+  td[data-check="no"]::before {
+    content: "\2717"; /* ballot x */
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1.2em;
+    font-weight: 400;
+  }
+
+  /* Partial (limited/some) */
+  td[data-check="partial"]::before {
+    content: "\25D2"; /* circle with lower half black — represents partial */
+    color: #e5c07b;
+    font-size: 1.2em;
+  }
+
+  /* === Responsive === */
+  @media (max-width: 500px) {
+    .matrix-wrapper {
+      /* Allow horizontal scroll but within slide constraints */
+      max-width: 100%;
+    }
+
+    .feature-matrix {
+      font-size: 0.75rem;
+    }
+
+    .badge {
+      display: none; /* hide badge on very small screens */
+    }
+  }
+
+  /* === Light Theme Variant === */
+  [data-theme="light"] .matrix-wrapper {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="light"] .feature-matrix thead th {
+    background: rgba(0, 0, 0, 0.03);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+    color: var(--color-text, #383a42);
+  }
+
+  [data-theme="light"] .feature-matrix thead th.feature-label {
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  [data-theme="light"] .feature-matrix thead th.highlight-header {
+    background: color-mix(in srgb, var(--color-accent, #4078f2) 10%, transparent);
+    color: var(--color-accent, #4078f2);
+  }
+
+  [data-theme="light"] .feature-matrix tbody tr {
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme="light"] .feature-matrix tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  [data-theme="light"] .feature-matrix tbody tr:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  [data-theme="light"] .feature-matrix td.feature-name {
+    color: var(--color-text, #383a42);
+  }
+
+  [data-theme="light"] .highlight-col,
+  [data-theme="light"] .feature-matrix td:nth-child(3) {
+    background: color-mix(in srgb, var(--color-accent, #4078f2) 4%, transparent);
+  }
+
+  [data-theme="light"] td[data-check="no"]::before {
+    color: rgba(0, 0, 0, 0.15);
+  }
+
+  [data-theme="light"] .badge {
+    background: var(--color-accent, #4078f2);
+  }
+</style>

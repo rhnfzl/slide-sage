@@ -1,0 +1,244 @@
+<!--
+  Slide-Sage Template: Horizontal Timeline
+
+  A horizontal line with 4-6 milestone dots, alternating labels above and below.
+
+  Usage:
+    - Replace milestone labels and descriptions with your content
+    - Odd milestones (.milestone:nth-child(odd)) show content above the line
+    - Even milestones (.milestone:nth-child(even)) show content below the line
+    - Uses --color-accent for dot and connector colors
+    - Responsive: wraps to vertical layout on viewports narrower than 600px
+-->
+
+<div class="slide">
+  <div class="slide-content">
+
+    <!-- Heading -->
+    <h2 class="timeline-heading">Project Timeline</h2>
+
+    <!-- Timeline Container -->
+    <div class="timeline-container">
+
+      <!-- Timeline Track (the horizontal line) -->
+      <div class="timeline-track"></div>
+
+      <!-- Milestones -->
+      <div class="timeline-milestones">
+
+        <!-- Milestone 1 (odd: content above) -->
+        <div class="milestone">
+          <div class="milestone-content">
+            <h4 class="milestone-label">Q1 2024</h4>
+            <p class="milestone-desc">Project kickoff and requirements gathering</p>
+          </div>
+          <div class="milestone-dot"></div>
+        </div>
+
+        <!-- Milestone 2 (even: content below) -->
+        <div class="milestone">
+          <div class="milestone-content">
+            <h4 class="milestone-label">Q2 2024</h4>
+            <p class="milestone-desc">Architecture design and prototype development</p>
+          </div>
+          <div class="milestone-dot"></div>
+        </div>
+
+        <!-- Milestone 3 (odd: content above) -->
+        <div class="milestone">
+          <div class="milestone-content">
+            <h4 class="milestone-label">Q3 2024</h4>
+            <p class="milestone-desc">Core feature implementation and testing</p>
+          </div>
+          <div class="milestone-dot"></div>
+        </div>
+
+        <!-- Milestone 4 (even: content below) -->
+        <div class="milestone">
+          <div class="milestone-content">
+            <h4 class="milestone-label">Q4 2024</h4>
+            <p class="milestone-desc">Beta release and user feedback collection</p>
+          </div>
+          <div class="milestone-dot"></div>
+        </div>
+
+        <!-- Milestone 5 (odd: content above) -->
+        <div class="milestone">
+          <div class="milestone-content">
+            <h4 class="milestone-label">Q1 2025</h4>
+            <p class="milestone-desc">Performance optimization and scaling</p>
+          </div>
+          <div class="milestone-dot"></div>
+        </div>
+
+        <!-- Milestone 6 (even: content below) -->
+        <div class="milestone">
+          <div class="milestone-content">
+            <h4 class="milestone-label">Q2 2025</h4>
+            <p class="milestone-desc">General availability and launch</p>
+          </div>
+          <div class="milestone-dot"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* === Horizontal Timeline Styles === */
+
+  .timeline-heading {
+    text-align: center;
+    margin-bottom: clamp(1.5rem, 3vw, 3rem);
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+  }
+
+  .timeline-container {
+    position: relative;
+    width: 100%;
+    padding: clamp(4rem, 10vw, 7rem) 0;
+  }
+
+  /* Horizontal line spanning the full width */
+  .timeline-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-50%);
+  }
+
+  .timeline-milestones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 0;
+  }
+
+  .milestone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+  }
+
+  /* Dot on the timeline */
+  .milestone-dot {
+    width: clamp(10px, 1.5vw, 14px);
+    height: clamp(10px, 1.5vw, 14px);
+    border-radius: 50%;
+    background: var(--color-accent, #61afef);
+    border: 2px solid var(--color-bg, #0f0f1a);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent, #61afef) 30%, transparent);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  /* Content block */
+  .milestone-content {
+    position: absolute;
+    text-align: center;
+    width: clamp(80px, 12vw, 140px);
+    padding: 0.4rem;
+  }
+
+  .milestone-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.95rem);
+    font-weight: 700;
+    color: var(--color-accent, #61afef);
+    margin: 0 0 0.2rem 0;
+    white-space: nowrap;
+  }
+
+  .milestone-desc {
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Odd milestones: content ABOVE the line */
+  .milestone:nth-child(odd) .milestone-content {
+    bottom: clamp(14px, 2vw, 22px);
+  }
+
+  /* Even milestones: content BELOW the line */
+  .milestone:nth-child(even) .milestone-content {
+    top: clamp(14px, 2vw, 22px);
+  }
+
+  /* === Responsive: vertical layout on narrow viewports === */
+  @media (max-width: 600px) {
+    .timeline-container {
+      padding: 1rem 0 1rem 2rem;
+    }
+
+    /* Track becomes vertical */
+    .timeline-track {
+      top: 0;
+      bottom: 0;
+      left: 1rem;
+      right: auto;
+      width: 2px;
+      height: auto;
+      transform: none;
+    }
+
+    .timeline-milestones {
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;
+      gap: 1.5rem;
+    }
+
+    .milestone {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .milestone-dot {
+      flex-shrink: 0;
+    }
+
+    /* Reset absolute positioning for vertical layout */
+    .milestone-content {
+      position: static;
+      text-align: left;
+      width: auto;
+    }
+
+    .milestone:nth-child(odd) .milestone-content,
+    .milestone:nth-child(even) .milestone-content {
+      top: auto;
+      bottom: auto;
+    }
+  }
+
+  /* === Light Theme Variant === */
+  [data-theme="light"] .timeline-track {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  [data-theme="light"] .milestone-dot {
+    background: var(--color-accent, #4078f2);
+    border-color: var(--color-bg, #ffffff);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent, #4078f2) 25%, transparent);
+  }
+
+  [data-theme="light"] .milestone-label {
+    color: var(--color-accent, #4078f2);
+  }
+
+  [data-theme="light"] .milestone-desc {
+    color: rgba(0, 0, 0, 0.55);
+  }
+</style>

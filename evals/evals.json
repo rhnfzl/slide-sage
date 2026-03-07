@@ -1,0 +1,64 @@
+[
+  {
+    "name": "ml-startup-pitch",
+    "prompt": "Create a pitch deck for my ML startup called 'DataForge'. Include a user growth chart showing 1K, 5K, 20K, 80K users over Q1-Q4, a bar chart comparing our model accuracy (94%) vs competitors (87%, 82%), and an architecture diagram showing our microservices setup with API Gateway, Model Service, Data Pipeline, and PostgreSQL.",
+    "expected_features": [
+      "Chart.js or ECharts loaded via CDN",
+      "At least one line/bar chart with user growth data",
+      "Comparison bar chart with accuracy data",
+      "Architecture diagram (SVG template or Mermaid)",
+      "Colorblind-safe palette",
+      "Viewport fitting (100vh slides)",
+      "Keyboard navigation working",
+      "10+ slides"
+    ]
+  },
+  {
+    "name": "api-metrics-review",
+    "prompt": "Here's our API metrics: {\"endpoints\": [{\"path\": \"/users\", \"avg_latency_ms\": 45, \"p99_latency_ms\": 230, \"requests_per_day\": 50000}, {\"path\": \"/orders\", \"avg_latency_ms\": 120, \"p99_latency_ms\": 890, \"requests_per_day\": 25000}, {\"path\": \"/search\", \"avg_latency_ms\": 200, \"p99_latency_ms\": 1500, \"requests_per_day\": 15000}], \"error_rate\": 0.3, \"uptime\": 99.95}. Create a 10-slide technical review with performance charts.",
+    "expected_features": [
+      "JSON data parsed and visualized",
+      "Bar chart for latency comparison",
+      "Multiple charts across slides",
+      "Data table slide",
+      "KPI/metric highlight slides",
+      "10 slides exactly",
+      "Technical/minimal animation style"
+    ]
+  },
+  {
+    "name": "microservices-teaching",
+    "prompt": "Make a teaching presentation about microservices architecture for a university class. Include architecture diagrams showing monolith vs microservices, a sequence diagram for an API call flow, and code examples in Python showing a FastAPI microservice.",
+    "expected_features": [
+      "Architecture diagram (monolith vs microservices)",
+      "Sequence diagram (Mermaid)",
+      "Code slides with Prism.js syntax highlighting",
+      "Python code examples",
+      "Educational structure (intro, concepts, examples, summary)",
+      "Clean, readable layout"
+    ]
+  },
+  {
+    "name": "quick-status-update",
+    "prompt": "Create a quick 5-slide status update with a bar chart comparing Q1 vs Q2 results: Revenue Q1=$2.1M Q2=$2.8M, Users Q1=45K Q2=62K, NPS Q1=42 Q2=51.",
+    "expected_features": [
+      "Exactly 5 slides",
+      "Bar chart with Q1 vs Q2 comparison",
+      "Concise, executive-summary style",
+      "KPI numbers prominently displayed",
+      "Fast generation (minimal interview)"
+    ]
+  },
+  {
+    "name": "incremental-enhancement",
+    "prompt": "Add 3 slides about our new caching layer to this existing presentation at ./presentation.html. The caching layer uses Redis with a 15-minute TTL, reduced average latency by 60%, and handles 100K requests/second. Include a before/after latency chart and a client-server diagram showing the cache.",
+    "expected_features": [
+      "Reads existing HTML file first",
+      "Adds exactly 3 new slides",
+      "Preserves existing slide styles and structure",
+      "Before/after chart",
+      "Client-server diagram with cache",
+      "Matches existing presentation theme"
+    ]
+  }
+]

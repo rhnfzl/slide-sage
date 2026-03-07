@@ -1,0 +1,212 @@
+<!--
+  Slide-Sage Template: KPI Dashboard
+
+  A row of 3-4 metric cards with large numbers, labels, and optional trend arrows.
+
+  Usage:
+    - Replace kpi-value data attributes and labels with your metrics
+    - data-value: the numeric end value (used by CountUp.js if loaded)
+    - data-label: the metric label displayed below the number
+    - data-trend: "up", "down", or "neutral" for the trend indicator
+    - Trend classes: .trend-up (green arrow), .trend-down (red arrow), .trend-neutral (grey dash)
+    - CountUp.js compatible: .kpi-value elements have data-value for animation
+    - Responsive: 2-column on narrow, 1-column on very narrow viewports
+-->
+
+<div class="slide">
+  <div class="slide-content">
+
+    <!-- Heading -->
+    <h2 class="kpi-heading">Key Performance Indicators</h2>
+
+    <!-- KPI Cards Container -->
+    <div class="kpi-container">
+
+      <!-- Card 1 -->
+      <div class="kpi-card">
+        <div class="kpi-value" data-value="2847" data-label="Monthly Active Users" data-trend="up">2,847</div>
+        <div class="kpi-label">Monthly Active Users</div>
+        <div class="kpi-trend trend-up">
+          <span class="trend-arrow">&#9650;</span>
+          <span class="trend-text">+12.3%</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="kpi-card">
+        <div class="kpi-value" data-value="98.7" data-label="Uptime %" data-trend="up">98.7%</div>
+        <div class="kpi-label">Uptime %</div>
+        <div class="kpi-trend trend-up">
+          <span class="trend-arrow">&#9650;</span>
+          <span class="trend-text">+0.3%</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="kpi-card">
+        <div class="kpi-value" data-value="142" data-label="Avg Response (ms)" data-trend="down">142ms</div>
+        <div class="kpi-label">Avg Response (ms)</div>
+        <div class="kpi-trend trend-down">
+          <span class="trend-arrow">&#9660;</span>
+          <span class="trend-text">-8.1%</span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="kpi-card">
+        <div class="kpi-value" data-value="4.2" data-label="Customer Rating" data-trend="neutral">4.2</div>
+        <div class="kpi-label">Customer Rating</div>
+        <div class="kpi-trend trend-neutral">
+          <span class="trend-arrow">&#8212;</span>
+          <span class="trend-text">No change</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* === KPI Dashboard Styles === */
+
+  .kpi-heading {
+    text-align: center;
+    margin-bottom: clamp(1rem, 2.5vw, 2rem);
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+  }
+
+  .kpi-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(0.6rem, 1.5vw, 1.2rem);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .kpi-card {
+    flex: 1 1 calc(25% - 1rem);
+    min-width: 160px;
+    max-width: 280px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius, 12px);
+    padding: clamp(1rem, 2vw, 1.8rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .kpi-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Large metric number */
+  .kpi-value {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--color-accent, #61afef);
+    letter-spacing: -0.02em;
+  }
+
+  /* Metric label */
+  .kpi-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Trend indicator */
+  .kpi-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    font-weight: 600;
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+    margin-top: 0.2rem;
+  }
+
+  .trend-arrow {
+    font-size: 0.75em;
+    line-height: 1;
+  }
+
+  /* Trend Up: green */
+  .trend-up {
+    color: #50c878;
+    background: rgba(80, 200, 120, 0.1);
+  }
+
+  /* Trend Down: red */
+  .trend-down {
+    color: #e06c75;
+    background: rgba(224, 108, 117, 0.1);
+  }
+
+  /* Trend Neutral: grey */
+  .trend-neutral {
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* === Responsive: 2-column on narrow === */
+  @media (max-width: 700px) {
+    .kpi-card {
+      flex: 1 1 calc(50% - 0.8rem);
+      min-width: 140px;
+      max-width: none;
+    }
+  }
+
+  /* === Responsive: 1-column on very narrow === */
+  @media (max-width: 400px) {
+    .kpi-card {
+      flex: 1 1 100%;
+      max-width: none;
+    }
+  }
+
+  /* === Light Theme Variant === */
+  [data-theme="light"] .kpi-card {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme="light"] .kpi-card:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+
+  [data-theme="light"] .kpi-value {
+    color: var(--color-accent, #4078f2);
+  }
+
+  [data-theme="light"] .kpi-label {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  [data-theme="light"] .trend-up {
+    color: #2d8a4e;
+    background: rgba(45, 138, 78, 0.08);
+  }
+
+  [data-theme="light"] .trend-down {
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.08);
+  }
+
+  [data-theme="light"] .trend-neutral {
+    color: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+</style>

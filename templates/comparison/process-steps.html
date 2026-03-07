@@ -1,0 +1,333 @@
+<!--
+  Slide-Sage Template: Process Steps
+
+  Numbered circles connected by lines/chevrons showing a step-by-step process.
+
+  Usage:
+    - Replace step titles and descriptions with your content
+    - Add 4-6 steps as needed
+    - State classes: .step-completed (checkmark, accent fill),
+      .step-active (glow/pulse effect), .step-upcoming (dimmed)
+    - Active step has a pulsing glow animation
+    - Completed steps show a checkmark instead of the number
+    - Upcoming steps are visually dimmed
+    - Responsive: wraps to 2-column grid on narrow viewports
+-->
+
+<div class="slide">
+  <div class="slide-content">
+
+    <!-- Heading -->
+    <h2 class="process-heading">Implementation Process</h2>
+
+    <!-- Process Steps Container -->
+    <div class="process-container">
+
+      <!-- Step 1: Completed -->
+      <div class="process-step step-completed">
+        <div class="step-circle">
+          <span class="step-number">1</span>
+          <span class="step-check">&#10003;</span>
+        </div>
+        <h4 class="step-title">Discovery</h4>
+        <p class="step-desc">Gather requirements and define project scope</p>
+      </div>
+
+      <!-- Step 2: Completed -->
+      <div class="process-step step-completed">
+        <div class="step-circle">
+          <span class="step-number">2</span>
+          <span class="step-check">&#10003;</span>
+        </div>
+        <h4 class="step-title">Design</h4>
+        <p class="step-desc">Create architecture and UI wireframes</p>
+      </div>
+
+      <!-- Step 3: Active -->
+      <div class="process-step step-active">
+        <div class="step-circle">
+          <span class="step-number">3</span>
+          <span class="step-check">&#10003;</span>
+        </div>
+        <h4 class="step-title">Develop</h4>
+        <p class="step-desc">Build core features and integrations</p>
+      </div>
+
+      <!-- Step 4: Upcoming -->
+      <div class="process-step step-upcoming">
+        <div class="step-circle">
+          <span class="step-number">4</span>
+          <span class="step-check">&#10003;</span>
+        </div>
+        <h4 class="step-title">Test</h4>
+        <p class="step-desc">QA, load testing, and security audit</p>
+      </div>
+
+      <!-- Step 5: Upcoming -->
+      <div class="process-step step-upcoming">
+        <div class="step-circle">
+          <span class="step-number">5</span>
+          <span class="step-check">&#10003;</span>
+        </div>
+        <h4 class="step-title">Deploy</h4>
+        <p class="step-desc">Staged rollout to production environment</p>
+      </div>
+
+      <!-- Step 6: Upcoming -->
+      <div class="process-step step-upcoming">
+        <div class="step-circle">
+          <span class="step-number">6</span>
+          <span class="step-check">&#10003;</span>
+        </div>
+        <h4 class="step-title">Monitor</h4>
+        <p class="step-desc">Observability, feedback, and iteration</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* === Process Steps Styles === */
+
+  .process-heading {
+    text-align: center;
+    margin-bottom: clamp(1rem, 2.5vw, 2rem);
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+  }
+
+  .process-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .process-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    position: relative;
+    padding: 0 clamp(0.3rem, 0.8vw, 0.6rem);
+  }
+
+  /* Horizontal connector: a line between circles */
+  .process-step:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: clamp(18px, 3vw, 26px);
+    right: 50%;
+    left: calc(-50%);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: 0;
+  }
+
+  /* Completed connector gets accent color */
+  .process-step.step-completed:not(:first-child)::before {
+    background: color-mix(in srgb, var(--color-accent, #61afef) 50%, transparent);
+  }
+
+  /* Active connector gets partial accent */
+  .process-step.step-active:not(:first-child)::before {
+    background: linear-gradient(to right,
+      color-mix(in srgb, var(--color-accent, #61afef) 50%, transparent),
+      rgba(255, 255, 255, 0.12)
+    );
+  }
+
+  /* Numbered circle */
+  .step-circle {
+    width: clamp(36px, 5.5vw, 52px);
+    height: clamp(36px, 5.5vw, 52px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.6vw, 1.2rem);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+
+  .step-number {
+    display: block;
+  }
+
+  .step-check {
+    display: none;
+  }
+
+  /* Step title */
+  .step-title {
+    font-size: clamp(0.75rem, 1.3vw, 1rem);
+    font-weight: 600;
+    margin: clamp(0.4rem, 1vw, 0.7rem) 0 0.2rem 0;
+    color: var(--color-text, #cdd6f4);
+  }
+
+  /* Step description */
+  .step-desc {
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    line-height: 1.4;
+    max-width: 130px;
+  }
+
+  /* === State: Completed === */
+  .step-completed .step-circle {
+    background: var(--color-accent, #61afef);
+    color: #fff;
+  }
+
+  .step-completed .step-number {
+    display: none;
+  }
+
+  .step-completed .step-check {
+    display: block;
+    color: #fff;
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+  }
+
+  .step-completed .step-title {
+    color: var(--color-accent, #61afef);
+  }
+
+  /* === State: Active (glow/pulse) === */
+  .step-active .step-circle {
+    background: var(--color-accent, #61afef);
+    color: #fff;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #61afef) 25%, transparent);
+    animation: step-pulse 2s ease-in-out infinite;
+  }
+
+  .step-active .step-title {
+    color: var(--color-accent, #61afef);
+    font-weight: 700;
+  }
+
+  @keyframes step-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #61afef) 25%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent, #61afef) 10%, transparent);
+    }
+  }
+
+  /* === State: Upcoming (dimmed) === */
+  .step-upcoming .step-circle {
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .step-upcoming .step-title {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .step-upcoming .step-desc {
+    color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* === Responsive: 2-column grid on narrow viewports === */
+  @media (max-width: 650px) {
+    .process-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1rem, 2.5vw, 1.5rem);
+    }
+
+    /* Hide horizontal connectors in grid layout */
+    .process-step::before {
+      display: none !important;
+    }
+
+    .step-desc {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 350px) {
+    .process-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* === Light Theme Variant === */
+  [data-theme="light"] .process-step:not(:first-child)::before {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="light"] .process-step.step-completed:not(:first-child)::before {
+    background: color-mix(in srgb, var(--color-accent, #4078f2) 40%, transparent);
+  }
+
+  [data-theme="light"] .process-step.step-active:not(:first-child)::before {
+    background: linear-gradient(to right,
+      color-mix(in srgb, var(--color-accent, #4078f2) 40%, transparent),
+      rgba(0, 0, 0, 0.1)
+    );
+  }
+
+  [data-theme="light"] .step-completed .step-circle {
+    background: var(--color-accent, #4078f2);
+  }
+
+  [data-theme="light"] .step-completed .step-title {
+    color: var(--color-accent, #4078f2);
+  }
+
+  [data-theme="light"] .step-active .step-circle {
+    background: var(--color-accent, #4078f2);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #4078f2) 20%, transparent);
+  }
+
+  [data-theme="light"] .step-active .step-title {
+    color: var(--color-accent, #4078f2);
+  }
+
+  @keyframes step-pulse-light {
+    0%, 100% {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #4078f2) 20%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent, #4078f2) 8%, transparent);
+    }
+  }
+
+  [data-theme="light"] .step-active .step-circle {
+    animation-name: step-pulse-light;
+  }
+
+  [data-theme="light"] .step-upcoming .step-circle {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme="light"] .step-upcoming .step-title {
+    color: rgba(0, 0, 0, 0.35);
+  }
+
+  [data-theme="light"] .step-upcoming .step-desc {
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  [data-theme="light"] .step-title {
+    color: var(--color-text, #383a42);
+  }
+
+  [data-theme="light"] .step-desc {
+    color: rgba(0, 0, 0, 0.5);
+  }
+</style>

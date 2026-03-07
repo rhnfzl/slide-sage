@@ -1,0 +1,113 @@
+<svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Branching tree hierarchy diagram" id="tree-hierarchy-diagram">
+  <title>Tree Hierarchy</title>
+  <style>
+    .th-node { transition: filter 0.2s ease; cursor: pointer; }
+    .th-node:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .th-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; fill: #fff; }
+    .th-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; fill: none; }
+  </style>
+
+  <defs>
+    <marker id="th-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="th-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Root node -->
+  <g id="root-group">
+    <rect class="th-node" x="30" y="170" width="140" height="50" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#th-shadow)" />
+    <text id="root-label" x="100" y="201" text-anchor="middle" class="th-label">Root</text>
+  </g>
+
+  <!-- Connector: Root -> Branch 1 -->
+  <path d="M170,195 L215,195 L215,75 L260,75" class="th-connector" marker-end="url(#th-arrow)" />
+  <!-- Connector: Root -> Branch 2 -->
+  <path d="M170,195 L215,195 L215,195 L260,195" class="th-connector" marker-end="url(#th-arrow)" />
+  <!-- Connector: Root -> Branch 3 (hidden) -->
+  <g id="branch-3-connector" style="display:none;">
+    <path d="M170,195 L215,195 L215,315 L260,315" class="th-connector" marker-end="url(#th-arrow)" />
+  </g>
+
+  <!-- Branch 1 -->
+  <g id="branch-1-group">
+    <rect class="th-node" x="260" y="50" width="140" height="50" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#th-shadow)" />
+    <text id="branch-1-label" x="330" y="81" text-anchor="middle" class="th-label">Branch 1</text>
+  </g>
+
+  <!-- Connector: Branch 1 -> Leaf 1-1 -->
+  <path d="M400,75 L440,75 L440,45 L480,45" class="th-connector" marker-end="url(#th-arrow)" />
+  <!-- Connector: Branch 1 -> Leaf 1-2 -->
+  <path d="M400,75 L440,75 L440,105 L480,105" class="th-connector" marker-end="url(#th-arrow)" />
+
+  <!-- Leaf 1-1 -->
+  <g id="leaf-1-1-group">
+    <rect class="th-node" x="480" y="20" width="130" height="50" rx="8" ry="8"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#th-shadow)" />
+    <text id="leaf-1-1-label" x="545" y="51" text-anchor="middle" class="th-label">Leaf 1-1</text>
+  </g>
+
+  <!-- Leaf 1-2 -->
+  <g id="leaf-1-2-group">
+    <rect class="th-node" x="480" y="80" width="130" height="50" rx="8" ry="8"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#th-shadow)" />
+    <text id="leaf-1-2-label" x="545" y="111" text-anchor="middle" class="th-label">Leaf 1-2</text>
+  </g>
+
+  <!-- Branch 2 -->
+  <g id="branch-2-group">
+    <rect class="th-node" x="260" y="170" width="140" height="50" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#th-shadow)" />
+    <text id="branch-2-label" x="330" y="201" text-anchor="middle" class="th-label">Branch 2</text>
+  </g>
+
+  <!-- Connector: Branch 2 -> Leaf 2-1 -->
+  <path d="M400,195 L440,195 L440,165 L480,165" class="th-connector" marker-end="url(#th-arrow)" />
+  <!-- Connector: Branch 2 -> Leaf 2-2 -->
+  <path d="M400,195 L440,195 L440,225 L480,225" class="th-connector" marker-end="url(#th-arrow)" />
+
+  <!-- Leaf 2-1 -->
+  <g id="leaf-2-1-group">
+    <rect class="th-node" x="480" y="140" width="130" height="50" rx="8" ry="8"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#th-shadow)" />
+    <text id="leaf-2-1-label" x="545" y="171" text-anchor="middle" class="th-label">Leaf 2-1</text>
+  </g>
+
+  <!-- Leaf 2-2 -->
+  <g id="leaf-2-2-group">
+    <rect class="th-node" x="480" y="200" width="130" height="50" rx="8" ry="8"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#th-shadow)" />
+    <text id="leaf-2-2-label" x="545" y="231" text-anchor="middle" class="th-label">Leaf 2-2</text>
+  </g>
+
+  <!-- Branch 3 (hidden by default) -->
+  <g id="branch-3-group" style="display:none;">
+    <rect class="th-node" x="260" y="290" width="140" height="50" rx="10" ry="10"
+          fill="var(--diagram-red, #DC5A5A)" filter="url(#th-shadow)" />
+    <text id="branch-3-label" x="330" y="321" text-anchor="middle" class="th-label">Branch 3</text>
+
+    <!-- Connector: Branch 3 -> Leaf 3-1 -->
+    <path d="M400,315 L440,315 L440,285 L480,285" class="th-connector" marker-end="url(#th-arrow)" />
+    <!-- Connector: Branch 3 -> Leaf 3-2 -->
+    <path d="M400,315 L440,315 L440,345 L480,345" class="th-connector" marker-end="url(#th-arrow)" />
+
+    <!-- Leaf 3-1 -->
+    <g id="leaf-3-1-group">
+      <rect class="th-node" x="480" y="260" width="130" height="50" rx="8" ry="8"
+            fill="var(--diagram-red, #DC5A5A)" filter="url(#th-shadow)" />
+      <text id="leaf-3-1-label" x="545" y="291" text-anchor="middle" class="th-label">Leaf 3-1</text>
+    </g>
+
+    <!-- Leaf 3-2 -->
+    <g id="leaf-3-2-group">
+      <rect class="th-node" x="480" y="320" width="130" height="50" rx="8" ry="8"
+            fill="var(--diagram-red, #DC5A5A)" filter="url(#th-shadow)" />
+      <text id="leaf-3-2-label" x="545" y="351" text-anchor="middle" class="th-label">Leaf 3-2</text>
+    </g>
+  </g>
+</svg>

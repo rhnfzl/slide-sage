@@ -1,0 +1,156 @@
+<svg viewBox="0 0 900 400" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="ML pipeline diagram showing data sources, feature engineering, training, and inference stages"
+     id="ml-pipeline-diagram">
+  <title>ML Pipeline: Feature, Train, Serve</title>
+  <style>
+    .ml-node { transition: filter 0.2s ease; cursor: pointer; }
+    .ml-node:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .ml-label { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #fff; }
+    .ml-title { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; fill: var(--diagram-text, #ccc); }
+    .ml-db-label { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 600; fill: #fff; }
+    .ml-feedback-label { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: var(--diagram-text, #ccc); }
+    .ml-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="ml-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="ml-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- ==================== DATA SOURCES (x=20) ==================== -->
+  <g id="sources-group">
+    <text x="80" y="15" text-anchor="middle" class="ml-title">Data Sources</text>
+
+    <g id="source-1-group">
+      <rect class="ml-node" x="20" y="30" width="120" height="40" rx="8" ry="8"
+            fill="var(--diagram-primary, #4A90D9)" filter="url(#ml-shadow)" />
+      <text id="source-1-label" x="80" y="55" text-anchor="middle" class="ml-label">Event Logs</text>
+    </g>
+
+    <g id="source-2-group">
+      <rect class="ml-node" x="20" y="85" width="120" height="40" rx="8" ry="8"
+            fill="var(--diagram-primary, #4A90D9)" filter="url(#ml-shadow)" />
+      <text id="source-2-label" x="80" y="110" text-anchor="middle" class="ml-label">User Data</text>
+    </g>
+
+    <g id="source-3-group">
+      <rect class="ml-node" x="20" y="140" width="120" height="40" rx="8" ry="8"
+            fill="var(--diagram-primary, #4A90D9)" filter="url(#ml-shadow)" />
+      <text id="source-3-label" x="80" y="165" text-anchor="middle" class="ml-label">External API</text>
+    </g>
+  </g>
+
+  <!-- Arrows: Sources -> Feature Pipeline -->
+  <line x1="140" y1="50" x2="190" y2="60" class="ml-connector" marker-end="url(#ml-arrow)" />
+  <line x1="140" y1="105" x2="190" y2="105" class="ml-connector" marker-end="url(#ml-arrow)" />
+  <line x1="140" y1="160" x2="190" y2="150" class="ml-connector" marker-end="url(#ml-arrow)" />
+
+  <!-- ==================== FEATURE PIPELINE (x=180) ==================== -->
+  <g id="feature-pipeline-group">
+    <text x="290" y="15" text-anchor="middle" class="ml-title">Feature Pipeline</text>
+
+    <g id="feature-1-group">
+      <rect class="ml-node" x="200" y="30" width="130" height="40" rx="8" ry="8"
+            fill="var(--diagram-secondary, #50C878)" filter="url(#ml-shadow)" />
+      <text id="feature-1-label" x="265" y="55" text-anchor="middle" class="ml-label">Extraction</text>
+    </g>
+
+    <g id="feature-2-group">
+      <rect class="ml-node" x="200" y="85" width="130" height="40" rx="8" ry="8"
+            fill="var(--diagram-secondary, #50C878)" filter="url(#ml-shadow)" />
+      <text id="feature-2-label" x="265" y="110" text-anchor="middle" class="ml-label">Transforms</text>
+    </g>
+
+    <g id="feature-3-group">
+      <rect class="ml-node" x="200" y="140" width="130" height="40" rx="8" ry="8"
+            fill="var(--diagram-secondary, #50C878)" filter="url(#ml-shadow)" />
+      <text id="feature-3-label" x="265" y="165" text-anchor="middle" class="ml-label">Validation</text>
+    </g>
+
+    <!-- Feature Store cylinder -->
+    <g id="store-group">
+      <ellipse cx="265" cy="220" rx="50" ry="10" fill="var(--diagram-secondary, #50C878)" />
+      <rect x="215" y="220" width="100" height="35" fill="var(--diagram-secondary, #50C878)" />
+      <ellipse cx="265" cy="255" rx="50" ry="10" fill="#3db066" />
+      <text id="store-label" x="265" y="242" text-anchor="middle" class="ml-db-label">Feature Store</text>
+    </g>
+  </g>
+
+  <!-- Arrows: Feature boxes -> Feature Store -->
+  <line x1="265" y1="70" x2="265" y2="85" class="ml-connector" marker-end="url(#ml-arrow)" />
+  <line x1="265" y1="125" x2="265" y2="140" class="ml-connector" marker-end="url(#ml-arrow)" />
+  <line x1="265" y1="180" x2="265" y2="208" class="ml-connector" marker-end="url(#ml-arrow)" />
+
+  <!-- Arrow: Feature Store -> Training Pipeline -->
+  <line x1="330" y1="237" x2="460" y2="60" class="ml-connector" marker-end="url(#ml-arrow)" />
+
+  <!-- ==================== TRAINING PIPELINE (x=450) ==================== -->
+  <g id="training-pipeline-group">
+    <text x="530" y="15" text-anchor="middle" class="ml-title">Training Pipeline</text>
+
+    <g id="train-1-group">
+      <rect class="ml-node" x="470" y="30" width="130" height="40" rx="8" ry="8"
+            fill="var(--diagram-amber, #F5A623)" filter="url(#ml-shadow)" />
+      <text id="train-1-label" x="535" y="55" text-anchor="middle" class="ml-label">Preprocessing</text>
+    </g>
+
+    <g id="train-2-group">
+      <rect class="ml-node" x="470" y="85" width="130" height="40" rx="8" ry="8"
+            fill="var(--diagram-amber, #F5A623)" filter="url(#ml-shadow)" />
+      <text id="train-2-label" x="535" y="110" text-anchor="middle" class="ml-label">Training</text>
+    </g>
+
+    <g id="train-3-group">
+      <rect class="ml-node" x="470" y="140" width="130" height="40" rx="8" ry="8"
+            fill="var(--diagram-amber, #F5A623)" filter="url(#ml-shadow)" />
+      <text id="train-3-label" x="535" y="165" text-anchor="middle" class="ml-label">Evaluation</text>
+    </g>
+
+    <!-- Model Registry cylinder -->
+    <g id="registry-group">
+      <ellipse cx="535" cy="220" rx="50" ry="10" fill="var(--diagram-amber, #F5A623)" />
+      <rect x="485" y="220" width="100" height="35" fill="var(--diagram-amber, #F5A623)" />
+      <ellipse cx="535" cy="255" rx="50" ry="10" fill="#d4900e" />
+      <text id="registry-label" x="535" y="242" text-anchor="middle" class="ml-db-label">Model Registry</text>
+    </g>
+  </g>
+
+  <!-- Arrows: Training boxes chained vertically -->
+  <line x1="535" y1="70" x2="535" y2="85" class="ml-connector" marker-end="url(#ml-arrow)" />
+  <line x1="535" y1="125" x2="535" y2="140" class="ml-connector" marker-end="url(#ml-arrow)" />
+  <line x1="535" y1="180" x2="535" y2="208" class="ml-connector" marker-end="url(#ml-arrow)" />
+
+  <!-- Arrow: Model Registry -> Inference Pipeline -->
+  <line x1="585" y1="237" x2="730" y2="100" class="ml-connector" marker-end="url(#ml-arrow)" />
+
+  <!-- ==================== INFERENCE PIPELINE (x=720) ==================== -->
+  <g id="inference-pipeline-group">
+    <text x="800" y="15" text-anchor="middle" class="ml-title">Inference Pipeline</text>
+
+    <g id="serve-1-group">
+      <rect class="ml-node" x="730" y="55" width="140" height="45" rx="8" ry="8"
+            fill="var(--diagram-purple, #9B59B6)" filter="url(#ml-shadow)" />
+      <text id="serve-1-label" x="800" y="83" text-anchor="middle" class="ml-label">Model Server</text>
+    </g>
+
+    <g id="serve-2-group">
+      <rect class="ml-node" x="730" y="120" width="140" height="45" rx="8" ry="8"
+            fill="var(--diagram-purple, #9B59B6)" filter="url(#ml-shadow)" />
+      <text id="serve-2-label" x="800" y="148" text-anchor="middle" class="ml-label">API Endpoint</text>
+    </g>
+  </g>
+
+  <!-- Arrow: Serve 1 -> Serve 2 -->
+  <line x1="800" y1="100" x2="800" y2="118" class="ml-connector" marker-end="url(#ml-arrow)" />
+
+  <!-- ==================== FEEDBACK / MONITORING LOOP ==================== -->
+  <path d="M 800,165 L 800,360 L 80,360 L 80,182"
+        class="ml-connector" fill="none" stroke-dasharray="8,4"
+        marker-end="url(#ml-arrow)" />
+  <text id="feedback-label" x="450" y="380" text-anchor="middle" class="ml-feedback-label">Monitoring &amp; Feedback Loop</text>
+</svg>

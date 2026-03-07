@@ -1,0 +1,88 @@
+<svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="API gateway architecture with authentication branch and backend services"
+     id="api-gateway-auth-diagram">
+  <title>API Gateway with Auth Branch</title>
+  <style>
+    .ag-node { transition: filter 0.2s ease; cursor: pointer; }
+    .ag-node:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .ag-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: #fff; }
+    .ag-arrow-label { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: var(--diagram-text, #ccc); }
+    .ag-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+    .ag-auth-connector { stroke: var(--diagram-amber, #F5A623); stroke-width: 2; stroke-dasharray: 8,4; }
+  </style>
+
+  <defs>
+    <marker id="ag-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <marker id="ag-auth-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-amber, #F5A623)" />
+    </marker>
+    <filter id="ag-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- ==================== CLIENT ==================== -->
+  <g id="client-group" class="ag-node">
+    <rect x="30" y="160" width="140" height="60" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#ag-shadow)" />
+    <text id="client-label" x="100" y="196" text-anchor="middle" class="ag-label">Client</text>
+  </g>
+
+  <!-- Arrow: Client -> Gateway -->
+  <line x1="170" y1="190" x2="258" y2="185" class="ag-connector" marker-end="url(#ag-arrow)" />
+
+  <!-- ==================== API GATEWAY ==================== -->
+  <g id="gateway-group" class="ag-node">
+    <rect x="260" y="150" width="160" height="70" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#ag-shadow)" />
+    <text id="gateway-label" x="340" y="191" text-anchor="middle" class="ag-label">API Gateway</text>
+  </g>
+
+  <!-- ==================== AUTH SERVICE (top branch) ==================== -->
+  <g id="auth-group" class="ag-node">
+    <rect x="290" y="30" width="130" height="55" rx="10" ry="10"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#ag-shadow)" />
+    <text id="auth-label" x="355" y="63" text-anchor="middle" class="ag-label">Auth Service</text>
+  </g>
+
+  <!-- Arrow: Gateway -> Auth (dashed, going up) -->
+  <line x1="320" y1="150" x2="330" y2="87" class="ag-auth-connector" marker-end="url(#ag-auth-arrow)" />
+  <text x="290" y="120" class="ag-arrow-label">validate</text>
+
+  <!-- Arrow: Auth -> Gateway (dashed, going down) -->
+  <line x1="380" y1="85" x2="370" y2="148" class="ag-auth-connector" marker-end="url(#ag-auth-arrow)" />
+  <text id="token-label" x="400" y="120" class="ag-arrow-label">token</text>
+
+  <!-- ==================== BACKEND SERVICES (right side) ==================== -->
+
+  <!-- Arrow: Gateway -> Service 1 -->
+  <line x1="420" y1="165" x2="558" y2="120" class="ag-connector" marker-end="url(#ag-arrow)" />
+  <!-- Arrow: Gateway -> Service 2 -->
+  <line x1="420" y1="185" x2="558" y2="195" class="ag-connector" marker-end="url(#ag-arrow)" />
+  <!-- Arrow: Gateway -> Service 3 -->
+  <line x1="420" y1="205" x2="558" y2="275" class="ag-connector" marker-end="url(#ag-arrow)" />
+
+  <!-- Service 1 -->
+  <g id="svc-1-group" class="ag-node">
+    <rect x="560" y="95" width="160" height="50" rx="8" ry="8"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#ag-shadow)" />
+    <text id="svc-1-label" x="640" y="125" text-anchor="middle" class="ag-label">Users Service</text>
+  </g>
+
+  <!-- Service 2 -->
+  <g id="svc-2-group" class="ag-node">
+    <rect x="560" y="170" width="160" height="50" rx="8" ry="8"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#ag-shadow)" />
+    <text id="svc-2-label" x="640" y="200" text-anchor="middle" class="ag-label">Orders Service</text>
+  </g>
+
+  <!-- Service 3 -->
+  <g id="svc-3-group" class="ag-node">
+    <rect x="560" y="250" width="160" height="50" rx="8" ry="8"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#ag-shadow)" />
+    <text id="svc-3-label" x="640" y="280" text-anchor="middle" class="ag-label">Data Service</text>
+  </g>
+</svg>

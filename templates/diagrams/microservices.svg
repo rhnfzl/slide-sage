@@ -1,0 +1,108 @@
+<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Microservices architecture diagram" id="microservices-diagram">
+  <title>Microservices Architecture</title>
+  <style>
+    .svc-box { transition: transform 0.2s ease, filter 0.2s ease; cursor: pointer; }
+    .svc-box:hover { filter: brightness(1.15) drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+    .label { font-family: system-ui, -apple-system, sans-serif; }
+    .gateway-label { font-size: 16px; font-weight: 700; fill: #fff; }
+    .svc-label { font-size: 13px; font-weight: 600; fill: #fff; }
+    .db-label { font-size: 11px; font-weight: 500; fill: #fff; }
+    .connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="ms-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Gateway -->
+  <g id="gateway-group">
+    <rect x="300" y="30" width="200" height="55" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#shadow)" />
+    <text id="gateway-label" x="400" y="63" text-anchor="middle" class="label gateway-label">API Gateway</text>
+  </g>
+
+  <!-- Connectors: Gateway to Services -->
+  <line x1="350" y1="85" x2="140" y2="175" class="connector" marker-end="url(#ms-arrow)" />
+  <line x1="400" y1="85" x2="400" y2="175" class="connector" marker-end="url(#ms-arrow)" />
+  <line x1="450" y1="85" x2="660" y2="175" class="connector" marker-end="url(#ms-arrow)" />
+
+  <!-- Service 1 -->
+  <g id="svc-1-group">
+    <rect id="svc-1-box" class="svc-box" x="50" y="175" width="180" height="50" rx="8" ry="8"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#shadow)" />
+    <text id="svc-1-label" x="140" y="205" text-anchor="middle" class="label svc-label">Service 1</text>
+  </g>
+  <!-- Service 1 connector to DB -->
+  <line x1="140" y1="225" x2="140" y2="295" class="connector" marker-end="url(#ms-arrow)" />
+  <!-- Service 1 DB -->
+  <g id="svc-1-db-group">
+    <ellipse cx="140" cy="300" rx="45" ry="10" fill="var(--diagram-secondary, #50C878)" />
+    <rect x="95" y="300" width="90" height="35" fill="var(--diagram-secondary, #50C878)" />
+    <ellipse cx="140" cy="335" rx="45" ry="10" fill="#3db066" />
+    <text id="svc-1-db-label" x="140" y="322" text-anchor="middle" class="label db-label">Database 1</text>
+  </g>
+
+  <!-- Service 2 -->
+  <g id="svc-2-group">
+    <rect id="svc-2-box" class="svc-box" x="310" y="175" width="180" height="50" rx="8" ry="8"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#shadow)" />
+    <text id="svc-2-label" x="400" y="205" text-anchor="middle" class="label svc-label">Service 2</text>
+  </g>
+  <!-- Service 2 connector to DB -->
+  <line x1="400" y1="225" x2="400" y2="295" class="connector" marker-end="url(#ms-arrow)" />
+  <!-- Service 2 DB -->
+  <g id="svc-2-db-group">
+    <ellipse cx="400" cy="300" rx="45" ry="10" fill="var(--diagram-amber, #F5A623)" />
+    <rect x="355" y="300" width="90" height="35" fill="var(--diagram-amber, #F5A623)" />
+    <ellipse cx="400" cy="335" rx="45" ry="10" fill="#d4900e" />
+    <text id="svc-2-db-label" x="400" y="322" text-anchor="middle" class="label db-label">Database 2</text>
+  </g>
+
+  <!-- Service 3 -->
+  <g id="svc-3-group">
+    <rect id="svc-3-box" class="svc-box" x="570" y="175" width="180" height="50" rx="8" ry="8"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#shadow)" />
+    <text id="svc-3-label" x="660" y="205" text-anchor="middle" class="label svc-label">Service 3</text>
+  </g>
+  <!-- Service 3 connector to DB -->
+  <line x1="660" y1="225" x2="660" y2="295" class="connector" marker-end="url(#ms-arrow)" />
+  <!-- Service 3 DB -->
+  <g id="svc-3-db-group">
+    <ellipse cx="660" cy="300" rx="45" ry="10" fill="var(--diagram-purple, #9B59B6)" />
+    <rect x="615" y="300" width="90" height="35" fill="var(--diagram-purple, #9B59B6)" />
+    <ellipse cx="660" cy="335" rx="45" ry="10" fill="#7d3f99" />
+    <text id="svc-3-db-label" x="660" y="322" text-anchor="middle" class="label db-label">Database 3</text>
+  </g>
+
+  <!-- Service 4 (hidden by default) -->
+  <g id="svc-4-group" style="display:none;">
+    <rect id="svc-4-box" class="svc-box" x="50" y="380" width="180" height="50" rx="8" ry="8"
+          fill="var(--diagram-red, #DC5A5A)" filter="url(#shadow)" />
+    <text id="svc-4-label" x="140" y="410" text-anchor="middle" class="label svc-label">Service 4</text>
+  </g>
+  <g id="svc-4-db-group" style="display:none;">
+    <ellipse cx="140" cy="460" rx="45" ry="10" fill="var(--diagram-secondary, #50C878)" />
+    <rect x="95" y="460" width="90" height="30" fill="var(--diagram-secondary, #50C878)" />
+    <ellipse cx="140" cy="490" rx="45" ry="10" fill="#3db066" />
+    <text id="svc-4-db-label" x="140" y="480" text-anchor="middle" class="label db-label">Database 4</text>
+  </g>
+
+  <!-- Service 5 (hidden by default) -->
+  <g id="svc-5-group" style="display:none;">
+    <rect id="svc-5-box" class="svc-box" x="310" y="380" width="180" height="50" rx="8" ry="8"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#shadow)" />
+    <text id="svc-5-label" x="400" y="410" text-anchor="middle" class="label svc-label">Service 5</text>
+  </g>
+  <g id="svc-5-db-group" style="display:none;">
+    <ellipse cx="400" cy="460" rx="45" ry="10" fill="var(--diagram-amber, #F5A623)" />
+    <rect x="355" y="460" width="90" height="30" fill="var(--diagram-amber, #F5A623)" />
+    <ellipse cx="400" cy="490" rx="45" ry="10" fill="#d4900e" />
+    <text id="svc-5-db-label" x="400" y="480" text-anchor="middle" class="label db-label">Database 5</text>
+  </g>
+</svg>

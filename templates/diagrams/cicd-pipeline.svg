@@ -1,0 +1,98 @@
+<svg viewBox="0 0 900 280" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CI/CD Pipeline diagram with staged deployment" id="cicd-pipeline-diagram">
+  <title>CI/CD Pipeline</title>
+  <style>
+    .cicd-node { transition: filter 0.2s ease; cursor: pointer; }
+    .cicd-node:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .cicd-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: #fff; }
+    .cicd-status { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
+    .cicd-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2.5; fill: none; }
+    .cicd-rollback { stroke: var(--diagram-red, #DC5A5A); stroke-width: 2; fill: none; stroke-dasharray: 6, 4; }
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -20; }
+    }
+    .cicd-connector-animated {
+      stroke-dasharray: 10, 5;
+      animation: dash-flow 0.8s linear infinite;
+    }
+  </style>
+
+  <defs>
+    <marker id="cicd-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <marker id="cicd-arrow-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-red, #DC5A5A)" />
+    </marker>
+    <filter id="cicd-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Stage 1: Code -->
+  <g id="stage-1-group">
+    <rect class="cicd-node" x="30" y="90" width="140" height="55" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#cicd-shadow)" />
+    <text id="stage-1-label" x="100" y="123" text-anchor="middle" class="cicd-label">Code</text>
+    <text id="stage-1-status" x="100" y="163" text-anchor="middle" class="cicd-status">Commit</text>
+  </g>
+
+  <!-- Arrow 1->2 -->
+  <line x1="170" y1="117" x2="210" y2="117" class="cicd-connector cicd-connector-animated" marker-end="url(#cicd-arrow)" />
+
+  <!-- Stage 2: Build -->
+  <g id="stage-2-group">
+    <rect class="cicd-node" x="220" y="90" width="140" height="55" rx="10" ry="10"
+          fill="var(--diagram-secondary, #50C878)" filter="url(#cicd-shadow)" />
+    <text id="stage-2-label" x="290" y="123" text-anchor="middle" class="cicd-label">Build</text>
+    <text id="stage-2-status" x="290" y="163" text-anchor="middle" class="cicd-status">Compile</text>
+  </g>
+
+  <!-- Arrow 2->3 -->
+  <line x1="360" y1="117" x2="400" y2="117" class="cicd-connector cicd-connector-animated" marker-end="url(#cicd-arrow)" />
+
+  <!-- Stage 3: Test -->
+  <g id="stage-3-group">
+    <rect class="cicd-node" x="410" y="90" width="140" height="55" rx="10" ry="10"
+          fill="var(--diagram-amber, #F5A623)" filter="url(#cicd-shadow)" />
+    <text id="stage-3-label" x="480" y="123" text-anchor="middle" class="cicd-label">Test</text>
+    <text id="stage-3-status" x="480" y="163" text-anchor="middle" class="cicd-status">Unit + Integration</text>
+  </g>
+
+  <!-- Arrow 3->4 -->
+  <line x1="550" y1="117" x2="590" y2="117" class="cicd-connector cicd-connector-animated" marker-end="url(#cicd-arrow)" />
+
+  <!-- Stage 4: Stage -->
+  <g id="stage-4-group">
+    <rect class="cicd-node" x="600" y="90" width="140" height="55" rx="10" ry="10"
+          fill="var(--diagram-purple, #9B59B6)" filter="url(#cicd-shadow)" />
+    <text id="stage-4-label" x="670" y="123" text-anchor="middle" class="cicd-label">Stage</text>
+    <text id="stage-4-status" x="670" y="163" text-anchor="middle" class="cicd-status">Pre-production</text>
+  </g>
+
+  <!-- Arrow 4->5 -->
+  <line x1="740" y1="117" x2="780" y2="117" class="cicd-connector cicd-connector-animated" marker-end="url(#cicd-arrow)" />
+
+  <!-- Stage 5: Deploy -->
+  <g id="stage-5-group">
+    <rect class="cicd-node" x="790" y="90" width="140" height="55" rx="10" ry="10"
+          fill="var(--diagram-red, #DC5A5A)" filter="url(#cicd-shadow)" />
+    <text id="stage-5-label" x="860" y="123" text-anchor="middle" class="cicd-label">Deploy</text>
+    <text id="stage-5-status" x="860" y="163" text-anchor="middle" class="cicd-status">Production</text>
+  </g>
+
+  <!-- Stage 6 (hidden by default) -->
+  <g id="stage-6-group" style="display:none;">
+    <rect class="cicd-node" x="30" y="200" width="140" height="55" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#cicd-shadow)" />
+    <text id="stage-6-label" x="100" y="233" text-anchor="middle" class="cicd-label">Stage 6</text>
+    <text id="stage-6-status" x="100" y="270" text-anchor="middle" class="cicd-status"></text>
+  </g>
+
+  <!-- Rollback arrow (hidden by default): from Test back to Code -->
+  <g id="rollback-group" style="display:none;">
+    <path d="M 480 145 Q 480 230 290 230 Q 100 230 100 150"
+          class="cicd-rollback" marker-end="url(#cicd-arrow-red)" />
+    <text x="290" y="250" text-anchor="middle" class="cicd-status" style="fill: var(--diagram-red, #DC5A5A);">Rollback</text>
+  </g>
+</svg>

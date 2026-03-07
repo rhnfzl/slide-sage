@@ -1,0 +1,108 @@
+<svg viewBox="0 0 700 500" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="C4 Level 1 system context diagram showing actors, the central system, and external systems"
+     id="c4-context-diagram">
+  <title>C4 Context Diagram</title>
+  <style>
+    .c4-interactive { transition: filter 0.2s ease; cursor: pointer; }
+    .c4-interactive:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
+    .c4-name { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: #fff; }
+    .c4-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 400; fill: rgba(255,255,255,0.8); }
+    .c4-person-name { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; fill: #fff; }
+    .c4-person-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 400; fill: rgba(255,255,255,0.75); }
+    .c4-ext-name { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: var(--diagram-text, #e0e0e0); }
+    .c4-ext-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 400; fill: var(--diagram-text, #bbb); }
+    .c4-arrow-label { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 500; fill: var(--diagram-text, #ccc); }
+    .c4-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="c4-arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--diagram-arrow, #888)" />
+    </marker>
+    <filter id="c4-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- ==================== PERSON 1 (top-left) ==================== -->
+  <g id="person-1-group" class="c4-interactive">
+    <!-- Body -->
+    <rect x="70" y="100" width="80" height="45" rx="8" ry="8"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <!-- Head -->
+    <circle cx="110" cy="78" r="18" fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <!-- Labels below figure -->
+    <text id="person-1-label" x="110" y="168" text-anchor="middle" class="c4-person-name">End User</text>
+    <text id="person-1-desc" x="110" y="180" text-anchor="middle" class="c4-person-desc">Uses the system via browser</text>
+  </g>
+
+  <!-- ==================== PERSON 2 (top-right, hidden) ==================== -->
+  <g id="person-2-group" style="display:none;" class="c4-interactive">
+    <!-- Body -->
+    <rect x="490" y="100" width="80" height="45" rx="8" ry="8"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <!-- Head -->
+    <circle cx="530" cy="78" r="18" fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <!-- Labels below figure -->
+    <text id="person-2-label" x="530" y="168" text-anchor="middle" class="c4-person-name">Admin</text>
+    <text id="person-2-desc" x="530" y="180" text-anchor="middle" class="c4-person-desc">Manages configuration</text>
+  </g>
+
+  <!-- ==================== CENTRAL SYSTEM ==================== -->
+  <g id="system-group" class="c4-interactive">
+    <rect x="250" y="210" width="200" height="90" rx="10" ry="10"
+          fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <text id="system-label" x="350" y="248" text-anchor="middle" class="c4-name">Your System</text>
+    <text id="system-desc" x="350" y="268" text-anchor="middle" class="c4-desc">Core application providing</text>
+    <text x="350" y="280" text-anchor="middle" class="c4-desc">business functionality</text>
+  </g>
+
+  <!-- Arrow: Person 1 -> System -->
+  <line x1="150" y1="145" x2="248" y2="240" class="c4-connector" marker-end="url(#c4-arrow)" />
+  <text x="180" y="185" class="c4-arrow-label">Uses</text>
+
+  <!-- Arrow: Person 2 -> System (shown when person-2-group visible) -->
+  <line x1="490" y1="145" x2="452" y2="240" class="c4-connector" marker-end="url(#c4-arrow)" />
+
+  <!-- ==================== EXTERNAL SYSTEM 1 (right) ==================== -->
+  <g id="ext-1-group" class="c4-interactive">
+    <rect x="540" y="230" width="140" height="60" rx="8" ry="8"
+          fill="var(--diagram-text, #e0e0e0)" fill-opacity="0.15"
+          stroke="var(--diagram-text, #e0e0e0)" stroke-width="1.5"
+          filter="url(#c4-shadow)" />
+    <text id="ext-1-label" x="610" y="256" text-anchor="middle" class="c4-ext-name">Email Service</text>
+    <text id="ext-1-desc" x="610" y="272" text-anchor="middle" class="c4-ext-desc">Sends notifications</text>
+  </g>
+
+  <!-- Arrow: System -> Ext 1 -->
+  <line x1="450" y1="255" x2="538" y2="255" class="c4-connector" marker-end="url(#c4-arrow)" />
+  <text x="494" y="248" class="c4-arrow-label">Sends emails</text>
+
+  <!-- ==================== EXTERNAL SYSTEM 2 (bottom-left) ==================== -->
+  <g id="ext-2-group" class="c4-interactive">
+    <rect x="80" y="380" width="140" height="60" rx="8" ry="8"
+          fill="var(--diagram-text, #e0e0e0)" fill-opacity="0.15"
+          stroke="var(--diagram-text, #e0e0e0)" stroke-width="1.5"
+          filter="url(#c4-shadow)" />
+    <text id="ext-2-label" x="150" y="406" text-anchor="middle" class="c4-ext-name">Payment Gateway</text>
+    <text id="ext-2-desc" x="150" y="422" text-anchor="middle" class="c4-ext-desc">Processes payments</text>
+  </g>
+
+  <!-- Arrow: System -> Ext 2 -->
+  <line x1="300" y1="300" x2="195" y2="378" class="c4-connector" marker-end="url(#c4-arrow)" />
+  <text x="230" y="345" class="c4-arrow-label">Processes payment</text>
+
+  <!-- ==================== EXTERNAL SYSTEM 3 (bottom-right, hidden) ==================== -->
+  <g id="ext-3-group" style="display:none;" class="c4-interactive">
+    <rect x="460" y="380" width="140" height="60" rx="8" ry="8"
+          fill="var(--diagram-text, #e0e0e0)" fill-opacity="0.15"
+          stroke="var(--diagram-text, #e0e0e0)" stroke-width="1.5"
+          filter="url(#c4-shadow)" />
+    <text id="ext-3-label" x="530" y="406" text-anchor="middle" class="c4-ext-name">Analytics</text>
+    <text id="ext-3-desc" x="530" y="422" text-anchor="middle" class="c4-ext-desc">Tracks usage metrics</text>
+  </g>
+
+  <!-- Arrow: System -> Ext 3 -->
+  <line x1="400" y1="300" x2="490" y2="378" class="c4-connector" marker-end="url(#c4-arrow)" />
+</svg>
