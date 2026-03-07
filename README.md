@@ -5,9 +5,9 @@
 [![License](https://img.shields.io/github/license/rhnfzl/slide-sage)](LICENSE)
 [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/rhnfzl/163f62ec409cd7427733c39fcfedbf39/raw/clone.json&logo=github)](https://github.com/rhnfzl/slide-sage)
 
-**AI-powered HTML presentations with data visualization, architecture diagrams, and interactive charts.**
+**Create presentations with charts, diagrams, and code highlighting. Works with most AI coding tools.**
 
-Slide Sage is an open-source skill for AI coding tools that generates professional, data-rich HTML presentations as single files — no build tools, no frameworks, no dependencies.
+Slide Sage is an open-source skill that generates professional, data-rich HTML presentations as single files — no build tools, no frameworks, no dependencies.
 
 ## What Makes It Different
 
