@@ -276,7 +276,7 @@ This keeps context usage minimal while supporting complex presentations.
 
 - Any AI coding tool (Claude Code, Codex CLI, Amp, Cursor, VS Code/Copilot, Gemini CLI, Aider, Windsurf, Amazon Q, Roo Code, and more)
 - A web browser to view presentations
-- Python 3.8+ with `python-pptx` and `Pillow` (only for PowerPoint conversion)
+- Python 3.11+ with `python-pptx`, `pymupdf`, and `Pillow` (only for PPTX/PDF conversion — see `scripts/README.md`)
 
 ## License
 
