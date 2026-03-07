@@ -915,6 +915,311 @@ Include once in `<defs>`:
 </defs>
 ```
 
+---
+
+## SVG Diagram Construction Rules (HARD RULES)
+
+These rules prevent the most common SVG diagram bugs in presentations. Every rule was learned from real rendering failures — follow them exactly.
+
+### Rule 1: Always Center Text Inside Boxes (NON-NEGOTIABLE)
+
+**NEVER** position `<text>` with a left-offset `x` inside a `<rect>`. SVG text defaults to `text-anchor="start"` (left-aligned), which looks misaligned inside centered boxes.
+
+**Always use:**
+```xml
+<rect x="30" y="10" width="180" height="50" rx="8" .../>
+<text x="120" y="40" text-anchor="middle" ...>Label</text>
+<!--       ^ x = rect_x + rect_width / 2 -->
+```
+
+**Formula:** `text_x = rect_x + (rect_width / 2)`
+
+This applies to ALL text inside ALL rect boxes — titles, subtitles, descriptions, code labels. No exceptions.
+
+**Multi-line text inside a box:**
+```xml
+<rect x="185" y="20" width="170" height="85" rx="6" .../>
+<!-- All lines share the same centered x -->
+<text x="270" y="45" text-anchor="middle" font-weight="600">Title</text>
+<text x="270" y="65" text-anchor="middle">Line 1</text>
+<text x="270" y="80" text-anchor="middle">Line 2</text>
+```
+
+### Rule 2: viewBox Must Encompass All Elements + Margin
+
+SVG silently clips anything outside the viewBox. There is no overflow, no error, no warning — content just disappears.
+
+**Before finalizing any SVG:**
+1. Find the lowest `y + height` of any `<rect>` or the highest `y` of any `<text>`
+2. Find the rightmost `x + width`
+3. Set viewBox height = max_y + **15px margin**
+4. Set viewBox width = max_x + **15px margin**
+
+**Common failure:** A box at `y="76" height="30"` in a `viewBox="0 0 700 100"` — bottom 6px is clipped.
+
+**Fix:** `viewBox="0 0 700 120"` (or use negative origin `viewBox="0 -5 800 130"` if elements go above y=0).
+
+### Rule 3: One Arrow Marker Per Color
+
+Each arrow color needs its own `<marker>` definition in `<defs>`. You cannot reuse a green marker for a red arrow — the arrowhead will render green regardless of the line's `stroke` color.
+
+```xml
+<defs>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#00ff88"/>
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#ef4444"/>
+    </marker>
+    <marker id="arr-gray" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/>
+    </marker>
+</defs>
+```
+
+**Every `<line>` with `marker-end` must reference the marker matching its stroke color.** Dashed lines (e.g., error/fallback paths) need arrowheads too — don't omit `marker-end` just because the line is dashed.
+
+### Rule 4: Arrow and Line Color Contrast
+
+**NEVER** use colors close to the slide background for arrows or connecting lines. On dark backgrounds (`#0d1425`, `#0a0f1c`), these are invisible:
+
+| Color | Visible on dark? | Use instead |
+|-------|-------------------|-------------|
+| `#1e293b` | **NO** — nearly same as background | `#64748b` (muted gray) |
+| `#0f172a` | **NO** | `#475569` or `#64748b` |
+| `#334155` | Barely | `#64748b` minimum |
+
+**Safe minimum contrast colors for dark backgrounds:** `#64748b` (gray), `#94a3b8` (light gray), or any accent color.
+
+### Rule 5: Center Arrow Labels at Midpoints
+
+Labels on arrows between boxes should be centered at the arrow's midpoint, not left-aligned from the arrow start.
+
+```xml
+<!-- Arrow from box1 (ends at x=230) to box2 (starts at x=280) -->
+<line x1="230" y1="90" x2="280" y2="90" stroke="#00ff88" .../>
+<!-- Label at midpoint: (230+280)/2 = 255 -->
+<text x="255" y="82" text-anchor="middle" ...>HTTP</text>
+```
+
+### Rule 6: Two-Column Text in SVG Containers
+
+When a wide SVG box has two content columns:
+
+1. **Calculate the box center:** `center_x = box_x + box_width / 2`
+2. **Place columns symmetrically:** `col1_x = center_x - offset`, `col2_x = center_x + offset`
+3. **Typical offset:** 30-40% of half-width works well
+
+```xml
+<!-- Box from x=100, width=580 -> center at 390 -->
+<rect x="100" y="170" width="580" height="140" .../>
+<text x="390" y="195" text-anchor="middle">TITLE</text>
+<!-- Col 1 at ~center - 120 = 270, Col 2 at ~center + 120 = 510 -->
+<text x="270" y="220" text-anchor="middle">Col 1 item</text>
+<text x="510" y="220" text-anchor="middle">Col 2 item</text>
+```
+
+**Warning:** Mathematical symmetry doesn't always look visually symmetric because text widths differ. If the result looks misaligned, adjust by 10-15px toward the wider-text column. The screen is the source of truth.
+
+### Rule 7: Roadmap / Stage Diagrams — Badges vs Titles
+
+When stages have both a badge (step number/phase label) and a title:
+
+- **Badges:** Small (35-50px wide), positioned at the right edge of the stage bar, font-size 7-8
+- **Titles:** Centered at the bar's horizontal midpoint (`text-anchor="middle"`), font-size 11-13
+- **Descriptions:** Below the title on a separate line, font-size 9-10, muted color
+
+```xml
+<!-- Stage bar: x=50, width=700 -> center at 400 -->
+<rect x="50" y="20" width="700" height="35" rx="6" .../>
+<text x="400" y="42" text-anchor="middle" font-size="12" font-weight="600">Stage Title</text>
+<text x="400" y="56" text-anchor="middle" font-size="9" fill="#94a3b8">Description below</text>
+<!-- Badge at right edge -->
+<rect x="710" y="24" width="35" height="18" rx="4" fill="#3b82f6"/>
+<text x="727" y="37" text-anchor="middle" font-size="7" fill="white">BLUE</text>
+```
+
+**Never** let badges overlap title text. If the bar is narrow, shrink badges first.
+
+### Rule 8: State Machine Diagrams
+
+For state machine / flow diagrams with loops and terminal states:
+
+1. **Loop-back arrows go ABOVE** the main flow, not below. Use a quadratic Bezier curve:
+   ```xml
+   <!-- Loop from box at x=350 back to box at x=150 (arc above) -->
+   <path d="M350,top Q250,-20 150,top" fill="none" stroke="#fbbf24"
+         stroke-width="1.5" marker-end="url(#arr-yellow)"/>
+   ```
+2. **Terminal states** (cancelled, expired, rejected) branch downward from the main flow
+3. **Every branch needs an arrowhead** — including dashed error/timeout paths
+4. **Label transitions** on or near the arrow with the trigger event
+
+### Rule 9: Multi-Row Diagrams — Row Centering
+
+When a diagram has multiple horizontal rows of boxes (e.g., main flow on top, schedule flow below):
+
+1. **Add a visual separator** between rows: a text label like "-- OR --" or "Path 2: Schedule-driven"
+2. **Center each row independently** — don't assume row 1 alignment applies to row 2
+3. **Label each row** with its purpose (e.g., "Path 1: Event-driven" / "Path 2: Schedule-driven")
+
+### Rule 10: Nested Box Diagrams (Memory Hierarchies, Scopes)
+
+For nested rectangles showing containment/scope:
+
+- **Center ALL text within its containing box**, not left-aligned
+- Each nesting level: inset 20-30px from parent on each side
+- Use `rgba()` fills at low opacity for nesting (e.g., `rgba(59,130,246,0.05)`) so inner boxes show through
+- **Title + description** pattern: title in accent color (font-size 12, bold), description in muted color (font-size 9) on the next line
+
+### Rule 11: Pyramid / Triangle Diagrams
+
+For layered pyramids (evaluation tiers, hierarchies):
+
+- Use `<polygon>` for triangle/trapezoid shapes
+- **ALL text inside EVERY layer uses `text-anchor="middle"`** with x at the shape's horizontal center
+- The horizontal center of a symmetric triangle/trapezoid: `(left_x + right_x) / 2`
+- Layer labels: accent color, font-weight 600
+- Layer descriptions: muted color, smaller font-size, below the label
+
+### Rule 12: Box Height Must Fit Text Content
+
+When a `<rect>` contains text, ensure the rect height accommodates all lines:
+
+- **Minimum height:** `(number_of_text_lines x line_spacing) + top_padding + bottom_padding`
+- Typical line spacing: 15-18px for font-size 9-11
+- Typical padding: 10-15px top and bottom
+- **A box with 1 line of text** needs at least 30-35px height
+- **A box with 3 lines** needs at least 60-70px height
+
+If text appears clipped at the bottom of a box, increase the rect height AND the viewBox height.
+
+### Rule 13: Presentation Title Should Reflect the Whole, Not a Part
+
+When naming a presentation about a platform/product, the title must represent the **entire scope**, not just one subsystem being presented. A presentation covering architecture, deployment, security, observability, and agents should NOT be titled after just the agent layer.
+
+**Rule of thumb:** If the presentation has N major sections and the title only describes one of them, the title is too narrow. Pick the umbrella term that covers all sections.
+
+### Rule 14: Dashed Lines Need Minimum Visible Length
+
+A `stroke-dasharray="4 3"` line that's only 13px long shows barely one dash — it looks like a rendering glitch, not a connection.
+
+- **Minimum line length:** 25px between source element and target element
+- If the gap between two boxes is too small, shift the target box to create at least 25px of space
+- Also increase the viewBox dimensions to accommodate the shifted element
+
+```xml
+<!-- BAD: 13px dashed line — barely visible -->
+<line x1="375" y1="85" x2="375" y2="98" stroke="#ef4444" stroke-dasharray="3"/>
+
+<!-- GOOD: 25px dashed line — dash pattern clearly visible -->
+<line x1="375" y1="85" x2="375" y2="110" stroke="#ef4444" stroke-dasharray="4 3"
+      marker-end="url(#arr-red)"/>
+```
+
+### Rule 15: Every Directional Line Needs an Arrowhead
+
+Rule 3 says arrowheads must match the line color. This rule goes further: **every line that represents directional flow MUST have `marker-end`**. No exceptions.
+
+Lines without arrowheads look like static borders or decorative separators — not flow connections. This applies to:
+- Converging lines (multiple sources merging into one target)
+- Branching lines (one source splitting to multiple targets)
+- Connecting lines between diagram sections
+
+```xml
+<!-- BAD: no arrowhead — looks like a static border -->
+<line x1="150" y1="200" x2="150" y2="240" stroke="#00ff88" stroke-width="1.5"/>
+
+<!-- GOOD: arrowhead shows this is a directional flow -->
+<line x1="150" y1="200" x2="150" y2="238" stroke="#00ff88" stroke-width="1.5"
+      marker-end="url(#arr-green)"/>
+```
+
+### Rule 16: Abbreviated Labels Need Sub-Descriptions
+
+Short labels like "B1", "B2", "Phase 1", "Step A" are meaningless without context. Always add a descriptive sub-label below the abbreviation in a smaller, muted font.
+
+```xml
+<!-- BAD: "B1" means nothing to the audience -->
+<text x="155" y="40" fill="#ef4444" font-size="8" text-anchor="middle">B1</text>
+
+<!-- GOOD: abbreviation + description -->
+<text x="155" y="30" fill="#ef4444" font-size="8" text-anchor="middle">B1</text>
+<text x="155" y="40" fill="#64748b" font-size="7" text-anchor="middle">Session-JWT</text>
+```
+
+For bottom-of-diagram legends, add a summary line:
+```xml
+<text x="400" y="155" fill="#64748b" font-size="8" text-anchor="middle">
+    B1-B4 = Trust boundaries where authentication is enforced
+</text>
+```
+
+### Rule 17: Inter-Box Gaps Must Fit Label Text
+
+When an arrow between two boxes carries a text label (e.g., "HTTP", "Streamable HTTP"), the gap between the boxes must be wide enough to display the full label.
+
+**Before placing a label:**
+1. Estimate the label's pixel width: `char_count x ~7px` for font-size 8-9
+2. Add 20px padding on each side
+3. If the gap is smaller than `label_width + 40px`, widen the viewBox and shift the downstream box
+
+```xml
+<!-- BAD: 55px gap for "Streamable HTTP" (14 chars x 7px = 98px) — truncated -->
+<rect x="285" ... width="230"/>  <!-- ends at 515 -->
+<rect x="570" .../>              <!-- gap = 55px -->
+
+<!-- GOOD: 95px gap — label fits comfortably -->
+<rect x="290" ... width="220"/>  <!-- ends at 510 -->
+<rect x="605" .../>              <!-- gap = 95px -->
+<text x="557" y="82" text-anchor="middle">Streamable HTTP</text>
+```
+
+### Rule 18: Center Rows of Equally-Spaced Boxes
+
+When multiple boxes share a horizontal row, center the group within the viewBox — don't just start at a small x offset.
+
+**Formula:** `start_x = (viewBox_width - total_row_width) / 2` where `total_row_width = N x box_width + (N-1) x gap`
+
+```xml
+<!-- BAD: 3 boxes starting at x=40 in an 800px viewBox — left-skewed -->
+<rect x="40" ... width="150"/>
+<rect x="220" ... width="150"/>
+<rect x="400" ... width="180"/>
+
+<!-- GOOD: 3 boxes centered (total width ~520px, start at (800-520)/2 = 140) -->
+<rect x="120" ... width="160"/>
+<rect x="310" ... width="160"/>
+<rect x="500" ... width="160"/>
+```
+
+When a diagram has distinct row groups, add a visual separator between them:
+```xml
+<line x1="80" y1="290" x2="720" y2="290" stroke="#1e293b" stroke-dasharray="6 3"/>
+<text x="400" y="307" fill="#64748b" font-size="8" text-anchor="middle">External Services</text>
+```
+
+### Rule 19: Bullet Markers for SVG Text Columns
+
+For left-aligned list items in SVG (not centered via `text-anchor`), prefix each item with a bullet character `&#x2022;` to provide visual structure.
+
+```xml
+<!-- Without bullets — looks like floating text -->
+<text x="160" y="320">Pydantic AI agents</text>
+<text x="160" y="340">MCP tools (166+)</text>
+
+<!-- With bullets — clearly a list -->
+<text x="160" y="320">&#x2022; Pydantic AI agents</text>
+<text x="160" y="340">&#x2022; MCP tools (166+)</text>
+```
+
+Keep all bullets at the same x position within a column. If using two columns with bullets, both columns should use the same bullet style.
+
+---
+
 ### Common Shapes
 
 ```xml
