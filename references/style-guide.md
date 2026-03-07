@@ -881,3 +881,15 @@ When a screenshot has a dark UI (terminals, IDEs, dashboards), add a subtle back
 ```
 
 Never repeat the same image on multiple slides (except logos on title + closing).
+
+---
+
+## Presentation Title Rule
+
+When naming a presentation about a platform or product, the title must represent the **entire scope**, not just one subsystem being presented. A presentation covering architecture, deployment, security, observability, and agents should NOT be titled after just the agent layer.
+
+**Rule of thumb:** If the presentation has N major sections and the title only describes one of them, the title is too narrow. Pick the umbrella term that covers all sections.
+
+**Example:** A platform with AI chat, agents, MCP tools, security, deployment, and observability:
+- **Wrong:** "8vance Agent Platform" — "Agent" is only one of many segments
+- **Right:** "8vance AI Platform" — "AI" encompasses the full scope

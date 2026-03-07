@@ -1099,9 +1099,9 @@ If text appears clipped at the bottom of a box, increase the rect height AND the
 
 ### Rule 13: Presentation Title Should Reflect the Whole, Not a Part
 
-When naming a presentation about a platform/product, the title must represent the **entire scope**, not just one subsystem being presented. A presentation covering architecture, deployment, security, observability, and agents should NOT be titled after just the agent layer.
+> **Note:** This is a general content rule, not SVG-specific. Full guidance with examples in `references/style-guide.md` → "Presentation Title Rule".
 
-**Rule of thumb:** If the presentation has N major sections and the title only describes one of them, the title is too narrow. Pick the umbrella term that covers all sections.
+The title must represent the **entire scope** of the presentation, not just one subsystem. If the presentation has N major sections and the title only describes one of them, the title is too narrow — pick the umbrella term that covers all sections.
 
 ### Rule 14: Dashed Lines Need Minimum Visible Length
 
