@@ -190,6 +190,42 @@ For side-by-side comparisons with accent borders.
 
 ---
 
+## file:// Protocol Warning (SVG Loading)
+
+Slide-sage presentations are self-contained HTML files viewed locally via `file://` protocol. This imposes restrictions on how SVG assets are loaded.
+
+| Asset Type | `<img src="...">` on `file://` | Recommendation |
+|---|---|---|
+| Raster images (PNG, JPG, WebP) | Works fine | Use `<img src="assets/photo.png">` |
+| SVG diagrams | **Fails silently** in Chrome/Safari | Inline the SVG directly into HTML |
+| SVG logos | **Fails silently** | Inline or convert to PNG first |
+
+**Why:** Chrome and Safari block `<img src="local.svg">` on `file://` protocol due to same-origin security policies. The image renders as a broken icon with no console error — a silent failure that's easy to miss.
+
+**Correct patterns:**
+
+```html
+<!-- WRONG: broken on file:// -->
+<div class="diagram-container">
+  <img src="assets/pipeline.svg" alt="Pipeline">
+</div>
+
+<!-- CORRECT: inline SVG renders everywhere -->
+<div class="diagram-container">
+  <svg viewBox="0 0 960 700" xmlns="http://www.w3.org/2000/svg">
+    <!-- SVG content directly here -->
+  </svg>
+</div>
+
+<!-- ALSO CORRECT: <object> tag (works on file://) -->
+<object data="templates/diagrams/microservices.svg"
+        type="image/svg+xml" style="width:100%;"></object>
+```
+
+This warning does NOT apply to CSS/HTML diagrams (Tier 0) or SVG templates loaded via `<object>` (Tier 1) — only to `<img src="*.svg">`.
+
+---
+
 ## Tier 1: SVG Templates (Most Token-Efficient)
 
 ### Concept
@@ -785,7 +821,7 @@ Add `data-sketch` attribute to SVG elements you want to convert.
 
 ## Tier 3: Inline SVG (Fully Custom)
 
-For diagrams that need precise positioning, custom shapes, or interactive elements.
+For diagrams that need precise positioning, custom shapes, or interactive elements. **Always inline SVGs** directly in the HTML — never use `<img src="file.svg">` (see file:// Protocol Warning above).
 
 ### Responsive viewBox Pattern
 
@@ -795,6 +831,74 @@ For diagrams that need precise positioning, custom shapes, or interactive elemen
   <!-- diagram content -->
 </svg>
 ```
+
+### viewBox Aspect Ratio
+
+For full-slide diagrams, **prefer a taller ratio** (e.g., `viewBox="0 0 900 860"`) over wide-and-short (e.g., `0 0 1100 750`). Wide viewBoxes render tiny on widescreen monitors because the height becomes the limiting dimension.
+
+| Diagram Shape | Recommended viewBox | Use Case |
+|---|---|---|
+| Tall/portrait | `0 0 900 860` | Architecture stacks, layered systems |
+| Square | `0 0 800 800` | Hub-and-spoke, radial layouts |
+| Landscape | `0 0 960 600` | Sequence flows, timelines |
+| Wide | `0 0 1100 500` | Only for horizontal pipelines |
+
+### SVG Font Sizing
+
+SVG text scales with the viewBox, so it appears **smaller** than HTML text at the same nominal size. Use these minimums:
+
+| Content | Minimum `font-size` |
+|---|---|
+| Body text / descriptions | 14px |
+| Component labels | 16-18px |
+| Section headings inside SVG | 19-22px |
+
+### Glow Highlights
+
+Use `<filter>` with `feGaussianBlur` to create glow effects on key components (e.g., the new technology being introduced):
+
+```xml
+<defs>
+  <filter id="glow-accent" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+    <feMerge>
+      <feMergeNode in="blur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</defs>
+
+<!-- Apply to a key component -->
+<rect x="100" y="200" width="180" height="70" rx="10"
+      fill="var(--diagram-primary)" filter="url(#glow-accent)"/>
+```
+
+### Full-Slide Diagram Container
+
+When a diagram needs maximum space, reduce slide padding and expand the container:
+
+```html
+<div class="slide" style="padding: clamp(0.3rem, 1vw, 1rem);">
+  <div class="slide-content" style="justify-content: center; gap: 0;">
+    <div style="width: 100%; max-width: 1200px; margin: 0 auto;">
+      <svg viewBox="0 0 900 860" xmlns="http://www.w3.org/2000/svg"
+           style="width: 100%; height: auto; max-height: 96vh;">
+        <defs><!-- markers, filters --></defs>
+        <!-- diagram content -->
+      </svg>
+    </div>
+  </div>
+</div>
+```
+
+### Color Matching
+
+Use the same CSS custom properties as the surrounding slides for diagram colors:
+
+- Text: `var(--color-text-primary)`, `var(--color-text-muted)`
+- Accents: `var(--color-accent)`, `var(--color-gold, #D4B02A)`
+- Borders: `var(--color-border)`
+- Arrow fills: `var(--diagram-arrow, #888)`
 
 ### Arrowhead Marker Definition
 

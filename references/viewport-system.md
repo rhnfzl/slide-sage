@@ -203,6 +203,122 @@ For flex layouts where children must fit within the viewport:
 }
 ```
 
+## CSS Layout — Viewport Filling Rules
+
+Hard rules for making slide content fill the viewport correctly. These prevent the most common layout bugs in scroll-snap presentations.
+
+### Rule 1: Never `flex: 1` on Bordered Elements
+
+**NEVER** apply `flex: 1` (or any flex-grow) to elements with visible borders, backgrounds, or outlines:
+
+- `.card`, `.code-block`, `table`, `.callout`, `.badge`
+- Any element with `border`, `background`, or `box-shadow`
+
+These elements have intrinsic content sizes. Growing them creates huge empty bordered areas — the border stretches to fill the viewport while the content stays small inside.
+
+**Only apply `flex: 1` to borderless layout containers:** `.grid-2`, `.grid-3`, `.flex-row`, `.flex-col`, `.diagram-container`, plain wrapper `<div>` elements.
+
+### Rule 2: Always `min-height: 0` on Flex Children
+
+Flex items default to `min-height: auto` (not `0`). This means a flex child will never shrink below its intrinsic content size, even with `flex: 1`. If `.slide-content` contains a large element (code block, table, image), the slide overflows instead of constraining.
+
+**Always pair `flex: 1` with `min-height: 0`:**
+
+```css
+.slide-content > .grid-2,
+.slide-content > .diagram-container {
+  flex: 1;
+  min-height: 0; /* CRITICAL — allows shrinking below content size */
+}
+```
+
+### Rule 3: `align-content: center` + `align-items: start` on Grids
+
+When a CSS Grid container gets `flex: 1` to fill available space:
+
+- Add `align-content: center` — centers the group of rows within the expanded grid
+- Add `align-items: start` — prevents individual grid items (cards) from stretching to fill row height
+- Without `align-items: start`, cards stretch their borders to match the tallest possible row
+
+```css
+.slide-content > .grid-2 {
+  flex: 1;
+  min-height: 0;
+  align-content: center;
+  align-items: start;
+}
+```
+
+### Rule 4: Trace CSS Selectors Through Real HTML
+
+Before writing any CSS rule that uses `:has()`, `:not()`, or complex descendant selectors:
+
+1. Pick 3-4 actual slides from the presentation
+2. Manually walk through the HTML: "Does `.reveal.card.card-accent` on slide 5 match this selector? Yes/No — What happens?"
+3. Check for elements with **multiple classes** (e.g., `class="reveal card card-accent"` matches BOTH `.reveal` and `.card` rules)
+4. Only commit the CSS after all traces pass
+
+### Rule 5: One Layout Change, Then Verify
+
+For visual/CSS layout changes:
+
+- Make ONE targeted change
+- Verify in browser
+- Then proceed to the next change
+
+Do NOT stack multiple speculative layout changes. Layout interactions are hard to predict from code alone.
+
+### Rule 6: Research Before CSS Implementation
+
+For layout problems (viewport filling, spacing, responsive sizing):
+
+- Search for proven patterns FIRST (flexbox centering, grid alignment)
+- Then implement the researched approach
+- Do not guess-and-iterate on CSS layout
+
+### Proven Pattern: Viewport-Filling Slide Content
+
+```css
+/* Base: center content vertically */
+.slide-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Borderless layout containers grow to fill space */
+.slide-content > .grid-2,
+.slide-content > .grid-3,
+.slide-content > .diagram-container {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Grids: center rows, don't stretch items */
+.slide-content > .grid-2,
+.slide-content > .grid-3 {
+  align-content: center;
+  align-items: start;
+}
+
+/* .animate-in wrappers grow only if they contain expandable layouts */
+.slide-content > .animate-in:not(.card):not(.code-block):has(
+  .grid-2, .grid-3, .diagram-container
+) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+```
+
+**Key: `:has()` selector must NEVER include `.card`, `.code-block`, or `table`** — these cause the wrapper to grow, which then stretches the bordered child.
+
+---
+
 ## CSS Function Warning
 
 **NEVER negate a CSS `clamp()`, `min()`, or `max()` function directly.** This is invalid CSS:

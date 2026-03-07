@@ -688,3 +688,84 @@ For short code references within slide text (e.g., function names, variable name
 ```
 
 **Never** place a multi-line code block below content cards or comparison layouts — if code is needed alongside a comparison, put it on the next slide.
+
+---
+
+## Manual Syntax Classes (Domain-Specific Pseudo-Code)
+
+For content Prism.js cannot tokenize — HTTP endpoints, file trees, data flow diagrams, config snippets — use manual CSS helper classes. These complement Prism.js (Tier 1) as a lighter-weight Tier 2 approach.
+
+### Dark Theme CSS
+
+```css
+/* === Manual Syntax Highlighting (One Dark Pro palette) === */
+.syn-kw     { color: #c678dd; }                          /* keywords */
+.syn-fn     { color: #61afef; }                          /* function names */
+.syn-str    { color: #98c379; }                          /* strings */
+.syn-num    { color: #d19a66; }                          /* numbers */
+.syn-cm     { color: #6a6a8a; font-style: italic; }     /* comments */
+.syn-method { color: #e5c07b; }                          /* method/builtin names */
+.syn-verb   { color: #98c379; font-weight: 600; }       /* HTTP verbs */
+.syn-path   { color: #d19a66; }                          /* file paths, URLs */
+.syn-param  { color: #56b6c2; }                          /* parameters */
+```
+
+### Light Theme CSS
+
+```css
+.light-theme .syn-kw     { color: #a626a4; }
+.light-theme .syn-fn     { color: #4078f2; }
+.light-theme .syn-str    { color: #50a14f; }
+.light-theme .syn-num    { color: #986801; }
+.light-theme .syn-cm     { color: #a0a1a7; font-style: italic; }
+.light-theme .syn-method { color: #c18401; }
+.light-theme .syn-verb   { color: #50a14f; font-weight: 600; }
+.light-theme .syn-path   { color: #986801; }
+.light-theme .syn-param  { color: #0184bc; }
+```
+
+### Usage Examples
+
+**HTTP endpoints:**
+
+```html
+<pre class="code-block"><span class="syn-verb">POST</span> <span class="syn-path">/api/v1/chat/send</span>  <span class="syn-cm">SSE stream</span>
+<span class="syn-verb">GET</span>  <span class="syn-path">/api/v1/health</span>      <span class="syn-cm">K8s probe</span>
+<span class="syn-verb">PUT</span>  <span class="syn-path">/api/v1/config/:id</span>  <span class="syn-cm">Update config</span></pre>
+```
+
+**File/directory tree:**
+
+```html
+<pre class="code-block"><span class="syn-path">src/</span>
+├── <span class="syn-path">api/</span>       <span class="syn-cm"># HTTP routes</span>
+├── <span class="syn-path">agent/</span>     <span class="syn-cm"># Agent logic</span>
+├── <span class="syn-path">models/</span>    <span class="syn-cm"># Data models</span>
+└── <span class="syn-path">utils/</span>     <span class="syn-cm"># Shared helpers</span></pre>
+```
+
+**Data flow pseudo-code:**
+
+```html
+<pre class="code-block"><span class="syn-kw">INPUT</span>  <span class="syn-path">user_query</span>
+  <span class="syn-fn">embed</span>(<span class="syn-param">query</span>) → <span class="syn-num">768d</span> vector
+  <span class="syn-fn">search</span>(<span class="syn-param">index</span>, <span class="syn-param">top_k</span>=<span class="syn-num">10</span>)
+  <span class="syn-fn">rerank</span>(<span class="syn-param">results</span>)
+<span class="syn-kw">OUTPUT</span> <span class="syn-path">ranked_candidates</span></pre>
+```
+
+### When to Use Prism.js vs Manual `.syn-*`
+
+| Content | Approach | Example |
+|---------|----------|---------|
+| Python, JS, TypeScript, Go, Rust | Prism.js | `class="language-python"` |
+| SQL queries | Prism.js | `class="language-sql"` |
+| Bash/shell commands | Prism.js | `class="language-bash"` |
+| YAML/JSON config | Prism.js | `class="language-yaml"` |
+| HTTP endpoints | Manual `.syn-*` | `.syn-verb` + `.syn-path` |
+| File/directory trees | Manual `.syn-*` | `.syn-path` + `.syn-cm` |
+| Data flow pseudo-code | Manual `.syn-*` | `.syn-kw` + `.syn-fn` |
+| Architecture labels | Manual `.syn-*` | `.syn-kw` for section names |
+| Plain text diagrams | Manual `.syn-*` | `.syn-kw` for labels |
+
+**Rule of thumb:** If Prism.js has a grammar for the language, use Prism.js. For everything else, use `.syn-*` classes.

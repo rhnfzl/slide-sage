@@ -99,6 +99,29 @@ def add_shadow(
     return shadow
 
 
+def add_padding(
+    img: Image.Image,
+    padding: int = 40,
+    bg_color: tuple = (0, 0, 0, 0),
+) -> Image.Image:
+    """Add padding around an image (transparent by default).
+
+    Useful when screenshots need breathing room in the slide layout,
+    or when a colored background border is needed around a screenshot.
+
+    Args:
+        img: Source image.
+        padding: Pixels of padding on each side.
+        bg_color: RGBA tuple for the padding area. Default is transparent.
+            Use e.g. (15, 15, 15, 255) for a dark solid background.
+    """
+    img = img.convert("RGBA")
+    w, h = img.size
+    new = Image.new("RGBA", (w + 2 * padding, h + 2 * padding), bg_color)
+    new.paste(img, (padding, padding), img)
+    return new
+
+
 def to_base64(img: Image.Image, fmt: str = "PNG", quality: int = 85) -> str:
     """Convert image to base64 data URI string."""
     buffer = BytesIO()
@@ -136,6 +159,12 @@ def process_file(
         img = add_rounded_corners(img, radius=kwargs.get("radius", 20))
     elif command == "shadow":
         img = add_shadow(img)
+    elif command == "padding":
+        img = add_padding(
+            img,
+            padding=kwargs.get("padding", 40),
+            bg_color=kwargs.get("bg_color", (0, 0, 0, 0)),
+        )
     elif command == "base64":
         fmt = input_path.suffix.lstrip(".").upper()
         if fmt == "JPG":
@@ -190,6 +219,11 @@ def main():
     shadow_p = subparsers.add_parser("shadow", help="Add drop shadow")
     shadow_p.add_argument("input", help="Input image path")
     shadow_p.add_argument("--output", "-o", required=True)
+
+    pad_p = subparsers.add_parser("padding", help="Add padding around image")
+    pad_p.add_argument("input", help="Input image path")
+    pad_p.add_argument("--padding", type=int, default=40, help="Pixels of padding per side")
+    pad_p.add_argument("--output", "-o", required=True)
 
     args = parser.parse_args()
 

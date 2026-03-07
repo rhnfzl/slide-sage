@@ -94,6 +94,24 @@ Data attributes: `td[data-check="yes"]`, `td[data-check="no"]`, `td[data-check="
 
 ---
 
+## Manual Syntax Highlighting Classes (From code-highlighting.md)
+
+For domain-specific pseudo-code that Prism.js cannot tokenize (HTTP endpoints, file trees, data flows).
+
+| Class | Purpose | Element |
+|-------|---------|---------|
+| `.syn-kw` | Keyword highlighting | `<span>` |
+| `.syn-fn` | Function name | `<span>` |
+| `.syn-str` | String literal | `<span>` |
+| `.syn-num` | Number | `<span>` |
+| `.syn-cm` | Comment (italic) | `<span>` |
+| `.syn-method` | Method/builtin name | `<span>` |
+| `.syn-verb` | HTTP verb (bold green) | `<span>` |
+| `.syn-path` | File path or URL | `<span>` |
+| `.syn-param` | Parameter name | `<span>` |
+
+---
+
 ## Need a Class Not Listed Here?
 
 **Define it in `<style>` FIRST, then use it in HTML.** Always use theme variables.

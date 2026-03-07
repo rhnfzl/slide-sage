@@ -826,3 +826,58 @@ Add `.reveal` class to child elements of `.slide-content`. Elements automaticall
 | Glow pulse | No | No | Yes |
 | Section labels | Yes | Yes | Yes |
 | Badges | Yes | Yes | Yes |
+
+---
+
+## Screenshot & Image Framing
+
+When placing screenshots or images on slides, use themed framing to match the presentation's aesthetic. Since slide-sage uses CSS custom properties, a single class works across all 6 presets.
+
+### Base Screenshot Frame
+
+```css
+.screenshot-frame {
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+```
+
+Requires `--accent-rgb` (already defined per-preset in the table above).
+
+### Stronger Framing (for hero screenshots)
+
+```css
+.screenshot-frame-strong {
+  border: 2px solid rgba(var(--accent-rgb), 0.3);
+  box-shadow: 0 4px 24px rgba(var(--accent-rgb), 0.12),
+              0 0 40px rgba(var(--accent-rgb), 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+```
+
+### Dark Background Screenshots
+
+When a screenshot has a dark UI (terminals, IDEs, dashboards), add a subtle background to separate it from dark slide backgrounds:
+
+```css
+.screenshot-frame-dark {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+}
+```
+
+### Usage
+
+```html
+<div class="screenshot-frame">
+  <img src="assets/dashboard.png" alt="Dashboard">
+</div>
+```
+
+Never repeat the same image on multiple slides (except logos on title + closing).
