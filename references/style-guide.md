@@ -767,3 +767,62 @@ When building a custom theme, choose one pairing. All are available on Google Fo
 | Instrument Sans        | Source Sans 3     | Corporate-distinctive    |
 | Albert Sans            | Figtree           | Friendly / approachable  |
 | Schibsted Grotesk      | Karla             | Editorial / data-story   |
+
+---
+
+## Visual Depth Techniques
+
+These techniques add visual polish and depth to presentations. They are **on by default** for Balanced and Dramatic animation levels. For Minimal, only card accents are applied.
+
+### Background Grid
+
+A subtle grid overlay adds texture without distraction. Uses the presentation's accent color at 2-3% opacity.
+
+Applied by adding `.bg-grid` class to `.slides-container`. The grid is generated via `::before` pseudo-element with `pointer-events: none`.
+
+**Per-preset accent RGB values** (needed for `rgba()` in the grid):
+
+| Preset | `--accent-rgb` value |
+|--------|---------------------|
+| Arctic Dawn (dark) | `74, 163, 216` |
+| Ember (dark) | `232, 152, 56` |
+| Jade Circuit (dark) | `62, 175, 110` |
+| Dusk Palette (dark) | `184, 100, 184` |
+| Monochrome Pro (dark) | `34, 211, 238` |
+| Ocean Deep (dark) | `42, 184, 200` |
+
+### Glow Effects
+
+Use `.glow` for a static accent glow on key cards or diagram nodes. Use `.glow-pulse` for a breathing animation on the most important element per slide (max 1-2 per slide).
+
+### Card Accent Borders
+
+Use `.card-accent` (left border) or `.card-top-accent` (top border) to visually distinguish cards. Use `.card-gold` for secondary accent.
+
+### Badge System
+
+Use `.badge` for inline labels (segment numbers, phase indicators, status tags). Variants: `.badge-gold`, `.badge-blue`, `.badge-orange`.
+
+### Staggered Reveal Animations
+
+Add `.reveal` class to child elements of `.slide-content`. Elements automatically stagger with 0.1s delay increments (up to 8 children) when the slide becomes active.
+
+### Typography Refinements
+
+| Element | Property | Value | Effect |
+|---------|----------|-------|--------|
+| `h1`, `h2` | `letter-spacing` | `-0.02em` | Tighter headings for impact |
+| `.section-label` | `letter-spacing` | `0.15em` | Wide spacing for section markers |
+| `.section-label` | `text-transform` | `uppercase` | Uppercase monospace labels |
+
+### Animation Level Matrix
+
+| Technique | Minimal | Balanced | Dramatic |
+|-----------|---------|----------|----------|
+| Background grid | No | Yes | Yes |
+| Card accents | Yes | Yes | Yes |
+| Staggered reveals | No | Yes | Yes |
+| Glow effects | No | No | Yes |
+| Glow pulse | No | No | Yes |
+| Section labels | Yes | Yes | Yes |
+| Badges | Yes | Yes | Yes |

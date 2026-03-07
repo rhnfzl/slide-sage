@@ -456,19 +456,22 @@ External libraries load before the closing `</body>` tag, before the SlidePresen
   <!-- Chart.js (when charts are needed) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 
-  <!-- Highlight.js (when code blocks are needed) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github-dark.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
+  <!-- Prism.js (when code blocks are needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <!-- Add language grammars as needed, e.g.: -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script> -->
 
   <!-- SlidePresentation class (always last) -->
   <script>
     class SlidePresentation { ... }
-    document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+    document.addEventListener('DOMContentLoaded', () => {
+      new SlidePresentation();
 
-    // Initialize highlight.js if loaded
-    if (typeof hljs !== 'undefined') {
-      document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());
-    }
+      // Initialize Prism.js if loaded
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightAll();
+      }
+    });
   </script>
 </body>
 ```

@@ -15,7 +15,7 @@ Slide Sage is an open-source skill that generates professional, data-rich HTML p
 |---------|-----------|-----------|--------|-------------------|
 | AI-native workflow | Yes | No | No | Proprietary |
 | Data visualization | Chart.js, ECharts, D3 | Plugin | Vue charts | Limited |
-| Architecture diagrams | SVG templates + Mermaid | No | Mermaid only | No |
+| Architecture diagrams | CSS/HTML + SVG templates | No | Mermaid only | No |
 | Code highlighting | Prism.js | highlight.js | Shiki | No |
 | Single-file output | Yes | No (needs build) | No (needs build) | No (SaaS) |
 | Cross-platform AI tools | Yes | N/A | N/A | N/A |
@@ -211,7 +211,7 @@ The AI will:
 
 ### Architecture Diagrams
 - **SVG templates** — Token-efficient pre-designed diagrams (microservices, data pipeline, client-server, layered architecture)
-- **Mermaid.js** — Text-to-diagram for flowcharts, sequence diagrams, ERDs, and 15+ more types
+- **CSS/HTML diagrams** — Sequence flows, architecture stacks, pyramids, process flows with full theme integration
 - **Inline SVG** — Fully custom diagrams with interactive tooltips
 
 ### Code Slides

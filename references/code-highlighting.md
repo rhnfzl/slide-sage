@@ -650,3 +650,41 @@ Code block backgrounds should complement the slide background. Use CSS custom pr
 <!-- 8. Copy button script -->
 <script>/* ... copy button JS from above ... */</script>
 ```
+
+---
+
+## Mandatory Initialization
+
+**CRITICAL**: Prism.js does NOT auto-highlight in all contexts. Always call `Prism.highlightAll()` after the DOM is ready:
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof Prism !== 'undefined') {
+    Prism.highlightAll();
+  }
+});
+```
+
+This must go in the presentation's `<script>` block, AFTER the Prism.js CDN scripts.
+
+### Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| `<code>` without `language-*` class | Always add `class="language-python"` (or appropriate language) |
+| Code not highlighted (monochrome) | Check that `Prism.highlightAll()` is called after DOM load |
+| Using `<pre><code>` without `.code-block` on `<pre>` | Always use `<pre class="code-block"><code class="language-xxx">` |
+| Inline code snippets in a code block | Use `<code class="inline-code">` for short inline references |
+
+---
+
+## Inline Code Styling
+
+For short code references within slide text (e.g., function names, variable names, API endpoints), use the `.inline-code` class instead of a full code block:
+
+```html
+<p>The <code class="inline-code">FallbackModel</code> wraps both providers:</p>
+<p>Set <code class="inline-code">previous_response_id: 'auto'</code> for caching.</p>
+```
+
+**Never** place a multi-line code block below content cards or comparison layouts — if code is needed alongside a comparison, put it on the next slide.

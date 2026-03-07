@@ -4,6 +4,192 @@ Three-tier system for architectural and technical diagrams, ordered by token eff
 
 ---
 
+## Tier 0: CSS/HTML Diagrams (Preferred)
+
+Use CSS/HTML diagrams for 80% of diagram needs. They render at full size, respect the theme, and have zero sizing issues. Classes are defined in `assets/viewport-base.css`.
+
+### Sequence/Flow Diagram
+
+Replaces Mermaid sequence diagrams. Uses `.sequence-flow` layout with step rows.
+
+```html
+<div class="sequence-flow">
+  <div class="seq-participants">
+    <div class="seq-actor">User</div>
+    <div class="seq-actor">Django</div>
+    <div class="seq-actor accent">FastAPI</div>
+    <div class="seq-actor">Agent</div>
+    <div class="seq-actor">MCP Server</div>
+  </div>
+  <div class="seq-step">
+    <span class="seq-from">User</span>
+    <span class="seq-arrow">&rarr;</span>
+    <span class="seq-to">Django</span>
+    <span class="seq-label">"Find Python devs"</span>
+  </div>
+  <div class="seq-step">
+    <span class="seq-from">Django</span>
+    <span class="seq-arrow">&rarr;</span>
+    <span class="seq-to">FastAPI</span>
+    <span class="seq-label">POST /chat/send + creds</span>
+  </div>
+  <div class="seq-step">
+    <span class="seq-from">FastAPI</span>
+    <span class="seq-arrow">&rarr;</span>
+    <span class="seq-to">Agent</span>
+    <span class="seq-label">run_agent_stream()</span>
+  </div>
+  <div class="seq-step">
+    <span class="seq-from">Agent</span>
+    <span class="seq-arrow">&rarr;</span>
+    <span class="seq-to">MCP Server</span>
+    <span class="seq-label">talent_search(skills=Python)</span>
+  </div>
+  <div class="seq-step response dashed">
+    <span class="seq-from">MCP Server</span>
+    <span class="seq-arrow">&larr;</span>
+    <span class="seq-to">Agent</span>
+    <span class="seq-label">Results (12 candidates)</span>
+  </div>
+  <div class="seq-step response dashed">
+    <span class="seq-from">FastAPI</span>
+    <span class="seq-arrow">&larr;</span>
+    <span class="seq-to">User</span>
+    <span class="seq-label">SSE: streaming response</span>
+  </div>
+</div>
+```
+
+Customize by:
+- Adding/removing `.seq-actor` elements for participants
+- Using `.accent` class on key participants
+- Adding `.response` and `.dashed` classes for return arrows
+- Using `&rarr;` for requests and `&larr;` for responses
+
+### Architecture Stack
+
+Replaces inline SVG architecture stacks. Uses `.arch-stack` with rows and groups.
+
+```html
+<div class="arch-stack">
+  <div class="arch-row full muted">CLIENT LAYER &mdash; React Frontend</div>
+  <div class="arch-row full muted">TM BACKEND &mdash; Django (Auth, Credentials, History)</div>
+  <div class="arch-row full"><span class="badge">01</span> API &amp; Streaming Layer (FastAPI, SSE)</div>
+  <div class="arch-row full"><span class="badge badge-gold">02</span> Agent Orchestration (Pydantic AI)</div>
+  <div class="arch-row-group">
+    <div class="arch-row"><span class="badge">03</span> MCP Client</div>
+    <div class="arch-row"><span class="badge">04</span> LLM Provider</div>
+    <div class="arch-row"><span class="badge">05</span> Guardrails</div>
+  </div>
+  <div class="arch-row full"><span class="badge">06</span> Conversation Storage</div>
+  <div class="arch-row full"><span class="badge">07</span> Observability</div>
+</div>
+```
+
+Customize by:
+- Using `.muted` for background/context layers
+- Using `.arch-row-group` for side-by-side segments
+- Using `.badge` and `.badge-gold` for segment numbers
+
+### Pyramid / Hierarchy
+
+Replaces SVG polygon pyramids. Uses `.pyramid` with decreasing widths.
+
+```html
+<div class="pyramid">
+  <div class="pyramid-layer" style="--width: 35%; border-color: var(--color-text-muted);">
+    <strong>LLM-as-Judge</strong>
+    <br><small>Pre-release</small>
+  </div>
+  <div class="pyramid-layer" style="--width: 60%; border-color: var(--color-gold, #D4B02A);">
+    <strong style="color: var(--color-gold, #D4B02A);">Agent Trajectory Tests</strong>
+    <br><small>Nightly &middot; DeepEval &middot; 50 golden cases</small>
+  </div>
+  <div class="pyramid-layer" style="--width: 85%; border-color: var(--color-accent);">
+    <strong style="color: var(--color-accent);">Deterministic Unit Tests</strong>
+    <br><small>Every PR &middot; Tool routing, guardrails, prompt assembly</small>
+  </div>
+</div>
+```
+
+Customize by:
+- Setting `--width` per layer (narrowest at top)
+- Using `border-color` to color-code layers
+- Adding `<strong>` for layer names and `<small>` for details
+
+### Process Flow (Horizontal)
+
+For step-by-step processes, timelines, and pipelines.
+
+```html
+<div class="process-flow">
+  <div class="process-step">
+    <div class="badge">1</div>
+    <strong>Ingest</strong>
+    <small>Raw data sources</small>
+  </div>
+  <div class="process-arrow">&rarr;</div>
+  <div class="process-step">
+    <div class="badge">2</div>
+    <strong>Transform</strong>
+    <small>Clean &amp; normalize</small>
+  </div>
+  <div class="process-arrow">&rarr;</div>
+  <div class="process-step">
+    <div class="badge">3</div>
+    <strong>Store</strong>
+    <small>Feature store</small>
+  </div>
+  <div class="process-arrow">&rarr;</div>
+  <div class="process-step">
+    <div class="badge">4</div>
+    <strong>Serve</strong>
+    <small>API endpoint</small>
+  </div>
+</div>
+```
+
+### Comparison / Split View
+
+For side-by-side comparisons with accent borders.
+
+```html
+<div class="grid-2 gap-md">
+  <div class="card card-accent">
+    <h3>Primary: Responses API</h3>
+    <ul>
+      <li><strong style="color: var(--color-accent);">GPT-5-mini</strong> on Azure OpenAI</li>
+      <li><code class="inline-code">previous_response_id: 'auto'</code></li>
+      <li>Server-side conversation state</li>
+    </ul>
+  </div>
+  <div class="card card-gold">
+    <h3>Fallback: Chat Completions</h3>
+    <ul>
+      <li><strong style="color: var(--color-gold, #D4B02A);">GPT-4.1-mini</strong> on Azure</li>
+      <li>Full message history resent</li>
+      <li>Automatic failover via Pydantic AI</li>
+    </ul>
+  </div>
+</div>
+```
+
+### When to Use CSS/HTML vs Other Tiers
+
+| Diagram Type | Use CSS/HTML | Use SVG Template | Use Inline SVG |
+|---|---|---|---|
+| Sequence/message flow | Yes (`.sequence-flow`) | — | — |
+| Architecture stack | Yes (`.arch-stack`) | — | — |
+| Pyramid/hierarchy | Yes (`.pyramid`) | `pyramid-roadmap.svg` | — |
+| Process pipeline | Yes (`.process-flow`) | `data-pipeline.svg` | — |
+| Comparison/split | Yes (`.grid-2` + `.card`) | — | — |
+| Microservices | — | `microservices.svg` | — |
+| Network topology | — | `network-zones.svg` | Complex custom |
+| Custom shapes | — | — | Yes |
+| Hub and spoke | — | `hub-and-spoke.svg` | — |
+
+---
+
 ## Tier 1: SVG Templates (Most Token-Efficient)
 
 ### Concept
@@ -594,154 +780,6 @@ function sketchify(svgElement) {
 ```
 
 Add `data-sketch` attribute to SVG elements you want to convert.
-
----
-
-## Tier 2: Mermaid.js
-
-For diagrams that don't need pixel-level control. Mermaid renders from text syntax -- good for flowcharts, sequence diagrams, and ER diagrams.
-
-### Setup
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<script>
-mermaid.initialize({
-  startOnLoad: true,
-  theme: 'dark',
-  themeVariables: {
-    primaryColor: '#4A90D9',
-    primaryTextColor: '#e0e0e0',
-    primaryBorderColor: '#6BA3D6',
-    lineColor: '#888',
-    secondaryColor: '#50C878',
-    tertiaryColor: '#2a2a2a',
-    fontFamily: 'system-ui, -apple-system, sans-serif',
-    fontSize: '14px'
-  }
-});
-</script>
-```
-
-### Container Pattern
-
-```html
-<div class="diagram-container" style="max-height:min(60vh,450px); overflow:hidden;">
-  <pre class="mermaid">
-    graph TD
-    A[Client] --> B[API Gateway]
-    B --> C[Service A]
-    B --> D[Service B]
-  </pre>
-</div>
-```
-
-### 1. Flowchart
-
-```
-graph TD
-    A[Start] --> B{Decision?}
-    B -->|Yes| C[Process A]
-    B -->|No| D[Process B]
-    C --> E[End]
-    D --> E
-
-    style A fill:#4A90D9,stroke:#3a7bc8,color:#fff
-    style E fill:#50C878,stroke:#3db066,color:#fff
-```
-
-Horizontal variant: use `graph LR` instead of `graph TD`.
-
-### 2. Sequence Diagram
-
-```
-sequenceDiagram
-    participant C as Client
-    participant G as Gateway
-    participant S as Service
-    participant D as Database
-
-    C->>G: HTTP Request
-    G->>S: Forward + Auth
-    S->>D: Query
-    D-->>S: Results
-    S-->>G: Response
-    G-->>C: JSON Response
-
-    Note over G,S: mTLS encrypted
-```
-
-### 3. Class Diagram
-
-```
-classDiagram
-    class User {
-        +String name
-        +String email
-        +login()
-        +logout()
-    }
-    class Order {
-        +int id
-        +Date created
-        +calculateTotal()
-    }
-    class Product {
-        +String name
-        +float price
-    }
-    User "1" --> "*" Order : places
-    Order "*" --> "*" Product : contains
-```
-
-### 4. State Diagram
-
-```
-stateDiagram-v2
-    [*] --> Idle
-    Idle --> Processing : submit
-    Processing --> Success : complete
-    Processing --> Error : fail
-    Error --> Processing : retry
-    Success --> [*]
-    Error --> [*] : cancel
-```
-
-### 5. Entity-Relationship Diagram
-
-```
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ LINE_ITEM : contains
-    PRODUCT ||--o{ LINE_ITEM : "ordered in"
-    USER {
-        int id PK
-        string name
-        string email
-    }
-    ORDER {
-        int id PK
-        date created
-        string status
-    }
-```
-
-### Theme Variables for Light Mode
-
-```javascript
-mermaid.initialize({
-  startOnLoad: true,
-  theme: 'default',
-  themeVariables: {
-    primaryColor: '#4A90D9',
-    primaryTextColor: '#333',
-    primaryBorderColor: '#3a7bc8',
-    lineColor: '#555',
-    secondaryColor: '#50C878',
-    tertiaryColor: '#f0f0f0'
-  }
-});
-```
 
 ---
 

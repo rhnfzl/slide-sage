@@ -1,6 +1,6 @@
 ---
 name: slide-sage
-description: Create data-rich, interactive HTML presentations with charts, architecture diagrams, code highlighting, and professional styling. Use when the user wants to build a presentation with data visualization, technical diagrams, metrics dashboards, or code examples. Supports Chart.js, ECharts, D3, Mermaid diagrams, Prism.js code highlighting, and 6 curated style presets.
+description: Create data-rich, interactive HTML presentations with charts, architecture diagrams, code highlighting, and professional styling. Use when the user wants to build a presentation with data visualization, technical diagrams, metrics dashboards, or code examples. Supports Chart.js, ECharts, D3, CSS/HTML diagrams, inline SVG, Prism.js code highlighting, and 6 curated style presets.
 ---
 
 # Slide Sage
@@ -35,37 +35,53 @@ When enhancing existing presentations:
 
 ## Phase 1: Smart Interview
 
-**Goal**: Gather enough context to generate without asking unnecessary questions.
+**Goal**: Always confirm key decisions with the user before generating — even when the prompt is detailed.
 
-### Zero-Question Path
+### Always-Ask Questions (mandatory, every presentation)
 
-Skip ALL questions and go directly to Phase 2 if the user's message contains:
-- Clear content/topic AND audience hint AND tone/style indicator
-- Structured data (JSON, CSV, or described metrics)
-- An existing presentation to enhance (Mode C)
+Always ask these two questions together in a single message, regardless of how much detail the user provides:
 
-Example that triggers zero-question path:
-> "Create a pitch deck for our ML startup with user growth chart (1K→80K over Q1-Q4), accuracy comparison vs competitors, and microservices architecture diagram"
+**Question 1 — Audience & Purpose:**
+> "Who is the audience? (e.g., investors, engineers, students, general)"
 
-This has: content (ML startup), data (growth numbers, accuracy), visuals needed (chart, diagram). No questions needed.
+**Question 2 — Style:**
+> "Any style preference? I have 6 presets:
+> - **Arctic Dawn** — Cool blues, clean (science/research)
+> - **Ember** — Warm on dark, high contrast (dashboards/metrics)
+> - **Jade Circuit** — Green/gold on charcoal (engineering/architecture)
+> - **Dusk Palette** — Muted purple/pink (creative/design)
+> - **Monochrome Pro** — Grayscale + accent (executive/formal)
+> - **Ocean Deep** — Navy, aqua, coral (corporate/professional)
+> - Or tell me your brand colors for a custom theme"
 
-### Contextual Questions (only when needed)
+If the user already specified audience and style in their prompt, acknowledge their choices and confirm: "I'll use [audience] targeting with [preset]. Sound good?"
 
-Ask at most 2-3 questions. Choose from this list based on what's MISSING:
+### Conditional Questions (only when info is missing)
+
+After the always-ask questions, add any of these that apply:
 
 | Missing Info | Question |
 |---|---|
-| Audience unknown | "Who is the audience? (e.g., investors, engineers, students)" |
-| No data provided but topic implies data | "Do you have specific data/metrics to include, or should I use representative examples?" |
-| Ambiguous scope | "Roughly how many slides? (e.g., 5 for a quick update, 15+ for a deep dive)" |
-| Style preference unclear for important presentations | "Any brand colors or style preference? (I have 6 presets: Arctic Dawn, Ember, Jade Circuit, Dusk Palette, Monochrome Pro, Ocean Deep)" |
+| No data provided but topic implies data | "Do you have specific data/metrics, or should I use representative examples?" |
+| Ambiguous scope | "Roughly how many slides? (5 for a quick update, 15+ for a deep dive)" |
+| Business/corporate context and no brand info | "Any brand colors or logo to incorporate? (Skip if not needed)" |
 
 **Never ask about**: animation level (detect from audience), library choices (auto-select), file format (auto-detect), presenter mode (default to comment notes).
 
-### Branding Quick-Check
+### Outline Confirmation (for large presentations)
 
-For business/corporate presentations, briefly offer:
-> "Any brand colors or logo to incorporate? (Skip if not needed)"
+If the planned presentation has **more than 15 slides**, present a brief slide outline before generating:
+
+> "Here's the planned structure ([N] slides):
+> 1. Title
+> 2. Agenda
+> 3-5. [Section name]
+> ...
+> [N]. Closing
+>
+> Does this look right, or should I adjust?"
+
+For 15 slides or fewer, skip the outline confirmation and proceed directly to Phase 2.
 
 ## Phase 2: Content Analysis
 
@@ -78,7 +94,7 @@ Scan the user's message for:
 | Signal | Content Type | Action |
 |--------|-------------|--------|
 | Numbers, metrics, KPIs, percentages | **Data/Charts** | Read `references/viz-integration.md` |
-| "Architecture", "flow", "system design", "pipeline" | **Diagrams** | Read `references/diagram-patterns.md` |
+| "Architecture", "flow", "system design", "pipeline" | **Diagrams** | Read `references/diagram-patterns.md` (CSS/HTML preferred, SVG templates, inline SVG) |
 | Code snippets, "API", "endpoint", function names | **Code slides** | Read `references/code-highlighting.md` |
 | Comparative language ("vs", "compared to", "before/after") | **Comparison slides** | Use comparison templates |
 | JSON/CSV data pasted or file referenced | **Data parsing** | Parse inline or read file |
@@ -96,7 +112,6 @@ Based on content types, decide which CDN libraries to include. Do NOT ask the us
 | Bar, line, pie, scatter, radar charts | Chart.js 4.4 | `cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` |
 | Heatmap, sankey, treemap | ECharts 5.5 | `cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js` |
 | Custom statistical charts | D3.js v7 | `cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` |
-| Flowcharts, sequence, ER diagrams | Mermaid.js | `cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` |
 | Code syntax highlighting | Prism.js | `cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js` |
 | Number animations | CountUp.js | `cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js` |
 | Typing effects (title slides) | Typed.js | `cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js` |
@@ -221,15 +236,13 @@ Structure the HTML file:
 
   <!-- CDN libraries (only those needed) -->
   <script src="[Chart.js CDN if needed]"></script>
-  <script src="[Mermaid CDN if needed]"></script>
   <script src="[Prism.js CDN if needed]"></script>
 
   <script>
     // SlidePresentation class (from html-template.md)
     // Chart initializations
-    // Mermaid initialization
     // Diagram template rendering
-    // Prism.js highlighting
+    // Prism.highlightAll() — MUST call after DOM ready
   </script>
 </body>
 </html>
@@ -249,11 +262,23 @@ When creating charts, follow these rules:
 
 ### Step 5: Diagram Generation
 
-Choose the most token-efficient approach:
+Use a CSS-first approach for all diagrams.
 
-1. **Check SVG templates first** — If the diagram matches a common pattern, use a pre-designed SVG template from `templates/diagrams/`. Available: microservices, data-pipeline, client-server, layered-arch, cicd-pipeline, hub-and-spoke, cloud-three-tier, kubernetes-cluster, event-driven-pubsub, ml-pipeline, c4-context, network-zones, api-gateway-auth, pyramid-roadmap, funnel, nested-scopes, tree-hierarchy. Write only the data object (~200-400 chars)
-2. **Mermaid for custom diagrams** — Flowcharts, sequence diagrams, ERDs that don't match templates. Write Mermaid syntax (~200-500 chars)
-3. **Inline SVG last resort** — Only for fully custom diagrams that neither templates nor Mermaid can express
+**Tier 0: CSS/HTML Diagrams (PREFERRED — use for 80% of diagrams)**
+
+Styled divs with flexbox/grid, borders, and accent colors. Full theme integration, perfect sizing, zero dependencies. Use the utility classes from `viewport-base.css`:
+
+- **Sequence flows** → `.sequence-flow`, `.seq-participants`, `.seq-actor`, `.seq-step`, `.seq-arrow`
+- **Architecture stacks** → `.arch-stack`, `.arch-row`, `.arch-row-group`
+- **Pyramids/hierarchies** → `.pyramid`, `.pyramid-layer`
+- **Process flows** → `.process-flow`, `.process-step`, `.process-arrow`
+- **Comparisons** → `.card-accent`, `.card-top-accent` with CSS Grid
+
+See `references/diagram-patterns.md` Tier 0 for complete HTML patterns.
+
+**Tier 1: SVG Templates** — If the diagram matches a common pattern, use a pre-designed SVG template from `templates/diagrams/`. Available: microservices, data-pipeline, client-server, layered-arch, cicd-pipeline, hub-and-spoke, cloud-three-tier, kubernetes-cluster, event-driven-pubsub, ml-pipeline, c4-context, network-zones, api-gateway-auth, pyramid-roadmap, funnel, nested-scopes, tree-hierarchy. Write only the data object (~200-400 chars)
+
+**Tier 2: Inline SVG** — Only for fully custom diagrams needing precise geometry (network topologies, custom shapes). Use `viewBox` + `preserveAspectRatio` + CSS variables for colors. Never use raw coordinate math for arrows — use CSS borders or SVG `<marker>` with clean polygon definitions.
 
 For diagram style:
 - **Clean geometric** (default) — Rounded corners, soft colors, professional
@@ -292,6 +317,43 @@ When content involves comparisons (before/after, pros/cons, A vs B):
 - Or feature matrix from `templates/comparison/feature-matrix.html`
 - Color-code columns with accent and secondary accent colors
 
+### Step 7: Visual Polish (Applied by Default)
+
+Apply visual depth techniques based on the detected animation level. These are **on by default** — not optional extras.
+
+| Technique | Minimal | Balanced | Dramatic |
+|---|---|---|---|
+| Card accent borders (`.card-accent`) | Yes | Yes | Yes |
+| Badge labels (`.badge`) | Yes | Yes | Yes |
+| Tight heading typography (`.tight-heading`) | Yes | Yes | Yes |
+| Background grid (`.bg-grid`) | No | Yes | Yes |
+| Staggered reveal animations (`.reveal`) | No | Yes | Yes |
+| Section labels (`.section-label`) | No | Yes | Yes |
+| Glow effects (`.glow`) | No | No | Yes |
+| Glow pulse (`.glow-pulse`) | No | No | Yes |
+
+**How to apply:**
+1. Add `bg-grid` class to `.slides-container` for Balanced/Dramatic levels
+2. Add `reveal` class to content elements inside slides (cards, list items, diagram blocks) for Balanced/Dramatic
+3. Add `card-accent` or `card-top-accent` to card elements
+4. Use `badge` classes for labels, step numbers, and status indicators
+5. Add `glow` to key accent elements for Dramatic level
+6. Use `tight-heading` on main headings for tighter letter-spacing
+7. Use `inline-code` class for short code references in text (e.g., `FallbackModel(...)`)
+
+See `references/style-guide.md` "Visual Depth Techniques" section for full details.
+
+### Step 8: Code Slide Quality
+
+When generating code slides:
+1. Always specify the language class on `<code>` elements: `<code class="language-python">`
+2. Call `Prism.highlightAll()` in the initialization script after DOM ready
+3. Max 10-12 lines per code block — if more, split across slides
+4. For inline code references (like `FallbackModel(...)` in a paragraph), use `<code class="inline-code">` — do NOT create a separate code block
+5. Style code containers with proper padding, border-radius, and a code-appropriate background
+
+See `references/code-highlighting.md` for Prism.js initialization requirements.
+
 ## Phase 5: Deliver
 
 ### Pre-Delivery Validation (MANDATORY)
@@ -305,14 +367,14 @@ Scan every `class="..."` attribute in the generated HTML. For each class name:
 - Is it in `viewport-base.css`? → OK
 - Is it in a comparison template you used? → OK
 - Is it defined in this presentation's `<style>` block? → OK
-- Is it a standard class from a CDN library (e.g., Prism.js, Mermaid)? → OK
+- Is it a standard class from a CDN library (e.g., Prism.js)? → OK
 - **None of the above? → BUG.** Define the class in `<style>` or use the correct existing class name.
 
 Common traps:
 
 | Wrong (invented) | Fix |
 |---|---|
-| `section-label` | Define `.section-label` in `<style>`, or use `.caption` |
+| `section-label` | Available in `viewport-base.css` — use directly |
 | `metric-card` | Define `.metric-card` in `<style>`, or use `.kpi-card` from KPI template |
 | `slide-header` | Use `<h2>` element (already styled by viewport-base.css) |
 | `highlight` | Define `.highlight` in `<style>` with specific styles |
@@ -353,7 +415,7 @@ This ensures the presentation respects the chosen theme and can be re-themed by 
    - Keyboard shortcuts: "Use arrow keys to navigate, '?' for help"
    - PDF export: "Print > Save as PDF for a printable version"
    - Presenter mode: "Press 'P' for presenter view with speaker notes"
-3. Note the tech stack used: "Built with [Chart.js, Mermaid, Prism.js] via CDN"
+3. Note the tech stack used: "Built with [Chart.js, Prism.js] via CDN"
 
 ### Do NOT
 

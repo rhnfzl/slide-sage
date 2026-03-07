@@ -321,6 +321,317 @@ blockquote {
 }
 
 /* ============================================
+   Visual Polish: Background Grid
+   ============================================ */
+.bg-grid::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Visual Polish: Glow Effects
+   ============================================ */
+.glow {
+  box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.3);
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.2); }
+  50% { box-shadow: 0 0 20px rgba(var(--accent-rgb, 137, 180, 250), 0.4); }
+}
+
+/* ============================================
+   Visual Polish: Card Accents
+   ============================================ */
+.card {
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius, 12px);
+  padding: var(--spacing-md);
+}
+
+.card-accent {
+  border-left: 3px solid var(--color-accent, #89b4fa);
+}
+
+.card-top-accent {
+  border-top: 3px solid var(--color-accent, #89b4fa);
+}
+
+.card-gold {
+  border-left: 3px solid var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+}
+
+/* ============================================
+   Visual Polish: Staggered Reveal
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .reveal:nth-child(2) { transition-delay: 0.1s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.15s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.2s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.25s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.3s; }
+.slide.active .reveal:nth-child(7) { transition-delay: 0.35s; }
+.slide.active .reveal:nth-child(8) { transition-delay: 0.4s; }
+
+/* ============================================
+   Visual Polish: Badges
+   ============================================ */
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: rgba(var(--accent-rgb, 137, 180, 250), 0.15);
+  color: var(--color-accent, #89b4fa);
+  vertical-align: middle;
+}
+
+.badge-gold {
+  background: rgba(var(--gold-rgb, 166, 227, 161), 0.15);
+  color: var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+}
+
+.badge-blue {
+  background: rgba(74, 163, 216, 0.15);
+  color: #4AA3D8;
+}
+
+.badge-orange {
+  background: rgba(232, 152, 56, 0.15);
+  color: #E89838;
+}
+
+/* ============================================
+   Visual Polish: Inline Code
+   ============================================ */
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2em 0.45em;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   Visual Polish: Section Label
+   ============================================ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent, #89b4fa);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ============================================
+   CSS Diagrams: Sequence Flow
+   ============================================ */
+.sequence-flow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.seq-participants {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.seq-actor {
+  flex: 1;
+  text-align: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(0.6rem, 1vw, 0.8rem);
+}
+
+.seq-actor.accent {
+  border-color: var(--color-accent, #89b4fa);
+  color: var(--color-accent, #89b4fa);
+}
+
+.seq-step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-left: 2px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  margin-left: var(--spacing-md);
+}
+
+.seq-step .seq-arrow {
+  color: var(--color-accent, #89b4fa);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.seq-step .seq-label {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+  font-size: 0.9em;
+}
+
+.seq-step .seq-from,
+.seq-step .seq-to {
+  font-weight: 600;
+  min-width: 4em;
+  font-size: 0.9em;
+}
+
+.seq-step.dashed {
+  border-left-style: dashed;
+}
+
+.seq-step.response {
+  border-left-color: var(--color-accent-secondary, #a6e3a1);
+}
+
+.seq-step.response .seq-arrow {
+  color: var(--color-accent-secondary, #a6e3a1);
+}
+
+/* ============================================
+   CSS Diagrams: Architecture Stack
+   ============================================ */
+.arch-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.arch-row.full {
+  width: 100%;
+}
+
+.arch-row-group {
+  display: flex;
+  gap: 4px;
+}
+
+.arch-row-group .arch-row {
+  flex: 1;
+}
+
+.arch-row.muted {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* ============================================
+   CSS Diagrams: Pyramid
+   ============================================ */
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.pyramid-layer {
+  width: var(--width, 80%);
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  transition: width 0.3s ease;
+}
+
+.pyramid-layer:first-child {
+  border-radius: 6px 6px 4px 4px;
+}
+
+.pyramid-layer:last-child {
+  border-radius: 4px 4px 6px 6px;
+}
+
+/* ============================================
+   CSS Diagrams: Process Flow (Horizontal)
+   ============================================ */
+.process-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.process-step {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+}
+
+.process-arrow {
+  font-size: 1.2rem;
+  color: var(--color-accent, #89b4fa);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Typography Enhancements
+   ============================================ */
+.tight-heading {
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
    Print Styles
    ============================================ */
 @media print {
