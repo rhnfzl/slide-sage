@@ -1,7 +1,5 @@
 # Slide Sage
 
-[![GitHub Stars](https://img.shields.io/github/stars/rhnfzl/slide-sage)](https://github.com/rhnfzl/slide-sage/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/rhnfzl/slide-sage)](https://github.com/rhnfzl/slide-sage/network/members)
 [![License](https://img.shields.io/github/license/rhnfzl/slide-sage)](LICENSE)
 [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/rhnfzl/163f62ec409cd7427733c39fcfedbf39/raw/clone.json&logo=github)](https://github.com/rhnfzl/slide-sage)
 
