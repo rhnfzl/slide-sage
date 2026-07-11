@@ -89,12 +89,12 @@ def hello():
 /* === Slide-Sage Dark Code Theme === */
 
 pre.code-block {
-  background: #1e1e2e;
-  color: #abb2bf;
+  background: color-mix(in srgb, var(--color-bg-primary) 82%, #000000);
+  color: var(--color-text-primary);
 }
 
 pre.code-block code {
-  color: #abb2bf;
+  color: inherit;
   text-shadow: none;
 }
 
@@ -211,124 +211,126 @@ pre.code-block ::selection {
 
 ## Light Theme CSS
 
+Named light presets already set `data-mode="light"` on `<html>`. Do not add a separate `.light-theme` class.
+
 ```css
 /* === Slide-Sage Light Code Theme === */
 
-pre.code-block.light-theme {
+html[data-mode="light"] pre.code-block {
   background: #fafafa;
   color: #383a42;
 }
 
-pre.code-block.light-theme code {
+html[data-mode="light"] pre.code-block code {
   color: #383a42;
   text-shadow: none;
 }
 
 /* Comments */
-.light-theme .token.comment,
-.light-theme .token.prolog,
-.light-theme .token.doctype,
-.light-theme .token.cdata {
+html[data-mode="light"] .token.comment,
+html[data-mode="light"] .token.prolog,
+html[data-mode="light"] .token.doctype,
+html[data-mode="light"] .token.cdata {
   color: #a0a1a7;
   font-style: italic;
 }
 
 /* Punctuation */
-.light-theme .token.punctuation {
+html[data-mode="light"] .token.punctuation {
   color: #383a42;
 }
 
 /* Namespaces */
-.light-theme .token.namespace {
+html[data-mode="light"] .token.namespace {
   opacity: 0.8;
 }
 
 /* Keywords */
-.light-theme .token.keyword,
-.light-theme .token.tag,
-.light-theme .token.boolean,
-.light-theme .token.constant,
-.light-theme .token.deleted {
+html[data-mode="light"] .token.keyword,
+html[data-mode="light"] .token.tag,
+html[data-mode="light"] .token.boolean,
+html[data-mode="light"] .token.constant,
+html[data-mode="light"] .token.deleted {
   color: #a626a4;
 }
 
 /* Strings */
-.light-theme .token.string,
-.light-theme .token.char,
-.light-theme .token.attr-value,
-.light-theme .token.inserted {
+html[data-mode="light"] .token.string,
+html[data-mode="light"] .token.char,
+html[data-mode="light"] .token.attr-value,
+html[data-mode="light"] .token.inserted {
   color: #50a14f;
 }
 
 /* Template strings */
-.light-theme .token.template-string,
-.light-theme .token.template-punctuation {
+html[data-mode="light"] .token.template-string,
+html[data-mode="light"] .token.template-punctuation {
   color: #50a14f;
 }
 
 /* Functions */
-.light-theme .token.function,
-.light-theme .token.class-name {
+html[data-mode="light"] .token.function,
+html[data-mode="light"] .token.class-name {
   color: #4078f2;
 }
 
 /* Numbers */
-.light-theme .token.number {
+html[data-mode="light"] .token.number {
   color: #986801;
 }
 
 /* Operators */
-.light-theme .token.operator,
-.light-theme .token.entity,
-.light-theme .token.url {
+html[data-mode="light"] .token.operator,
+html[data-mode="light"] .token.entity,
+html[data-mode="light"] .token.url {
   color: #0184bc;
 }
 
 /* Variables */
-.light-theme .token.variable,
-.light-theme .token.property {
+html[data-mode="light"] .token.variable,
+html[data-mode="light"] .token.property {
   color: #e45649;
 }
 
 /* Selectors, Symbols, Important */
-.light-theme .token.selector,
-.light-theme .token.symbol,
-.light-theme .token.important {
+html[data-mode="light"] .token.selector,
+html[data-mode="light"] .token.symbol,
+html[data-mode="light"] .token.important {
   color: #a626a4;
 }
 
 /* Attribute names */
-.light-theme .token.attr-name {
+html[data-mode="light"] .token.attr-name {
   color: #986801;
 }
 
 /* Regex */
-.light-theme .token.regex {
+html[data-mode="light"] .token.regex {
   color: #0184bc;
 }
 
 /* Built-in */
-.light-theme .token.builtin {
+html[data-mode="light"] .token.builtin {
   color: #c18401;
 }
 
 /* Annotations / Decorators */
-.light-theme .token.annotation,
-.light-theme .token.decorator {
+html[data-mode="light"] .token.annotation,
+html[data-mode="light"] .token.decorator {
   color: #986801;
 }
 
 /* Bold / Italic tokens */
-.light-theme .token.bold {
+html[data-mode="light"] .token.bold {
   font-weight: bold;
 }
-.light-theme .token.italic {
+html[data-mode="light"] .token.italic {
   font-style: italic;
 }
 
 /* Selection */
-pre.code-block.light-theme::selection,
-pre.code-block.light-theme ::selection {
+html[data-mode="light"] pre.code-block::selection,
+html[data-mode="light"] pre.code-block ::selection {
   background: rgba(64, 120, 242, 0.2);
 }
 ```
@@ -377,7 +379,7 @@ app.listen(3000, () => {
   white-space: pre;
   word-wrap: normal;
   word-break: normal;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
 }
 
 .code-block code {
@@ -432,22 +434,13 @@ pre.code-block.line-numbers {
 }
 
 .line-numbers .line-numbers-rows {
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--color-border);
   padding-right: 0.8em;
 }
 
 .line-numbers .line-numbers-rows > span::before {
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--color-text-muted);
   font-size: 0.85em;
-}
-
-/* Light theme variant */
-.light-theme.line-numbers .line-numbers-rows {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.light-theme .line-numbers-rows > span::before {
-  color: rgba(0, 0, 0, 0.25);
 }
 ```
 
@@ -489,16 +482,10 @@ pre[data-line] {
 }
 
 .line-highlight {
-  background: rgba(97, 175, 239, 0.12);
-  border-left: 3px solid #61afef;
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  border-left: 3px solid var(--color-accent);
   margin-left: -1.5rem;
   padding-left: calc(1.5rem - 3px);
-}
-
-/* Light theme */
-.light-theme .line-highlight {
-  background: rgba(64, 120, 242, 0.1);
-  border-left-color: #4078f2;
 }
 ```
 
@@ -529,9 +516,9 @@ document.querySelectorAll('.code-block').forEach(block => {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+  color: var(--color-text-secondary);
   border-radius: 4px;
   padding: 4px 10px;
   font-size: 0.75rem;
@@ -542,20 +529,8 @@ document.querySelectorAll('.code-block').forEach(block => {
 }
 
 .copy-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-/* Light theme */
-.light-theme .copy-btn {
-  background: rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.light-theme .copy-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: rgba(0, 0, 0, 0.8);
+  background: color-mix(in srgb, var(--color-text) 20%, transparent);
+  color: var(--color-text);
 }
 ```
 
@@ -578,14 +553,6 @@ For showing code changes with added/removed lines:
   opacity: 0.7;
 }
 
-/* Light theme */
-.light-theme .line-added {
-  background: rgba(80, 200, 120, 0.12);
-}
-
-.light-theme .line-removed {
-  background: rgba(224, 108, 117, 0.12);
-}
 ```
 
 ### Usage in HTML
@@ -607,16 +574,9 @@ Code block backgrounds should complement the slide background. Use CSS custom pr
 
 ```css
 .code-block {
-  background: var(--code-bg, #1e1e2e);
-  color: var(--code-fg, #abb2bf);
-  border: 1px solid var(--code-border, rgba(255, 255, 255, 0.06));
-}
-
-/* Auto-detect: if slide has a light background, switch code theme */
-.slide[data-theme="light"] .code-block {
-  background: var(--code-bg-light, #fafafa);
-  color: var(--code-fg-light, #383a42);
-  border-color: var(--code-border-light, rgba(0, 0, 0, 0.1));
+  background: var(--code-bg, color-mix(in srgb, var(--color-bg-primary) 82%, #000000));
+  color: var(--code-fg, var(--color-text-primary));
+  border: 1px solid var(--code-border, var(--color-border));
 }
 ```
 
@@ -713,15 +673,15 @@ For content Prism.js cannot tokenize - HTTP endpoints, file trees, data flow dia
 ### Light Theme CSS
 
 ```css
-.light-theme .syn-kw     { color: #a626a4; }
-.light-theme .syn-fn     { color: #4078f2; }
-.light-theme .syn-str    { color: #50a14f; }
-.light-theme .syn-num    { color: #986801; }
-.light-theme .syn-cm     { color: #a0a1a7; font-style: italic; }
-.light-theme .syn-method { color: #c18401; }
-.light-theme .syn-verb   { color: #50a14f; font-weight: 600; }
-.light-theme .syn-path   { color: #986801; }
-.light-theme .syn-param  { color: #0184bc; }
+html[data-mode="light"] .syn-kw     { color: #a626a4; }
+html[data-mode="light"] .syn-fn     { color: #4078f2; }
+html[data-mode="light"] .syn-str    { color: #50a14f; }
+html[data-mode="light"] .syn-num    { color: #986801; }
+html[data-mode="light"] .syn-cm     { color: #a0a1a7; font-style: italic; }
+html[data-mode="light"] .syn-method { color: #c18401; }
+html[data-mode="light"] .syn-verb   { color: #50a14f; font-weight: 600; }
+html[data-mode="light"] .syn-path   { color: #986801; }
+html[data-mode="light"] .syn-param  { color: #0184bc; }
 ```
 
 ### Usage Examples

@@ -1,6 +1,6 @@
 ---
 name: slide-sage
-description: Create data-rich, interactive HTML presentations with charts, architecture diagrams, code highlighting, and professional styling. Use when the user wants to build a presentation with data visualization, technical diagrams, metrics dashboards, or code examples. Supports Chart.js, ECharts, D3, CSS/HTML diagrams, inline SVG, Prism.js code highlighting, and 6 curated style presets.
+description: Create data-rich, interactive HTML presentations with charts, architecture diagrams, code highlighting, and professional styling. Use when the user wants to build a presentation with data visualization, technical diagrams, metrics dashboards, or code examples. Supports Chart.js, ECharts, D3, CSS/HTML diagrams, inline SVG, Prism.js code highlighting, and 8 tone-first style presets.
 license: MIT
 metadata:
   version: "2.0.0"
@@ -9,7 +9,7 @@ metadata:
 
 # Slide Sage
 
-Create data-rich, interactive HTML presentations as single files with charts, diagrams, and code highlighting.
+Create data-rich, interactive HTML presentations as a single HTML runtime with charts, diagrams, and code highlighting.
 
 ## Core Principles
 
@@ -19,6 +19,12 @@ Create data-rich, interactive HTML presentations as single files with charts, di
 4. **Adaptive Intelligence** - When given raw data, act as narrative director. When given a clear outline, act as layout executor
 5. **Colorblind Safe** - All data visualization uses accessible color palettes by default
 6. **Utility-First CSS (NON-NEGOTIABLE)** - Define CSS classes in `<style>` before referencing them in HTML. Never use inline `style="..."` for properties that repeat across 2+ elements. Read `references/css-class-inventory.md` for all available classes
+
+## Anti-slop design doctrine
+
+Every visual choice must clarify a claim, comparison, hierarchy, or state. Do not use generic dashboard gradients, floating glass cards, repeated glowing borders, or an accent color as decoration. Do not default to Inter or the Catppuccin values `#1e1e2e`, `#cdd6f4`, and `#89b4fa`. Commit to one named preset, use its tokens for the interface, use the Tier 1 palette for data, and give each slide one intentional focal point. Limit a slide to one orchestrated reveal sequence. A literal hex belongs only in the selected preset, Tier 1 palette, or an intentional visual asset.
+
+Charts represent supplied facts. Never silently invent numbers, percentages, sources, or time periods.
 
 ## Phase 0: Detect Mode
 
@@ -49,13 +55,15 @@ Always ask these two questions together in a single message, regardless of how m
 > "Who is the audience? (e.g., investors, engineers, students, general)"
 
 **Question 2 - Style:**
-> "Any style preference? I have 6 presets:
+> "Any style preference? I have 8 presets:
 > - **Arctic Dawn** - Cool blues, clean (science/research)
 > - **Ember** - Warm on dark, high contrast (dashboards/metrics)
 > - **Jade Circuit** - Green/gold on charcoal (engineering/architecture)
 > - **Dusk Palette** - Muted purple/pink (creative/design)
 > - **Monochrome Pro** - Grayscale + accent (executive/formal)
 > - **Ocean Deep** - Navy, aqua, coral (corporate/professional)
+> - **Editorial Ledger** - Serif-led, explanatory (teaching/strategy)
+> - **Serif Signal** - Dramatic serif display (keynotes/narrative)
 > - Or tell me your brand colors for a custom theme"
 
 If the user already specified audience and style in their prompt, acknowledge their choices and confirm: "I'll use [audience] targeting with [preset]. Sound good?"
@@ -66,7 +74,7 @@ After the always-ask questions, add any of these that apply:
 
 | Missing Info | Question |
 |---|---|
-| No data provided but topic implies data | "Do you have specific data/metrics, or should I use representative examples?" |
+| No data provided but topic implies data | "Do you have the numbers and their source?" |
 | Ambiguous scope | "Roughly how many slides? (5 for a quick update, 15+ for a deep dive)" |
 | Business/corporate context and no brand info | "Any brand colors or logo to incorporate? (Skip if not needed)" |
 
@@ -147,25 +155,16 @@ Read `references/style-guide.md` for the full style system.
 
 **Tier 1: Data-Viz Palettes** - Always applied. Colorblind-safe chart colors regardless of aesthetic choice.
 
-**Tier 2: Named Presets** - If user didn't specify a style, choose based on content:
-
-| Content Type | Recommended Preset |
-|---|---|
-| Scientific, research, data analysis | **Arctic Dawn** (cool blues, clean) |
-| Dashboard, metrics, data-heavy | **Ember** (warm on dark, high contrast) |
-| Engineering, technical architecture | **Jade Circuit** (green/gold on charcoal) |
-| Creative, design, marketing | **Dusk Palette** (muted purple/pink) |
-| Minimal, executive, formal | **Monochrome Pro** (grayscale + accent) |
-| Corporate, professional | **Ocean Deep** (navy, aqua, coral) |
+**Tier 2: Named Presets** - Choose by the requested tone first, then use content type only as a tie-breaker. Read the compact index in `references/style-guide.md` and load the matching file from `references/presets/`.
 
 **Tier 3: Custom Theme** - If user provides brand colors, generate a custom theme using the theme builder algorithm.
 
 ### Style Application
 
-1. Set CSS custom properties on `:root` from the chosen preset
-2. Apply Google Fonts from the preset
-3. Set chart color palette from the preset's chart colors
-4. Apply light or dark mode based on preset defaults (user can override)
+1. Set `data-theme` and `data-mode` on `<html>` from the chosen preset
+2. Inline the selected preset CSS after `viewport-base.css`, including its system-font fallback
+3. Use the Tier 1 palette for charts, independently of the preset accent
+4. Apply the preset's light or dark default unless the user overrides it
 
 ## Phase 4: Generate Presentation
 
@@ -323,7 +322,7 @@ When content involves comparisons (before/after, pros/cons, A vs B):
 
 ### Step 7: Visual Polish (Applied by Default)
 
-Apply visual depth techniques based on the detected animation level. These are **on by default** - not optional extras.
+Apply visual depth only when it makes a claim easier to read. Keep one orchestrated reveal sequence per slide at most.
 
 | Technique | Minimal | Balanced | Dramatic |
 |---|---|---|---|
@@ -337,11 +336,11 @@ Apply visual depth techniques based on the detected animation level. These are *
 | Glow pulse (`.glow-pulse`) | No | No | Yes |
 
 **How to apply:**
-1. Add `bg-grid` class to `.slides-container` for Balanced/Dramatic levels
-2. Add `reveal` class to content elements inside slides (cards, list items, diagram blocks) for Balanced/Dramatic
-3. Add `card-accent` or `card-top-accent` to card elements
+1. Add `bg-grid` only when a technical or data-led tone benefits from it
+2. Add `reveal` only to one related sequence of elements on a slide
+3. Add `card-accent` or `card-top-accent` only where cards clarify grouping
 4. Use `badge` classes for labels, step numbers, and status indicators
-5. Add `glow` to key accent elements for Dramatic level
+5. Add `glow` to one key accent element only for a dramatic deck
 6. Use `tight-heading` on main headings for tighter letter-spacing
 7. Use `inline-code` class for short code references in text (e.g., `FallbackModel(...)`)
 
@@ -404,7 +403,7 @@ Search for any inline style value that appears on 3+ elements. Extract to a clas
 
 Verify that custom CSS classes use theme variables, not hard-coded values:
 
-- Colors: `var(--color-accent)` not `#89b4fa`
+- Colors: `var(--color-accent)` not `#3366cc`
 - Spacing: `var(--spacing-md)` not `1.25rem`
 - Fonts: `var(--font-mono)` not `'JetBrains Mono'`
 - Radius: `var(--radius)` not `12px`
@@ -447,8 +446,10 @@ If the user pastes or references structured data:
 ### Data Description
 
 If the user describes data without specific numbers:
-- Use representative/realistic example data
-- Note in speaker notes: "Sample data - replace with actual values"
+- In an interactive run, ask for the numbers and their source before plotting a chart.
+- In a non-interactive, subagent, or CI run, continue with clearly-labeled `SAMPLE DATA` only.
+- Put a visible `SAMPLE DATA` badge on the chart slide and this speaker note: `SAMPLE DATA, replace before sharing`.
+- Never present sample values as factual evidence or cite an invented source.
 
 ## Viewport Fitting - Critical Rules
 

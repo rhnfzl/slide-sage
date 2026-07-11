@@ -4,7 +4,7 @@
   <style>
     .cs-box { transition: filter 0.2s ease; cursor: pointer; }
     .cs-box:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
-    .cs-title { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; fill: #fff; }
+    .cs-title { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; fill: var(--diagram-label, #FFFFFF); }
     .cs-sublabel { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
     .cs-arrow-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #ccc); }
     .cs-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
@@ -25,14 +25,14 @@
   <!-- Client 1 -->
   <g id="client-1-group">
     <rect class="cs-box" x="40" y="80" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#cs-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#cs-shadow)" />
     <text id="client-1-label" x="120" y="116" text-anchor="middle" class="cs-title">Web App</text>
   </g>
 
   <!-- Client 2 -->
   <g id="client-2-group">
     <rect class="cs-box" x="40" y="200" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#cs-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#cs-shadow)" />
     <text id="client-2-label" x="120" y="236" text-anchor="middle" class="cs-title">Mobile App</text>
   </g>
 
@@ -53,7 +53,7 @@
   <!-- Server -->
   <g id="server-group">
     <rect class="cs-box" x="420" y="120" width="200" height="70" rx="10" ry="10"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#cs-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#cs-shadow)" />
     <text id="server-label" x="520" y="161" text-anchor="middle" class="cs-title">API Server</text>
   </g>
 
@@ -62,9 +62,10 @@
 
   <!-- Database cylinder -->
   <g id="db-group">
-    <ellipse cx="520" cy="280" rx="55" ry="12" fill="var(--diagram-amber, #F5A623)" />
-    <rect x="465" y="280" width="110" height="45" fill="var(--diagram-amber, #F5A623)" />
-    <ellipse cx="520" cy="325" rx="55" ry="12" fill="#d4900e" />
+    <ellipse cx="520" cy="280" rx="55" ry="12" fill="var(--diagram-amber, #EE7733)" />
+    <rect x="465" y="280" width="110" height="45" fill="var(--diagram-amber, #EE7733)" />
+    <ellipse cx="520" cy="325" rx="55" ry="12" fill="var(--diagram-amber, #EE7733)" />
+    <ellipse cx="520" cy="325" rx="55" ry="12" fill="var(--diagram-shadow, #000000)" fill-opacity="0.20" />
     <text id="db-label" x="520" y="308" text-anchor="middle" class="cs-title" style="font-size:13px;">PostgreSQL</text>
   </g>
 </svg>

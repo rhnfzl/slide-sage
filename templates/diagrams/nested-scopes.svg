@@ -5,7 +5,7 @@
     .ns-scope { transition: filter 0.2s ease; cursor: pointer; }
     .ns-scope:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
     .ns-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; fill: var(--diagram-text, #e0e0e0); }
-    .ns-item-label { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #fff; }
+    .ns-item-label { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
     .ns-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
   </style>
 
@@ -21,41 +21,41 @@
   <!-- Scope 1 (outermost) -->
   <g id="scope-1-group">
     <rect class="ns-scope" x="20" y="20" width="560" height="360" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" opacity="0.12" />
+          fill="var(--diagram-primary, #0077BB)" opacity="0.12" />
     <text id="scope-1-label" x="35" y="42" class="ns-label">Organization</text>
   </g>
 
   <!-- Scope 2 -->
   <g id="scope-2-group">
     <rect class="ns-scope" x="60" y="55" width="480" height="290" rx="10" ry="10"
-          fill="var(--diagram-secondary, #50C878)" opacity="0.15" />
+          fill="var(--diagram-secondary, #009988)" opacity="0.15" />
     <text id="scope-2-label" x="75" y="77" class="ns-label">Department</text>
   </g>
 
   <!-- Scope 3 -->
   <g id="scope-3-group">
     <rect class="ns-scope" x="110" y="95" width="380" height="210" rx="10" ry="10"
-          fill="var(--diagram-amber, #F5A623)" opacity="0.18" />
+          fill="var(--diagram-amber, #EE7733)" opacity="0.18" />
     <text id="scope-3-label" x="125" y="117" class="ns-label">Team</text>
 
     <!-- Inner items inside scope 3 -->
     <rect class="ns-scope" x="135" y="135" width="100" height="45" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#ns-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#ns-shadow)" />
     <text id="inner-item-1" x="185" y="163" text-anchor="middle" class="ns-item-label">Module A</text>
 
     <rect class="ns-scope" x="250" y="135" width="100" height="45" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#ns-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#ns-shadow)" />
     <text id="inner-item-2" x="300" y="163" text-anchor="middle" class="ns-item-label">Module B</text>
 
     <rect class="ns-scope" x="365" y="135" width="100" height="45" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#ns-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#ns-shadow)" />
     <text id="inner-item-3" x="415" y="163" text-anchor="middle" class="ns-item-label">Module C</text>
   </g>
 
   <!-- Scope 4 (innermost - hidden by default) -->
   <g id="scope-4-group" style="display:none;">
     <rect class="ns-scope" x="170" y="140" width="260" height="120" rx="10" ry="10"
-          fill="var(--diagram-purple, #9B59B6)" opacity="0.20" />
+          fill="var(--diagram-purple, #3344AA)" opacity="0.20" />
     <text id="scope-4-label" x="185" y="162" class="ns-label">Sub-Team</text>
   </g>
 </svg>

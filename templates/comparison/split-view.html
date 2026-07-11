@@ -79,30 +79,30 @@
 
   /* Column A: accent color */
   .col-a {
-    background: color-mix(in srgb, var(--color-accent, #61afef) 10%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-accent, #61afef) 25%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
   }
 
   .col-a .compare-sub-heading {
-    color: var(--color-accent, #61afef);
+    color: var(--color-accent);
   }
 
   .col-a .compare-list li::before {
-    color: var(--color-accent, #61afef);
+    color: var(--color-accent);
   }
 
   /* Column B: secondary accent color */
   .col-b {
-    background: color-mix(in srgb, var(--color-accent-secondary, #c678dd) 10%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-accent-secondary, #c678dd) 25%, transparent);
+    background: color-mix(in srgb, var(--color-accent-secondary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 25%, transparent);
   }
 
   .col-b .compare-sub-heading {
-    color: var(--color-accent-secondary, #c678dd);
+    color: var(--color-accent-secondary);
   }
 
   .col-b .compare-list li::before {
-    color: var(--color-accent-secondary, #c678dd);
+    color: var(--color-accent-secondary);
   }
 
   /* Sub-heading */
@@ -111,7 +111,7 @@
     font-weight: 600;
     margin: 0;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
   /* Bullet list */
@@ -157,13 +157,13 @@
     bottom: 10%;
     left: 50%;
     width: 1px;
-    background: rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, var(--color-text) 12%, transparent);
     transform: translateX(-50%);
   }
 
   .vs-divider span {
-    background: var(--color-bg, #0f0f1a);
-    color: rgba(255, 255, 255, 0.35);
+    background: var(--color-bg);
+    color: color-mix(in srgb, var(--color-text) 35%, transparent);
     font-size: clamp(0.65rem, 1vw, 0.85rem);
     font-weight: 700;
     text-transform: uppercase;
@@ -200,29 +200,5 @@
       height: 1px;
       transform: translateY(-50%);
     }
-  }
-
-  /* === Light slide variant === */
-  [data-theme="light"] .col-a {
-    background: color-mix(in srgb, var(--color-accent, #4078f2) 8%, transparent);
-    border-color: color-mix(in srgb, var(--color-accent, #4078f2) 20%, transparent);
-  }
-
-  [data-theme="light"] .col-b {
-    background: color-mix(in srgb, var(--color-accent-secondary, #a626a4) 8%, transparent);
-    border-color: color-mix(in srgb, var(--color-accent-secondary, #a626a4) 20%, transparent);
-  }
-
-  [data-theme="light"] .compare-sub-heading {
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-  }
-
-  [data-theme="light"] .vs-divider::before {
-    background: rgba(0, 0, 0, 0.1);
-  }
-
-  [data-theme="light"] .vs-divider span {
-    color: rgba(0, 0, 0, 0.3);
-    background: var(--color-bg, #ffffff);
   }
 </style>

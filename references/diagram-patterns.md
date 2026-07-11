@@ -243,8 +243,8 @@ const diagram = {
   type: 'microservices',
   gateway: 'API Gateway',
   services: [
-    { name: 'Auth Service', db: 'PostgreSQL', color: 'var(--diagram-blue)' },
-    { name: 'Order Service', db: 'MongoDB', color: 'var(--diagram-green)' },
+    { name: 'Auth Service', db: 'PostgreSQL', color: 'var(--diagram-primary)' },
+    { name: 'Order Service', db: 'MongoDB', color: 'var(--diagram-secondary)' },
     { name: 'Payment Service', db: 'Redis', color: 'var(--diagram-amber)' }
   ]
 };
@@ -767,8 +767,8 @@ document.getElementById('arch-diagram').addEventListener('load', function() {
     type: 'microservices',
     gateway: 'API Gateway',
     services: [
-      { name: 'User Service', db: 'PostgreSQL', color: 'var(--diagram-blue)' },
-      { name: 'Order Service', db: 'DynamoDB', color: 'var(--diagram-green)' }
+      { name: 'User Service', db: 'PostgreSQL', color: 'var(--diagram-primary)' },
+      { name: 'Order Service', db: 'DynamoDB', color: 'var(--diagram-secondary)' }
     ]
   });
 });
@@ -798,7 +798,7 @@ function sketchify(svgElement) {
   svgElement.querySelectorAll('rect[data-sketch]').forEach(rect => {
     const x = +rect.getAttribute('x'), y = +rect.getAttribute('y');
     const w = +rect.getAttribute('width'), h = +rect.getAttribute('height');
-    const fill = rect.getAttribute('fill') || '#4A90D9';
+    const fill = rect.getAttribute('fill') || 'var(--diagram-primary, #0077BB)';
     const roughRect = rc.rectangle(x, y, w, h, {
       fill, fillStyle: 'hachure', roughness: 1.5, strokeWidth: 1.5, stroke: '#333'
     });
@@ -1227,14 +1227,15 @@ Keep all bullets at the same x position within a column. If using two columns wi
 ```xml
 <!-- Rounded rectangle (service box) -->
 <rect x="100" y="50" width="160" height="60" rx="8" ry="8"
-      fill="var(--diagram-primary, #4A90D9)" stroke="none" />
-<text x="180" y="85" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">Service</text>
+      fill="var(--diagram-primary, #0077BB)" stroke="none" />
+<text x="180" y="85" text-anchor="middle" fill="var(--diagram-label, #FFFFFF)" font-size="14" font-weight="600">Service</text>
 
 <!-- Database cylinder -->
-<ellipse cx="180" cy="240" rx="50" ry="12" fill="var(--diagram-secondary, #50C878)" />
-<rect x="130" y="240" width="100" height="40" fill="var(--diagram-secondary, #50C878)" />
-<ellipse cx="180" cy="280" rx="50" ry="12" fill="var(--diagram-secondary-dark, #3db066)" />
-<text x="180" y="265" text-anchor="middle" fill="#fff" font-size="12">PostgreSQL</text>
+<ellipse cx="180" cy="240" rx="50" ry="12" fill="var(--diagram-secondary, #009988)" />
+<rect x="130" y="240" width="100" height="40" fill="var(--diagram-secondary, #009988)" />
+<ellipse cx="180" cy="280" rx="50" ry="12" fill="var(--diagram-secondary, #009988)" />
+<ellipse cx="180" cy="280" rx="50" ry="12" fill="var(--diagram-shadow, #000000)" fill-opacity="0.20" />
+<text x="180" y="265" text-anchor="middle" fill="var(--diagram-label, #FFFFFF)" font-size="12">PostgreSQL</text>
 
 <!-- Arrow connector -->
 <line x1="180" y1="110" x2="180" y2="228" stroke="var(--diagram-arrow, #888)"
@@ -1287,14 +1288,16 @@ Define in the presentation's `<style>` block so diagrams inherit the theme:
 
 ```css
 :root {
-  --diagram-primary: #4A90D9;
-  --diagram-secondary: #50C878;
-  --diagram-amber: #F5A623;
-  --diagram-red: #DC5A5A;
-  --diagram-purple: #9B59B6;
+  --diagram-primary: #0077BB;
+  --diagram-secondary: #009988;
+  --diagram-amber: #EE7733;
+  --diagram-red: #CC3311;
+  --diagram-purple: #3344AA;
   --diagram-arrow: #888;
   --diagram-bg: #2a2a2a;
   --diagram-text: #e0e0e0;
+  --diagram-label: #FFFFFF;
+  --diagram-shadow: #000000;
 }
 
 /* Light mode overrides */
@@ -1330,8 +1333,8 @@ Place `<use>` elements inside your SVG to reference icons from the sprite:
 
 ```xml
 <!-- Inside a diagram SVG -->
-<use href="#icon-database" x="155" y="62" width="20" height="20" style="color: #fff;"/>
-<use href="#icon-shield" x="415" y="62" width="20" height="20" style="color: #fff;"/>
+<use href="#icon-database" x="155" y="62" width="20" height="20" style="color: var(--diagram-label, #FFFFFF);"/>
+<use href="#icon-shield" x="415" y="62" width="20" height="20" style="color: var(--diagram-label, #FFFFFF);"/>
 ```
 
 ### Using Icons in HTML Slide Content

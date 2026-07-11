@@ -85,6 +85,7 @@ class SlidePresentation {
     this.touchEndX = 0;
     this.swipeThreshold = 50;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ready = false;
 
     this.progressFill = document.getElementById('progressFill');
     this.slideCounter = document.getElementById('slideCounter');
@@ -102,6 +103,10 @@ class SlidePresentation {
     this.bindHashChange();
     this.readHashAndNavigate();
     this.updateUI();
+    this.ready = true;
+
+    // Delay the first lifecycle event until chart scripts in this DOM-ready turn exist.
+    window.requestAnimationFrame(() => this.emitSlideChange(null));
   }
 
   bindKeyboard() {
@@ -216,6 +221,7 @@ class SlidePresentation {
 
   goTo(index, updateHash = true) {
     if (index < 0 || index >= this.totalSlides) return;
+    if (index === this.currentSlide) return;
 
     const previousSlide = this.slides[this.currentSlide];
     const nextSlide = this.slides[index];
@@ -238,6 +244,21 @@ class SlidePresentation {
     }
 
     this.updateUI();
+
+    if (this.ready) {
+      this.emitSlideChange(previousSlide);
+    }
+  }
+
+  emitSlideChange(previousSlide) {
+    document.dispatchEvent(new CustomEvent('slidechange', {
+      detail: {
+        slide: this.slides[this.currentSlide],
+        index: this.currentSlide,
+        previousSlide,
+        reducedMotion: this.reducedMotion
+      }
+    }));
   }
 
   updateUI() {
@@ -403,9 +424,9 @@ These print-specific styles are included in every presentation:
 }
 
 .shortcuts-panel {
-  background: var(--color-surface, #1e1e2e);
-  color: var(--color-text, #cdd6f4);
-  border-radius: var(--radius, 12px);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius);
   padding: 2rem;
   max-width: 420px;
   width: 90%;
@@ -415,7 +436,7 @@ These print-specific styles are included in every presentation:
 .shortcuts-panel h3 {
   margin: 0 0 1.2rem 0;
   font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--color-heading, #cdd6f4);
+  color: var(--color-heading);
 }
 
 .shortcuts-panel table {
@@ -434,8 +455,8 @@ These print-specific styles are included in every presentation:
 }
 
 .shortcuts-panel kbd {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
   border-radius: 4px;
   padding: 2px 6px;
   font-family: var(--font-mono, monospace);

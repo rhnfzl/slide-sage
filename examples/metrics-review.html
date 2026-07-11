@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="ember" data-mode="dark">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Engineering delivery review</title><style>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Engineering delivery review</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Manrope:wght@400;600;700;800&amp;display=swap">
+  <style>
 /* viewport-base.css - inlined into every slide-sage presentation */
 
 /* ============================================
@@ -23,19 +24,46 @@ html, body {
    CSS Custom Properties
    ============================================ */
 :root {
-  /* Colors - overridden per theme */
-  --color-bg: #0f0f1a;
-  --color-text: #cdd6f4;
-  --color-heading: #ffffff;
-  --color-accent: #89b4fa;
-  --color-accent-secondary: #a6e3a1;
-  --color-surface: #1e1e2e;
-  --color-border: rgba(255, 255, 255, 0.1);
+  /* Theme vocabulary - presets override the rich values below. */
+  --color-bg-primary: #101820;
+  --color-bg-secondary: #182632;
+  --color-bg-surface: #203442;
+  --color-bg-elevated: #294354;
+  --color-text-primary: #edf4f8;
+  --color-text-secondary: #b8cad5;
+  --color-text-muted: #8299aa;
+  --color-text-inverse: #101820;
+  --color-accent: #0077BB;
+  --color-accent-secondary: #009988;
+  --color-gold: #BBAA33;
+  --color-accent-hover: #4A9ACE;
+  --color-accent-subtle: #17384a;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+
+  /* Bridge rich preset values to the shared presentation components. */
+  --color-bg: var(--color-bg-primary);
+  --color-text: var(--color-text-primary);
+  --color-heading: var(--color-text-primary);
+  --color-surface: var(--color-bg-surface);
+
+  /* Colorblind-safe categorical defaults. */
+  --cat-1: #0077BB;
+  --cat-2: #CC3311;
+  --cat-3: #009988;
+  --cat-4: #EE7733;
+  --cat-5: #3344AA;
+  --cat-6: #EE3377;
+  --cat-7: #BBAA33;
+  --cat-8: #888888;
+  --chart-positive: #2A9D5C;
+  --chart-negative: #CC3311;
+  --chart-neutral: #888888;
+  --chart-highlight: #EE7733;
 
   /* Typography */
-  --font-heading: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
 
   /* Spacing scale */
   --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
@@ -45,7 +73,15 @@ html, body {
   --spacing-xl: clamp(1.5rem, 3.5vw, 3rem);
 
   /* Shape & Motion */
-  --radius: 12px;
+  --radius-sm: clamp(0.2rem, 0.4vw, 0.35rem);
+  --radius-md: clamp(0.35rem, 0.7vw, 0.6rem);
+  --radius-lg: clamp(0.5rem, 1vw, 0.85rem);
+  --radius: var(--radius-lg);
+  --preset-title-size: clamp(1.8rem, 4vw, 3.5rem);
+  --preset-section-size: clamp(1.4rem, 3vw, 2.5rem);
+  --preset-kicker-tracking: 0.12em;
+  --preset-divider-width: 1px;
+  --preset-stat-treatment: tabular-nums;
   --transition-speed: 0.3s;
 }
 
@@ -111,7 +147,7 @@ html, body {
    ============================================ */
 h1 {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  font-size: var(--preset-title-size);
   font-weight: 700;
   line-height: 1.2;
   color: var(--color-heading);
@@ -120,7 +156,7 @@ h1 {
 
 h2 {
   font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  font-size: var(--preset-section-size);
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-heading);
@@ -160,10 +196,34 @@ small, .caption, figcaption {
   opacity: 0.7;
 }
 
+.eyebrow,
+.kicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: var(--preset-kicker-tracking);
+  text-transform: uppercase;
+}
+
+.accent-rule,
+.presentation-divider {
+  width: clamp(4rem, 10vw, 9rem);
+  height: var(--preset-divider-width);
+  background: var(--color-accent);
+}
+
+.stat-value,
+.metric-value {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-variant-numeric: var(--preset-stat-treatment);
+}
+
 code {
   font-family: var(--font-mono);
   font-size: clamp(0.75rem, 0.9vw, 0.9rem);
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
   padding: 0.15em 0.4em;
   border-radius: 4px;
 }
@@ -172,7 +232,7 @@ pre {
   font-family: var(--font-mono);
   font-size: clamp(0.7rem, 1.2vw, 0.95rem);
   line-height: 1.5;
-  background: rgba(0, 0, 0, 0.3);
+  background: color-mix(in srgb, var(--color-bg) 74%, black);
   border-radius: var(--radius);
   padding: var(--spacing-md);
   overflow: hidden;
@@ -247,7 +307,7 @@ blockquote {
   left: 0;
   width: 100%;
   height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
   z-index: 100;
 }
 
@@ -331,8 +391,8 @@ blockquote {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
@@ -342,7 +402,7 @@ blockquote {
    Visual Polish: Glow Effects
    ============================================ */
 .glow {
-  box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.3);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .glow-pulse {
@@ -350,30 +410,30 @@ blockquote {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.2); }
-  50% { box-shadow: 0 0 20px rgba(var(--accent-rgb, 137, 180, 250), 0.4); }
+  0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent); }
+  50% { box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent); }
 }
 
 /* ============================================
    Visual Polish: Card Accents
    ============================================ */
 .card {
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
-  border-radius: var(--radius, 12px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
   padding: var(--spacing-md);
 }
 
 .card-accent {
-  border-left: 3px solid var(--color-accent, #89b4fa);
+  border-left: 3px solid var(--color-accent);
 }
 
 .card-top-accent {
-  border-top: 3px solid var(--color-accent, #89b4fa);
+  border-top: 3px solid var(--color-accent);
 }
 
 .card-gold {
-  border-left: 3px solid var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+  border-left: 3px solid var(--color-gold);
 }
 
 /* ============================================
@@ -409,24 +469,24 @@ blockquote {
   font-size: clamp(0.6rem, 0.9vw, 0.75rem);
   font-family: var(--font-mono);
   font-weight: 600;
-  background: rgba(var(--accent-rgb, 137, 180, 250), 0.15);
-  color: var(--color-accent, #89b4fa);
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
   vertical-align: middle;
 }
 
 .badge-gold {
-  background: rgba(var(--gold-rgb, 166, 227, 161), 0.15);
-  color: var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+  background: color-mix(in srgb, var(--color-gold) 15%, transparent);
+  color: var(--color-gold);
 }
 
 .badge-blue {
-  background: rgba(74, 163, 216, 0.15);
-  color: #4AA3D8;
+  background: color-mix(in srgb, var(--cat-1) 15%, transparent);
+  color: var(--cat-1);
 }
 
 .badge-orange {
-  background: rgba(232, 152, 56, 0.15);
-  color: #E89838;
+  background: color-mix(in srgb, var(--cat-4) 15%, transparent);
+  color: var(--cat-4);
 }
 
 /* ============================================
@@ -435,10 +495,10 @@ blockquote {
 .inline-code {
   font-family: var(--font-mono);
   font-size: clamp(0.7rem, 0.85vw, 0.85rem);
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
   padding: 0.2em 0.45em;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
 }
 
 /* ============================================
@@ -450,7 +510,7 @@ blockquote {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--color-accent, #89b4fa);
+  color: var(--color-accent);
   margin-bottom: var(--spacing-xs);
 }
 
@@ -475,8 +535,8 @@ blockquote {
   flex: 1;
   text-align: center;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-family: var(--font-mono);
   font-weight: 600;
@@ -484,8 +544,8 @@ blockquote {
 }
 
 .seq-actor.accent {
-  border-color: var(--color-accent, #89b4fa);
-  color: var(--color-accent, #89b4fa);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .seq-step {
@@ -493,19 +553,19 @@ blockquote {
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-left: 2px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-left: 2px solid var(--color-border);
   margin-left: var(--spacing-md);
 }
 
 .seq-step .seq-arrow {
-  color: var(--color-accent, #89b4fa);
+  color: var(--color-accent);
   font-weight: bold;
   flex-shrink: 0;
 }
 
 .seq-step .seq-label {
   font-family: var(--font-mono);
-  color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+  color: var(--color-text-muted);
   font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
@@ -521,11 +581,11 @@ blockquote {
 }
 
 .seq-step.response {
-  border-left-color: var(--color-accent-secondary, #a6e3a1);
+  border-left-color: var(--color-accent-secondary);
 }
 
 .seq-step.response .seq-arrow {
-  color: var(--color-accent-secondary, #a6e3a1);
+  color: var(--color-accent-secondary);
 }
 
 /* ============================================
@@ -543,8 +603,8 @@ blockquote {
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: clamp(0.65rem, 1.1vw, 0.85rem);
 }
@@ -582,8 +642,8 @@ blockquote {
   width: var(--width, 80%);
   text-align: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: clamp(0.7rem, 1.2vw, 0.9rem);
   font-weight: 600;
@@ -615,15 +675,15 @@ blockquote {
   min-width: 120px;
   text-align: center;
   padding: var(--spacing-sm) var(--spacing-xs);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: clamp(0.65rem, 1vw, 0.8rem);
 }
 
 .process-arrow {
   font-size: clamp(1rem, 1.4vw, 1.2rem);
-  color: var(--color-accent, #89b4fa);
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 
@@ -756,7 +816,20 @@ blockquote {
   .nav-arrows { display: none; }
 }
 
-:root{--color-bg-primary:#17110d;--color-bg-secondary:#241a13;--color-bg-surface:#2e2118;--color-text-primary:#fff2df;--color-text-secondary:#cbb79d;--color-text-muted:#937e67;--color-accent:#ee8a2d;--color-accent-hover:#f5ad62;--color-accent-subtle:#3a2815;--color-border:#523a28;--color-heading:var(--color-text-primary);--color-text:var(--color-text-primary);--color-bg:var(--color-bg-primary);--color-surface:var(--color-bg-surface);--font-heading:'Arial Narrow',Arial,sans-serif;--font-body:Arial,sans-serif;--font-mono:'SFMono-Regular',Consolas,monospace;--radius:clamp(.25rem,.6vw,.5rem)}body{background:var(--color-bg-primary);color:var(--color-text-primary);font-family:var(--font-body)}.slide{background:var(--color-bg-primary)}.kicker{font-family:var(--font-mono);font-size:clamp(.65rem,1vw,.85rem);color:var(--color-accent);letter-spacing:.14em;text-transform:uppercase}.review-title{font-size:clamp(3rem,8vw,7rem);line-height:.86;letter-spacing:-.06em;max-width:12ch}.review-sub{color:var(--color-text-secondary);max-width:44ch}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-md);width:100%}.metric{padding:var(--spacing-lg) var(--spacing-md);border:1px solid var(--color-border);background:var(--color-bg-surface)}.metric strong{display:block;font-size:clamp(2.2rem,5vw,5rem);font-family:var(--font-heading);color:var(--color-accent);line-height:.9}.metric span{color:var(--color-text-secondary);font-size:clamp(.72rem,1.1vw,.95rem)}.chart-wrap{height:min(52vh,400px);width:100%;position:relative}.source{font-family:var(--font-mono);font-size:clamp(.62rem,.9vw,.78rem);color:var(--color-text-muted)}.decision{display:grid;grid-template-columns:1fr 2fr;gap:var(--spacing-lg);width:100%;align-items:start}.decision-label{font-family:var(--font-heading);font-size:clamp(2.2rem,5vw,4.6rem);color:var(--color-accent);line-height:.92}.decision-copy{padding-left:var(--spacing-lg);border-left:1px solid var(--color-border)}.decision-copy li{margin-bottom:var(--spacing-sm)}.shortcuts-panel{width:min(90vw,42rem);background:var(--color-bg-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--spacing-lg)}.shortcuts-panel h3{margin:0 0 var(--spacing-md);color:var(--color-heading);font-size:clamp(1.1rem,2vw,1.5rem)}.shortcuts-panel table{width:100%;border-collapse:collapse}.shortcuts-panel td{padding:var(--spacing-xs) 0}.shortcuts-panel td:first-child{padding-right:var(--spacing-md);white-space:nowrap}.shortcuts-dismiss{margin:var(--spacing-md) 0 0;color:var(--color-text-muted);text-align:center}@media(max-width:760px){.metric-grid,.decision{grid-template-columns:1fr}.decision-copy{padding-left:0;border-left:0}}
+html[data-theme="ember"] {
+  --color-bg-primary: #FBF8F4; --color-bg-secondary: #F4EDE4; --color-bg-surface: #FFFFFF; --color-bg-elevated: #FFFFFF;
+  --color-text-primary: #2C2218; --color-text-secondary: #6B5740; --color-text-muted: #927C65; --color-text-inverse: #FBF8F4;
+  --color-accent: #CC6B20; --color-accent-secondary: #009988; --color-gold: #B47D0A; --color-accent-hover: #A95112; --color-accent-subtle: #FDE4CA;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 15%, transparent);
+  --font-heading: 'Manrope', Arial, sans-serif; --font-body: 'Manrope', Arial, sans-serif; --font-mono: 'DM Mono', ui-monospace, monospace;
+  --radius-sm: clamp(0.2rem, 0.4vw, 0.35rem); --radius-md: clamp(0.35rem, 0.65vw, 0.55rem); --radius-lg: clamp(0.45rem, 0.8vw, 0.7rem);
+  --preset-title-size: clamp(1.98rem, 4.4vw, 3.85rem); --preset-section-size: clamp(1.54rem, 3.3vw, 2.75rem); --preset-kicker-tracking: 0.18em; --preset-divider-width: 3px; --preset-stat-treatment: tabular-nums;
+}
+html[data-theme="ember"][data-mode="dark"] {
+  --color-bg-primary: #1A1410; --color-bg-secondary: #241C15; --color-bg-surface: #2E231A; --color-bg-elevated: #3A2C20;
+  --color-text-primary: #F5E9D8; --color-text-secondary: #D0B99C; --color-text-muted: #927B63; --color-text-inverse: #1A1410;
+  --color-accent: #E89838; --color-accent-secondary: #43B7A7; --color-gold: #D4A01A; --color-accent-hover: #F4B967; --color-accent-subtle: #3F2A17;
+}body{background:var(--color-bg-primary);color:var(--color-text-primary);font-family:var(--font-body)}.slide{background:var(--color-bg-primary)}.kicker{font-family:var(--font-mono);font-size:clamp(.65rem,1vw,.85rem);color:var(--color-accent);letter-spacing:.14em;text-transform:uppercase}.review-title{font-size:clamp(3rem,8vw,7rem);line-height:.86;letter-spacing:-.06em;max-width:12ch}.review-sub{color:var(--color-text-secondary);max-width:44ch}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-md);width:100%}.metric{padding:var(--spacing-lg) var(--spacing-md);border:1px solid var(--color-border);background:var(--color-bg-surface)}.metric strong{display:block;font-size:clamp(2.2rem,5vw,5rem);font-family:var(--font-heading);color:var(--color-accent);line-height:.9}.metric span{color:var(--color-text-secondary);font-size:clamp(.72rem,1.1vw,.95rem)}.chart-wrap{height:min(52vh,400px);width:100%;position:relative}.source{font-family:var(--font-mono);font-size:clamp(.62rem,.9vw,.78rem);color:var(--color-text-muted)}.decision{display:grid;grid-template-columns:1fr 2fr;gap:var(--spacing-lg);width:100%;align-items:start}.decision-label{font-family:var(--font-heading);font-size:clamp(2.2rem,5vw,4.6rem);color:var(--color-accent);line-height:.92}.decision-copy{padding-left:var(--spacing-lg);border-left:1px solid var(--color-border)}.decision-copy li{margin-bottom:var(--spacing-sm)}.shortcuts-panel{width:min(90vw,42rem);background:var(--color-bg-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--spacing-lg)}.shortcuts-panel h3{margin:0 0 var(--spacing-md);color:var(--color-heading);font-size:clamp(1.1rem,2vw,1.5rem)}.shortcuts-panel table{width:100%;border-collapse:collapse}.shortcuts-panel td{padding:var(--spacing-xs) 0}.shortcuts-panel td:first-child{padding-right:var(--spacing-md);white-space:nowrap}.shortcuts-dismiss{margin:var(--spacing-md) 0 0;color:var(--color-text-muted);text-align:center}@media(max-width:760px){.metric-grid,.decision{grid-template-columns:1fr}.decision-copy{padding-left:0;border-left:0}}
 .shortcuts-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:var(--spacing-lg);background:color-mix(in srgb,var(--color-bg-primary) 78%,transparent);opacity:0;pointer-events:none;transition:opacity .2s ease}.shortcuts-overlay.visible{opacity:1;pointer-events:auto}</style></head><body><main class="slides-container" id="slides">
 <section class="slide active"><div class="slide-content gap-md"><span class="kicker">Engineering review</span><h1 class="review-title">Faster, with fewer reversals.</h1><p class="review-sub">A monthly delivery review for engineering leadership. Values are demonstration data, labeled throughout.</p></div></section>
 <!-- NOTES: Frame the review around the decision. These values are sample values, not a claim about a real team. -->
@@ -776,6 +849,7 @@ class SlidePresentation {
     this.touchEndX = 0;
     this.swipeThreshold = 50;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ready = false;
 
     this.progressFill = document.getElementById('progressFill');
     this.slideCounter = document.getElementById('slideCounter');
@@ -793,6 +867,10 @@ class SlidePresentation {
     this.bindHashChange();
     this.readHashAndNavigate();
     this.updateUI();
+    this.ready = true;
+
+    // Delay the first lifecycle event until chart scripts in this DOM-ready turn exist.
+    window.requestAnimationFrame(() => this.emitSlideChange(null));
   }
 
   bindKeyboard() {
@@ -907,6 +985,7 @@ class SlidePresentation {
 
   goTo(index, updateHash = true) {
     if (index < 0 || index >= this.totalSlides) return;
+    if (index === this.currentSlide) return;
 
     const previousSlide = this.slides[this.currentSlide];
     const nextSlide = this.slides[index];
@@ -929,6 +1008,21 @@ class SlidePresentation {
     }
 
     this.updateUI();
+
+    if (this.ready) {
+      this.emitSlideChange(previousSlide);
+    }
+  }
+
+  emitSlideChange(previousSlide) {
+    document.dispatchEvent(new CustomEvent('slidechange', {
+      detail: {
+        slide: this.slides[this.currentSlide],
+        index: this.currentSlide,
+        previousSlide,
+        reducedMotion: this.reducedMotion
+      }
+    }));
   }
 
   updateUI() {
@@ -977,5 +1071,47 @@ class SlidePresentation {
     }
   }
 }
-addEventListener('DOMContentLoaded',()=>{new SlidePresentation();new Chart(document.getElementById('deliveryChart'),{data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{type:'bar',label:'Deployments/week',data:[18,20,23,25,28,31],backgroundColor:'#ee8a2d',yAxisID:'y'},{type:'line',label:'Failure rate',data:[11,10.5,9.8,9.1,8.2,7],borderColor:'#42b8a5',pointBackgroundColor:'#42b8a5',tension:.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#cbb79d'}}},scales:{x:{ticks:{color:'#cbb79d'},grid:{display:false}},y:{position:'left',ticks:{color:'#cbb79d'},grid:{color:'rgba(203,183,157,.14)'},title:{display:true,text:'Deployments per week',color:'#cbb79d'}},y1:{position:'right',ticks:{color:'#cbb79d',callback:v=>v+'%'},grid:{drawOnChartArea:false},title:{display:true,text:'Change failure rate',color:'#cbb79d'}}}}})});
+
+document.addEventListener('DOMContentLoaded', () => {
+  new SlidePresentation();
+  const canvas = document.getElementById('deliveryChart');
+  const theme = getComputedStyle(document.documentElement);
+  const accent = theme.getPropertyValue('--color-accent').trim();
+  const secondary = theme.getPropertyValue('--color-accent-secondary').trim();
+  const muted = theme.getPropertyValue('--color-text-secondary').trim();
+  const border = theme.getPropertyValue('--color-border').trim();
+  const chart = new Chart(canvas, {
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [
+        { type: 'bar', label: 'Deployments/week', data: [18, 20, 23, 25, 28, 31], backgroundColor: accent, yAxisID: 'y' },
+        { type: 'line', label: 'Failure rate', data: [11, 10.5, 9.8, 9.1, 8.2, 7], borderColor: secondary, pointBackgroundColor: secondary, tension: 0.3, yAxisID: 'y1' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: { legend: { labels: { color: muted } } },
+      scales: {
+        x: { ticks: { color: muted }, grid: { display: false } },
+        y: { position: 'left', ticks: { color: muted }, grid: { color: border }, title: { display: true, text: 'Deployments per week', color: muted } },
+        y1: { position: 'right', ticks: { color: muted, callback: value => `${value}%` }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Change failure rate', color: muted } }
+      }
+    }
+  });
+
+document.addEventListener('slidechange', ({ detail }) => {
+    if (!detail.slide.contains(canvas)) return;
+    chart.stop();
+    if (detail.reducedMotion) {
+      chart.options.animation = false;
+      chart.update('none');
+      return;
+    }
+    chart.options.animation = { duration: 800, easing: 'easeOutQuart' };
+    chart.reset();
+    chart.update();
+  });
+});
 </script></body></html>

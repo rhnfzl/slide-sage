@@ -4,8 +4,8 @@
   <style>
     .hs-box { transition: filter 0.2s ease; cursor: pointer; }
     .hs-box:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
-    .hs-hub-label { font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: #fff; }
-    .hs-spoke-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #fff; }
+    .hs-hub-label { font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: var(--diagram-label, #FFFFFF); }
+    .hs-spoke-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
     .hs-arrow-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
     .hs-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
   </style>
@@ -25,14 +25,14 @@
   <!-- Hub (Center) -->
   <g id="hub-group">
     <rect class="hs-box" x="220" y="260" width="160" height="80" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#hs-shadow)" />
     <text id="hub-label" x="300" y="306" text-anchor="middle" class="hs-hub-label">Platform</text>
   </g>
 
   <!-- Spoke 1: Top (300, 60) -->
   <g id="spoke-1-group">
     <rect class="hs-box" x="240" y="35" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#hs-shadow)" />
     <text id="spoke-1-label" x="300" y="66" text-anchor="middle" class="hs-spoke-label">Service A</text>
   </g>
   <!-- Bidirectional arrows: Hub <-> Spoke 1 -->
@@ -43,7 +43,7 @@
   <!-- Spoke 2: Top-right (480, 160) -->
   <g id="spoke-2-group">
     <rect class="hs-box" x="420" y="135" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#hs-shadow)" />
     <text id="spoke-2-label" x="480" y="166" text-anchor="middle" class="hs-spoke-label">Service B</text>
   </g>
   <!-- Bidirectional arrows: Hub <-> Spoke 2 -->
@@ -54,7 +54,7 @@
   <!-- Spoke 3: Bottom-right (480, 360) -->
   <g id="spoke-3-group">
     <rect class="hs-box" x="420" y="335" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#hs-shadow)" />
     <text id="spoke-3-label" x="480" y="366" text-anchor="middle" class="hs-spoke-label">Service C</text>
   </g>
   <!-- Bidirectional arrows: Hub <-> Spoke 3 -->
@@ -65,7 +65,7 @@
   <!-- Spoke 4: Bottom (300, 460) -->
   <g id="spoke-4-group">
     <rect class="hs-box" x="240" y="435" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#hs-shadow)" />
     <text id="spoke-4-label" x="300" y="466" text-anchor="middle" class="hs-spoke-label">Service D</text>
   </g>
   <!-- Bidirectional arrows: Hub <-> Spoke 4 -->
@@ -76,7 +76,7 @@
   <!-- Spoke 5: Bottom-left (120, 360) -->
   <g id="spoke-5-group">
     <rect class="hs-box" x="60" y="335" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#hs-shadow)" />
     <text id="spoke-5-label" x="120" y="366" text-anchor="middle" class="hs-spoke-label">Service E</text>
   </g>
   <!-- Bidirectional arrows: Hub <-> Spoke 5 -->
@@ -87,7 +87,7 @@
   <!-- Spoke 6: Top-left (120, 160) -->
   <g id="spoke-6-group">
     <rect class="hs-box" x="60" y="135" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#hs-shadow)" />
     <text id="spoke-6-label" x="120" y="166" text-anchor="middle" class="hs-spoke-label">Service F</text>
   </g>
   <!-- Bidirectional arrows: Hub <-> Spoke 6 -->
@@ -98,14 +98,14 @@
   <!-- Spoke 7 (hidden) -->
   <g id="spoke-7-group" style="display:none;">
     <rect class="hs-box" x="420" y="245" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#hs-shadow)" />
     <text id="spoke-7-label" x="480" y="276" text-anchor="middle" class="hs-spoke-label">Service G</text>
   </g>
 
   <!-- Spoke 8 (hidden) -->
   <g id="spoke-8-group" style="display:none;">
     <rect class="hs-box" x="60" y="245" width="120" height="50" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#hs-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#hs-shadow)" />
     <text id="spoke-8-label" x="120" y="276" text-anchor="middle" class="hs-spoke-label">Service H</text>
   </g>
 </svg>

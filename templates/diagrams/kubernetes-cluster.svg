@@ -6,9 +6,9 @@
     .k8s-box:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
     .k8s-cluster-label { font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: var(--diagram-text, #e0e0e0); }
     .k8s-section-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: var(--diagram-text, #e0e0e0); }
-    .k8s-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #fff; }
+    .k8s-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
     .k8s-sublabel { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
-    .k8s-pod-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 600; fill: #fff; }
+    .k8s-pod-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
     .k8s-outline { fill: none; stroke: var(--diagram-arrow, #888); stroke-width: 1.5; stroke-dasharray: 6, 3; }
     .k8s-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
   </style>
@@ -28,34 +28,34 @@
 
   <!-- Control Plane section -->
   <rect class="k8s-outline" x="40" y="65" width="310" height="330" rx="8" ry="8"
-        style="stroke: var(--diagram-primary, #4A90D9);" />
+        style="stroke: var(--diagram-primary, #0077BB);" />
   <text x="195" y="90" text-anchor="middle" class="k8s-section-label">Control Plane</text>
 
   <!-- CP box 1: API Server (top-left) -->
   <g id="cp-1-group">
     <rect class="k8s-box" x="60" y="105" width="130" height="45" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#k8s-shadow)" />
     <text id="cp-1-label" x="125" y="133" text-anchor="middle" class="k8s-label">API Server</text>
   </g>
 
   <!-- CP box 2: Scheduler (top-right) -->
   <g id="cp-2-group">
     <rect class="k8s-box" x="205" y="105" width="130" height="45" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#k8s-shadow)" />
     <text id="cp-2-label" x="270" y="133" text-anchor="middle" class="k8s-label">Scheduler</text>
   </g>
 
   <!-- CP box 3: Controller Manager (bottom-left) -->
   <g id="cp-3-group">
     <rect class="k8s-box" x="60" y="170" width="130" height="45" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#k8s-shadow)" />
     <text id="cp-3-label" x="125" y="198" text-anchor="middle" class="k8s-label">Controller Mgr</text>
   </g>
 
   <!-- CP box 4: etcd (bottom-right) -->
   <g id="cp-4-group">
     <rect class="k8s-box" x="205" y="170" width="130" height="45" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#k8s-shadow)" />
     <text id="cp-4-label" x="270" y="198" text-anchor="middle" class="k8s-label">etcd</text>
   </g>
 
@@ -65,69 +65,69 @@
 
   <!-- Worker Node 1 -->
   <rect class="k8s-outline" x="430" y="65" width="380" height="165" rx="8" ry="8"
-        style="stroke: var(--diagram-secondary, #50C878);" />
+        style="stroke: var(--diagram-secondary, #009988);" />
   <text id="worker-1-label" x="620" y="90" text-anchor="middle" class="k8s-section-label">Worker Node 1</text>
   <text x="470" y="112" class="k8s-sublabel">kubelet</text>
 
   <!-- Worker 1 Pod 1 -->
   <g id="worker-1-pod-1-group">
     <rect class="k8s-box" x="455" y="120" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#k8s-shadow)" />
     <text id="worker-1-pod-1" x="510" y="146" text-anchor="middle" class="k8s-pod-label">Pod 1</text>
   </g>
 
   <!-- Worker 1 Pod 2 -->
   <g id="worker-1-pod-2-group">
     <rect class="k8s-box" x="580" y="120" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#k8s-shadow)" />
     <text id="worker-1-pod-2" x="635" y="146" text-anchor="middle" class="k8s-pod-label">Pod 2</text>
   </g>
 
   <!-- Worker 1 Pod 3 (hidden) -->
   <g id="worker-1-pod-3-group" style="display:none;">
     <rect class="k8s-box" x="705" y="120" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#k8s-shadow)" />
     <text id="worker-1-pod-3" x="760" y="146" text-anchor="middle" class="k8s-pod-label">Pod 3</text>
   </g>
 
   <!-- Worker 1 Pod row 2 -->
   <g id="worker-1-pod-4-group">
     <rect class="k8s-box" x="455" y="172" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#k8s-shadow)" />
     <text id="worker-1-pod-4" x="510" y="198" text-anchor="middle" class="k8s-pod-label">Pod 3</text>
   </g>
 
   <!-- Worker Node 2 -->
   <rect class="k8s-outline" x="430" y="250" width="380" height="165" rx="8" ry="8"
-        style="stroke: var(--diagram-amber, #F5A623);" />
+        style="stroke: var(--diagram-amber, #EE7733);" />
   <text id="worker-2-label" x="620" y="275" text-anchor="middle" class="k8s-section-label">Worker Node 2</text>
   <text x="470" y="297" class="k8s-sublabel">kubelet</text>
 
   <!-- Worker 2 Pod 1 -->
   <g id="worker-2-pod-1-group">
     <rect class="k8s-box" x="455" y="305" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#k8s-shadow)" />
     <text id="worker-2-pod-1" x="510" y="331" text-anchor="middle" class="k8s-pod-label">Pod 1</text>
   </g>
 
   <!-- Worker 2 Pod 2 -->
   <g id="worker-2-pod-2-group">
     <rect class="k8s-box" x="580" y="305" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#k8s-shadow)" />
     <text id="worker-2-pod-2" x="635" y="331" text-anchor="middle" class="k8s-pod-label">Pod 2</text>
   </g>
 
   <!-- Worker 2 Pod 3 (hidden) -->
   <g id="worker-2-pod-3-group" style="display:none;">
     <rect class="k8s-box" x="705" y="305" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#k8s-shadow)" />
     <text id="worker-2-pod-3" x="760" y="331" text-anchor="middle" class="k8s-pod-label">Pod 3</text>
   </g>
 
   <!-- Worker 2 Pod row 2 -->
   <g id="worker-2-pod-4-group">
     <rect class="k8s-box" x="455" y="357" width="110" height="40" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#k8s-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#k8s-shadow)" />
     <text id="worker-2-pod-4" x="510" y="383" text-anchor="middle" class="k8s-pod-label">Pod 3</text>
   </g>
 </svg>

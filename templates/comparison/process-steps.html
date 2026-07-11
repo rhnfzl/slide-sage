@@ -124,20 +124,20 @@
     right: 50%;
     left: calc(-50%);
     height: 2px;
-    background: rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, var(--color-text) 12%, transparent);
     z-index: 0;
   }
 
   /* Completed connector gets accent color */
   .process-step.step-completed:not(:first-child)::before {
-    background: color-mix(in srgb, var(--color-accent, #61afef) 50%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 50%, transparent);
   }
 
   /* Active connector gets partial accent */
   .process-step.step-active:not(:first-child)::before {
     background: linear-gradient(to right,
-      color-mix(in srgb, var(--color-accent, #61afef) 50%, transparent),
-      rgba(255, 255, 255, 0.12)
+      color-mix(in srgb, var(--color-accent) 50%, transparent),
+      color-mix(in srgb, var(--color-text) 12%, transparent)
     );
   }
 
@@ -170,13 +170,13 @@
     font-size: clamp(0.75rem, 1.3vw, 1rem);
     font-weight: 600;
     margin: clamp(0.4rem, 1vw, 0.7rem) 0 0.2rem 0;
-    color: var(--color-text, #cdd6f4);
+    color: var(--color-text);
   }
 
   /* Step description */
   .step-desc {
     font-size: clamp(0.6rem, 1vw, 0.8rem);
-    color: rgba(255, 255, 255, 0.5);
+    color: color-mix(in srgb, var(--color-text) 50%, transparent);
     margin: 0;
     line-height: 1.4;
     max-width: 130px;
@@ -184,8 +184,8 @@
 
   /* === State: Completed === */
   .step-completed .step-circle {
-    background: var(--color-accent, #61afef);
-    color: #fff;
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
   }
 
   .step-completed .step-number {
@@ -194,49 +194,49 @@
 
   .step-completed .step-check {
     display: block;
-    color: #fff;
+    color: var(--color-text-inverse);
     font-size: clamp(1rem, 1.8vw, 1.4rem);
   }
 
   .step-completed .step-title {
-    color: var(--color-accent, #61afef);
+    color: var(--color-accent);
   }
 
   /* === State: Active (glow/pulse) === */
   .step-active .step-circle {
-    background: var(--color-accent, #61afef);
-    color: #fff;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #61afef) 25%, transparent);
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 25%, transparent);
     animation: step-pulse 2s ease-in-out infinite;
   }
 
   .step-active .step-title {
-    color: var(--color-accent, #61afef);
+    color: var(--color-accent);
     font-weight: 700;
   }
 
   @keyframes step-pulse {
     0%, 100% {
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #61afef) 25%, transparent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 25%, transparent);
     }
     50% {
-      box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent, #61afef) 10%, transparent);
+      box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent) 10%, transparent);
     }
   }
 
   /* === State: Upcoming (dimmed) === */
   .step-upcoming .step-circle {
-    background: rgba(255, 255, 255, 0.06);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.35);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    border: 2px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    color: color-mix(in srgb, var(--color-text) 35%, transparent);
   }
 
   .step-upcoming .step-title {
-    color: rgba(255, 255, 255, 0.4);
+    color: color-mix(in srgb, var(--color-text) 40%, transparent);
   }
 
   .step-upcoming .step-desc {
-    color: rgba(255, 255, 255, 0.25);
+    color: color-mix(in srgb, var(--color-text) 25%, transparent);
   }
 
   /* === Responsive: 2-column grid on narrow viewports === */
@@ -263,71 +263,4 @@
     }
   }
 
-  /* === Light Theme Variant === */
-  [data-theme="light"] .process-step:not(:first-child)::before {
-    background: rgba(0, 0, 0, 0.1);
-  }
-
-  [data-theme="light"] .process-step.step-completed:not(:first-child)::before {
-    background: color-mix(in srgb, var(--color-accent, #4078f2) 40%, transparent);
-  }
-
-  [data-theme="light"] .process-step.step-active:not(:first-child)::before {
-    background: linear-gradient(to right,
-      color-mix(in srgb, var(--color-accent, #4078f2) 40%, transparent),
-      rgba(0, 0, 0, 0.1)
-    );
-  }
-
-  [data-theme="light"] .step-completed .step-circle {
-    background: var(--color-accent, #4078f2);
-  }
-
-  [data-theme="light"] .step-completed .step-title {
-    color: var(--color-accent, #4078f2);
-  }
-
-  [data-theme="light"] .step-active .step-circle {
-    background: var(--color-accent, #4078f2);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #4078f2) 20%, transparent);
-  }
-
-  [data-theme="light"] .step-active .step-title {
-    color: var(--color-accent, #4078f2);
-  }
-
-  @keyframes step-pulse-light {
-    0%, 100% {
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent, #4078f2) 20%, transparent);
-    }
-    50% {
-      box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent, #4078f2) 8%, transparent);
-    }
-  }
-
-  [data-theme="light"] .step-active .step-circle {
-    animation-name: step-pulse-light;
-  }
-
-  [data-theme="light"] .step-upcoming .step-circle {
-    background: rgba(0, 0, 0, 0.03);
-    border-color: rgba(0, 0, 0, 0.12);
-    color: rgba(0, 0, 0, 0.3);
-  }
-
-  [data-theme="light"] .step-upcoming .step-title {
-    color: rgba(0, 0, 0, 0.35);
-  }
-
-  [data-theme="light"] .step-upcoming .step-desc {
-    color: rgba(0, 0, 0, 0.25);
-  }
-
-  [data-theme="light"] .step-title {
-    color: var(--color-text, #383a42);
-  }
-
-  [data-theme="light"] .step-desc {
-    color: rgba(0, 0, 0, 0.5);
-  }
 </style>

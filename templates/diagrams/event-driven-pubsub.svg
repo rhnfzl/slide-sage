@@ -4,11 +4,11 @@
   <style>
     .ep-box { transition: filter 0.2s ease; cursor: pointer; }
     .ep-box:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
-    .ep-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #fff; }
-    .ep-bus-label { font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: #fff; }
+    .ep-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
+    .ep-bus-label { font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: var(--diagram-label, #FFFFFF); }
     .ep-topic-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
     .ep-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
-    .ep-bus-outline { fill: none; stroke: var(--diagram-amber, #F5A623); stroke-width: 1.5; opacity: 0.4; }
+    .ep-bus-outline { fill: none; stroke: var(--diagram-amber, #EE7733); stroke-width: 1.5; opacity: 0.4; }
     @keyframes dash-flow {
       to { stroke-dashoffset: -20; }
     }
@@ -30,28 +30,28 @@
   <!-- Publisher 1 -->
   <g id="pub-1-group">
     <rect class="ep-box" x="30" y="40" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#ep-shadow)" />
     <text id="pub-1-label" x="100" y="71" text-anchor="middle" class="ep-label">Publisher 1</text>
   </g>
 
   <!-- Publisher 2 -->
   <g id="pub-2-group">
     <rect class="ep-box" x="30" y="120" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#ep-shadow)" />
     <text id="pub-2-label" x="100" y="151" text-anchor="middle" class="ep-label">Publisher 2</text>
   </g>
 
   <!-- Publisher 3 -->
   <g id="pub-3-group">
     <rect class="ep-box" x="30" y="200" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#ep-shadow)" />
     <text id="pub-3-label" x="100" y="231" text-anchor="middle" class="ep-label">Publisher 3</text>
   </g>
 
   <!-- Publisher 4 (hidden) -->
   <g id="pub-4-group" style="display:none;">
     <rect class="ep-box" x="30" y="280" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#ep-shadow)" />
     <text id="pub-4-label" x="100" y="311" text-anchor="middle" class="ep-label">Publisher 4</text>
   </g>
 
@@ -63,11 +63,11 @@
   <!-- Event Bus (center) -->
   <g id="bus-group">
     <rect class="ep-box" x="300" y="55" width="250" height="200" rx="10" ry="10"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#ep-shadow)" />
     <text id="bus-label" x="425" y="90" text-anchor="middle" class="ep-bus-label">Event Bus</text>
 
     <!-- Topic dividers and labels -->
-    <line x1="320" y1="105" x2="530" y2="105" stroke="rgba(255,255,255,0.3)" stroke-width="1" />
+    <line x1="320" y1="105" x2="530" y2="105" stroke="color-mix(in srgb, var(--diagram-label, #FFFFFF) 30%, transparent)" stroke-width="1" />
     <rect x="330" y="115" width="190" height="30" rx="6" ry="6" fill="rgba(0,0,0,0.15)" />
     <text id="topic-1" x="425" y="136" text-anchor="middle" class="ep-topic-label">orders.created</text>
 
@@ -86,28 +86,28 @@
   <!-- Subscriber 1 -->
   <g id="sub-1-group">
     <rect class="ep-box" x="640" y="40" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#ep-shadow)" />
     <text id="sub-1-label" x="710" y="71" text-anchor="middle" class="ep-label">Subscriber 1</text>
   </g>
 
   <!-- Subscriber 2 -->
   <g id="sub-2-group">
     <rect class="ep-box" x="640" y="120" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#ep-shadow)" />
     <text id="sub-2-label" x="710" y="151" text-anchor="middle" class="ep-label">Subscriber 2</text>
   </g>
 
   <!-- Subscriber 3 -->
   <g id="sub-3-group">
     <rect class="ep-box" x="640" y="200" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#ep-shadow)" />
     <text id="sub-3-label" x="710" y="231" text-anchor="middle" class="ep-label">Subscriber 3</text>
   </g>
 
   <!-- Subscriber 4 (hidden) -->
   <g id="sub-4-group" style="display:none;">
     <rect class="ep-box" x="640" y="280" width="140" height="50" rx="8" ry="8"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#ep-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#ep-shadow)" />
     <text id="sub-4-label" x="710" y="311" text-anchor="middle" class="ep-label">Subscriber 4</text>
   </g>
 </svg>
