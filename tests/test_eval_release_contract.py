@@ -184,9 +184,12 @@ def test_03_ci_runs_the_eval_runner_and_representative_example_render_checks() -
 def test_04_release_workflow_guards_versions_and_changelog_documents_upgrade() -> None:
     version = "2.0.1"
     changelog = read_repository("CHANGELOG.md")
-    assert f"## {version} - 2026-07-12" in changelog
-    assert "npx skills add rhnfzl/slide-sage" in changelog
-    assert "git clone" in changelog
+    marker = f"## {version} - 2026-07-12"
+    assert marker in changelog
+    release_notes = changelog.split(marker, maxsplit=1)[1].split("\n## ", maxsplit=1)[0]
+    assert "npx skills add rhnfzl/slide-sage" in release_notes
+    assert "git clone" in release_notes
+    assert "skills/slide-sage/SKILL.md" in release_notes
 
     plugin = json.loads(read_repository(".claude-plugin/plugin.json"))
     assert plugin["version"] == version

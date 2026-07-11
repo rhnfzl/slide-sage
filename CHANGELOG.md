@@ -8,6 +8,13 @@ release tag. The release workflow fails if they drift.
 
 ## 2.0.1 - 2026-07-12
 
+### Upgrade
+
+- Existing `npx skills add` installations should run
+  `npx skills add rhnfzl/slide-sage` again to receive the complete payload.
+- Manual `git clone` users should pull `v2.0.1` and point their agent at
+  `skills/slide-sage/SKILL.md`.
+
 ### Fixed
 
 - `npx skills add rhnfzl/slide-sage` now installs the complete presentation
@@ -21,7 +28,7 @@ release tag. The release workflow fails if they drift.
 - Existing `npx skills add` installations and manual `git clone` users can get
   the upgraded skill by running `npx skills add rhnfzl/slide-sage` again. Clone
   users can alternatively pull this tag and keep their agent pointed at
-  `skills/slide-sage/SKILL.md`.
+  `SKILL.md`.
 
 ### Added
 
