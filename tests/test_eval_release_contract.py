@@ -157,8 +157,8 @@ def test_03_ci_runs_the_eval_runner_and_representative_example_render_checks() -
         "scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html",
         "scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html",
         "scripts/render-check --slide 2 --viewport-size 1123,500 skills/slide-sage/examples/architecture-teaching.html",
-        "scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html",
-        "scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html",
+        "scripts/render-check --slide 5 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html",
+        "scripts/render-check --slide 5 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html",
     ):
         assert command in workflow
     for artifact in (

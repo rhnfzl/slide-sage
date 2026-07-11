@@ -34,8 +34,8 @@ jobs:
           skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html artifacts/metrics-chart-short.png
           skills/slide-sage/scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html artifacts/architecture-diagram-reference.png
           skills/slide-sage/scripts/render-check --slide 2 --viewport-size 1123,500 skills/slide-sage/examples/architecture-teaching.html artifacts/architecture-diagram-short.png
-          skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html artifacts/intro-code-reference.png
-          skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html artifacts/intro-code-short.png
+          skills/slide-sage/scripts/render-check --slide 5 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html artifacts/intro-code-reference.png
+          skills/slide-sage/scripts/render-check --slide 5 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html artifacts/intro-code-short.png
       - name: Upload render evidence
         if: always()
         uses: actions/upload-artifact@v4
