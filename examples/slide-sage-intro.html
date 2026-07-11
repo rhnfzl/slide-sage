@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean-deep" data-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide Sage: technical stories with evidence</title>
+  <style>
+/* viewport-base.css — inlined into every slide-sage presentation */
+
+/* ============================================
+   Reset
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   CSS Custom Properties
+   ============================================ */
+:root {
+  /* Colors — overridden per theme */
+  --color-bg: #0f0f1a;
+  --color-text: #cdd6f4;
+  --color-heading: #ffffff;
+  --color-accent: #89b4fa;
+  --color-accent-secondary: #a6e3a1;
+  --color-surface: #1e1e2e;
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  /* Typography */
+  --font-heading: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* Spacing scale */
+  --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --spacing-md: clamp(0.75rem, 1.5vw, 1.25rem);
+  --spacing-lg: clamp(1rem, 2.5vw, 2rem);
+  --spacing-xl: clamp(1.5rem, 3.5vw, 3rem);
+
+  /* Shape & Motion */
+  --radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+/* ============================================
+   Slides Container
+   ============================================ */
+.slides-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+}
+
+/* ============================================
+   Individual Slide
+   ============================================ */
+.slide {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(1.5rem, 4vh, 3rem) clamp(1.5rem, 5vw, 4rem);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.slide.inactive {
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   Slide Content Wrapper
+   ============================================ */
+.slide-content {
+  max-width: min(90%, 1100px);
+  max-height: 85vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-sm);
+}
+
+p {
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-sm);
+}
+
+li {
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+}
+
+ul, ol {
+  padding-left: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+small, .caption, figcaption {
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.2vw, 0.95rem);
+  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  overflow: hidden;
+  max-height: 55vh;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--spacing-md);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* ============================================
+   Images
+   ============================================ */
+.slide img {
+  max-height: min(50vh, 400px);
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.text-center { text-align: center; }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+/* ============================================
+   Navigation: Progress Bar
+   ============================================ */
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  width: 0%;
+  transition: width var(--transition-speed) ease;
+}
+
+/* ============================================
+   Navigation: Slide Counter
+   ============================================ */
+.slide-counter {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.4;
+  z-index: 100;
+  user-select: none;
+}
+
+/* ============================================
+   Navigation: Arrow Buttons
+   ============================================ */
+.nav-arrows {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.slides-container:hover ~ .nav-arrows,
+.nav-arrows:hover {
+  opacity: 1;
+}
+
+.nav-arrow {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.nav-arrow:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.nav-arrow:disabled:hover {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* ============================================
+   Visual Polish: Background Grid
+   ============================================ */
+.bg-grid::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Visual Polish: Glow Effects
+   ============================================ */
+.glow {
+  box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.3);
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.2); }
+  50% { box-shadow: 0 0 20px rgba(var(--accent-rgb, 137, 180, 250), 0.4); }
+}
+
+/* ============================================
+   Visual Polish: Card Accents
+   ============================================ */
+.card {
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius, 12px);
+  padding: var(--spacing-md);
+}
+
+.card-accent {
+  border-left: 3px solid var(--color-accent, #89b4fa);
+}
+
+.card-top-accent {
+  border-top: 3px solid var(--color-accent, #89b4fa);
+}
+
+.card-gold {
+  border-left: 3px solid var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+}
+
+/* ============================================
+   Visual Polish: Staggered Reveal
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .reveal:nth-child(2) { transition-delay: 0.1s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.15s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.2s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.25s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.3s; }
+.slide.active .reveal:nth-child(7) { transition-delay: 0.35s; }
+.slide.active .reveal:nth-child(8) { transition-delay: 0.4s; }
+
+/* ============================================
+   Visual Polish: Badges
+   ============================================ */
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: rgba(var(--accent-rgb, 137, 180, 250), 0.15);
+  color: var(--color-accent, #89b4fa);
+  vertical-align: middle;
+}
+
+.badge-gold {
+  background: rgba(var(--gold-rgb, 166, 227, 161), 0.15);
+  color: var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+}
+
+.badge-blue {
+  background: rgba(74, 163, 216, 0.15);
+  color: #4AA3D8;
+}
+
+.badge-orange {
+  background: rgba(232, 152, 56, 0.15);
+  color: #E89838;
+}
+
+/* ============================================
+   Visual Polish: Inline Code
+   ============================================ */
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2em 0.45em;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   Visual Polish: Section Label
+   ============================================ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent, #89b4fa);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ============================================
+   CSS Diagrams: Sequence Flow
+   ============================================ */
+.sequence-flow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.seq-participants {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.seq-actor {
+  flex: 1;
+  text-align: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(0.6rem, 1vw, 0.8rem);
+}
+
+.seq-actor.accent {
+  border-color: var(--color-accent, #89b4fa);
+  color: var(--color-accent, #89b4fa);
+}
+
+.seq-step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-left: 2px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  margin-left: var(--spacing-md);
+}
+
+.seq-step .seq-arrow {
+  color: var(--color-accent, #89b4fa);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.seq-step .seq-label {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+  font-size: 0.9em;
+}
+
+.seq-step .seq-from,
+.seq-step .seq-to {
+  font-weight: 600;
+  min-width: 4em;
+  font-size: 0.9em;
+}
+
+.seq-step.dashed {
+  border-left-style: dashed;
+}
+
+.seq-step.response {
+  border-left-color: var(--color-accent-secondary, #a6e3a1);
+}
+
+.seq-step.response .seq-arrow {
+  color: var(--color-accent-secondary, #a6e3a1);
+}
+
+/* ============================================
+   CSS Diagrams: Architecture Stack
+   ============================================ */
+.arch-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.arch-row.full {
+  width: 100%;
+}
+
+.arch-row-group {
+  display: flex;
+  gap: 4px;
+}
+
+.arch-row-group .arch-row {
+  flex: 1;
+}
+
+.arch-row.muted {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* ============================================
+   CSS Diagrams: Pyramid
+   ============================================ */
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.pyramid-layer {
+  width: var(--width, 80%);
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  transition: width 0.3s ease;
+}
+
+.pyramid-layer:first-child {
+  border-radius: 6px 6px 4px 4px;
+}
+
+.pyramid-layer:last-child {
+  border-radius: 4px 4px 6px 6px;
+}
+
+/* ============================================
+   CSS Diagrams: Process Flow (Horizontal)
+   ============================================ */
+.process-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.process-step {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--color-surface, #1e1e2e);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+}
+
+.process-arrow {
+  font-size: 1.2rem;
+  color: var(--color-accent, #89b4fa);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Typography Enhancements
+   ============================================ */
+.tight-heading {
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  .slide {
+    position: relative;
+    page-break-after: always;
+    height: 100vh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .slide:last-child {
+    page-break-after: avoid;
+  }
+
+  .slide.inactive {
+    display: flex !important;
+    opacity: 1 !important;
+    position: relative !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  .progress-bar,
+  .slide-counter,
+  .nav-arrows,
+  .shortcuts-overlay {
+    display: none !important;
+  }
+
+  @page {
+    margin: 1cm;
+    size: landscape;
+  }
+
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Height Breakpoints
+   ============================================ */
+@media (max-height: 700px) {
+  h1 { font-size: clamp(1.5rem, 3.5vw, 2.8rem); }
+  h2 { font-size: clamp(1.2rem, 2.5vw, 2rem); }
+  h3 { font-size: clamp(1rem, 2vw, 1.5rem); }
+  p, li { font-size: clamp(0.8rem, 1.3vw, 1.05rem); }
+
+  .slide { padding: var(--spacing-sm) var(--spacing-md); }
+  .slide-content { max-height: 88vh; }
+
+  :root {
+    --spacing-md: clamp(0.5rem, 1.2vw, 1rem);
+    --spacing-lg: clamp(0.75rem, 2vw, 1.5rem);
+    --spacing-xl: clamp(1rem, 2.5vw, 2rem);
+  }
+}
+
+@media (max-height: 600px) {
+  h1 { font-size: clamp(1.3rem, 3vw, 2.2rem); }
+  h2 { font-size: clamp(1.1rem, 2.2vw, 1.7rem); }
+  h3 { font-size: clamp(0.95rem, 1.8vw, 1.3rem); }
+  p, li { font-size: clamp(0.75rem, 1.2vw, 0.95rem); }
+  small, .caption { font-size: clamp(0.65rem, 1vw, 0.8rem); }
+
+  .slide { padding: var(--spacing-xs) var(--spacing-sm); }
+  .slide-content { max-height: 90vh; }
+  .slide img { max-height: min(40vh, 300px); }
+}
+
+@media (max-height: 500px) {
+  h1 { font-size: clamp(1.1rem, 2.5vw, 1.8rem); }
+  h2 { font-size: clamp(0.95rem, 2vw, 1.4rem); }
+  h3 { font-size: clamp(0.85rem, 1.6vw, 1.1rem); }
+  p, li { font-size: clamp(0.7rem, 1.1vw, 0.85rem); }
+
+  .slide {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+  .slide-content { max-height: 92vh; }
+
+  h1, h2, h3 { margin-bottom: var(--spacing-xs); }
+  ul, ol { gap: 0.1rem; }
+  .slide img { max-height: min(30vh, 200px); }
+}
+
+/* ============================================
+   Width Breakpoints (secondary)
+   ============================================ */
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .flex-row { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: var(--spacing-sm); }
+  .nav-arrows { display: none; }
+}
+
+    :root {
+      --color-bg-primary: #081525; --color-bg-secondary: #10253c; --color-bg-surface: #17314c;
+      --color-text-primary: #f2f7fb; --color-text-secondary: #a9c4d8; --color-text-muted: #7394ad;
+      --color-accent: #29c4c9; --color-accent-hover: #5bdde0; --color-accent-subtle: #103b45;
+      --color-border: #2a5068; --color-heading: var(--color-text-primary); --color-text: var(--color-text-primary);
+      --color-bg: var(--color-bg-primary); --color-surface: var(--color-bg-surface);
+      --font-heading: Georgia, 'Times New Roman', serif; --font-body: Arial, Helvetica, sans-serif;
+      --font-mono: 'SFMono-Regular', Consolas, monospace; --radius: clamp(0.3rem, 0.8vw, 0.7rem);
+    }
+    body { background: var(--color-bg-primary); color: var(--color-text-primary); font-family: var(--font-body); }
+    .slide { background: var(--color-bg-primary); }
+    .eyebrow { color: var(--color-accent); font-family: var(--font-mono); font-size: clamp(0.68rem, 1vw, 0.9rem); letter-spacing: .14em; text-transform: uppercase; }
+    .hero-title { max-width: 15ch; font-size: clamp(2.8rem, 7vw, 6.8rem); line-height: .92; letter-spacing: -.05em; }
+    .hero-subtitle { max-width: 42ch; color: var(--color-text-secondary); font-size: clamp(1rem, 1.7vw, 1.4rem); }
+    .accent-rule { width: clamp(5rem, 12vw, 10rem); height: clamp(.2rem, .45vw, .4rem); background: var(--color-accent); }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); width: 100%; }
+    .proof-card { border-top: clamp(.15rem, .3vw, .25rem) solid var(--color-accent); padding: var(--spacing-md); background: var(--color-bg-surface); }
+    .proof-number { display: block; color: var(--color-accent); font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
+    .proof-label { color: var(--color-text-secondary); font-size: clamp(.75rem, 1.2vw, 1rem); }
+    .chart-wrap { position: relative; width: 100%; height: min(52vh, 400px); }
+    .sample-badge { align-self: flex-start; padding: var(--spacing-xs) var(--spacing-sm); border: 1px solid var(--color-accent); color: var(--color-accent); font-family: var(--font-mono); font-size: clamp(.62rem, .9vw, .8rem); }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); align-items: center; width: 100%; }
+    .flow-step { min-height: clamp(7rem, 18vh, 11rem); padding: var(--spacing-md); border: 1px solid var(--color-border); background: var(--color-bg-surface); display: flex; flex-direction: column; justify-content: space-between; }
+    .flow-step strong { color: var(--color-accent); font-family: var(--font-heading); font-size: clamp(1.1rem, 2vw, 1.7rem); }
+    .flow-step small { color: var(--color-text-secondary); }
+    .code-demo { width: 100%; background: #071018; border-left: clamp(.18rem, .4vw, .3rem) solid var(--color-accent); padding: var(--spacing-lg); font-family: var(--font-mono); font-size: clamp(.72rem, 1.25vw, 1rem); line-height: 1.7; color: #dce9ef; white-space: pre-wrap; }
+    .code-key { color: #ee7733; } .code-string { color: #42c6a4; } .code-call { color: #61a9dc; }
+    .closing-line { max-width: 18ch; font-size: clamp(2.5rem, 6vw, 5.8rem); line-height: .98; }
+    @media (max-width: 760px) { .proof-grid, .flow { grid-template-columns: 1fr 1fr; } }
+    @media (max-height: 600px) { .flow-step { min-height: 5rem; } .proof-number { font-size: clamp(1.5rem, 3vw, 2.4rem); } }
+  </style>
+</head>
+<body>
+  <main class="slides-container" id="slides">
+    <section class="slide active" id="slide-1">
+      <div class="slide-content gap-md">
+        <span class="eyebrow">Slide Sage</span><div class="accent-rule"></div>
+        <h1 class="hero-title">Technical stories with evidence.</h1>
+        <p class="hero-subtitle">One Agent Skill for metrics, architecture, and code, delivered as a browser-ready presentation.</p>
+      </div>
+    </section>
+    <section class="slide inactive" id="slide-2">
+      <div class="slide-content gap-lg"><span class="eyebrow">The contract</span><h2>Every output earns the screen.</h2>
+        <div class="proof-grid">
+          <div class="proof-card"><span class="proof-number">100vh</span><span class="proof-label">One viewport. No internal scrolling.</span></div>
+          <div class="proof-card"><span class="proof-number">1 file</span><span class="proof-label">CSS, navigation, notes, and data travel together.</span></div>
+          <div class="proof-card"><span class="proof-number">3 tiers</span><span class="proof-label">CSS diagrams, SVG templates, then custom SVG.</span></div>
+        </div>
+      </div>
+    </section>
+    <section class="slide inactive" id="slide-3">
+      <div class="slide-content gap-sm"><span class="eyebrow">Metrics</span><h2>Show the trend, keep the source visible.</h2><span class="sample-badge">SAMPLE DATA</span>
+        <div class="chart-wrap"><canvas id="qualityChart" role="img" aria-label="Sample chart showing slide quality checks improving across four releases"></canvas></div>
+        <p class="caption">Sample values for demonstration. Replace before sharing.</p>
+      </div>
+    </section>
+    <section class="slide inactive" id="slide-4">
+      <div class="slide-content gap-lg"><span class="eyebrow">Workflow</span><h2>From prompt to a checked deck.</h2>
+        <div class="flow"><div class="flow-step"><strong>01</strong><small>Read the audience and purpose</small></div><div class="flow-step"><strong>02</strong><small>Choose the evidence and visual form</small></div><div class="flow-step"><strong>03</strong><small>Generate a single HTML deck</small></div><div class="flow-step"><strong>04</strong><small>Validate fit, classes, and delivery</small></div></div>
+      </div>
+    </section>
+    <section class="slide inactive" id="slide-5">
+      <div class="slide-content gap-md"><span class="eyebrow">Code</span><h2>The output stays understandable.</h2>
+        <pre class="code-demo"><span class="code-key">const</span> deck = <span class="code-call">createPresentation</span>({
+  audience: <span class="code-string">'engineering leadership'</span>,
+  evidence: metrics,
+  format: <span class="code-string">'single-html'</span>
+});
+
+<span class="code-key">await</span> deck.<span class="code-call">validate</span>();</pre>
+      </div>
+    </section>
+    <section class="slide inactive" id="slide-6">
+      <div class="slide-content gap-md"><span class="eyebrow">Start here</span><h2 class="closing-line">Bring the facts. Slide Sage shapes the room.</h2><p class="hero-subtitle">npx skills add rhnfzl/slide-sage</p></div>
+    </section>
+  </main>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script>
+    class Deck { constructor(){this.s=[...document.querySelectorAll('.slide')];this.i=0;addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();this.go(this.i+1)}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();this.go(this.i-1)}if(e.key==='Home')this.go(0);if(e.key==='End')this.go(this.s.length-1)});const m=location.hash.match(/^#slide-(\d+)$/);this.go(m?Number(m[1])-1:0)} go(n){if(n<0||n>=this.s.length)return;this.s.forEach((x,j)=>{x.classList.toggle('active',j===n);x.classList.toggle('inactive',j!==n)});this.i=n;progressFill.style.width=`${(n+1)/this.s.length*100}%`;slideCounter.textContent=`${n+1} / ${this.s.length}`;history.replaceState(null,'',`#slide-${n+1}`)}}
+    addEventListener('DOMContentLoaded',()=>{new Deck();new Chart(document.getElementById('qualityChart'),{type:'line',data:{labels:['v1.0','v1.2','v1.6','v2.0'],datasets:[{label:'Checks passed',data:[58,72,86,96],borderColor:'#29c4c9',backgroundColor:'rgba(41,196,201,.16)',fill:true,tension:.32,pointBackgroundColor:'#ee7733',pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:40,max:100,ticks:{color:'#a9c4d8'},grid:{color:'rgba(169,196,216,.15)'},title:{display:true,text:'Quality checks passed (%)',color:'#a9c4d8'}},x:{ticks:{color:'#a9c4d8'},grid:{display:false}}}}})});
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "rhnfzl",
+  "owner": {
+    "name": "rhnfzl"
+  },
+  "plugins": [
+    {
+      "name": "slide-sage",
+      "source": "./",
+      "description": "Create data-rich HTML slide decks with charts, technical diagrams, code, reliable viewport fitting, and browser-native delivery."
+    }
+  ]
+}

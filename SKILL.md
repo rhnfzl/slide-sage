@@ -1,6 +1,10 @@
 ---
 name: slide-sage
 description: Create data-rich, interactive HTML presentations with charts, architecture diagrams, code highlighting, and professional styling. Use when the user wants to build a presentation with data visualization, technical diagrams, metrics dashboards, or code examples. Supports Chart.js, ECharts, D3, CSS/HTML diagrams, inline SVG, Prism.js code highlighting, and 6 curated style presets.
+license: MIT
+metadata:
+  version: "2.0.0"
+  author: rhnfzl
 ---
 
 # Slide Sage

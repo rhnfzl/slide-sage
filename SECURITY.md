@@ -1,0 +1,17 @@
+# Security
+
+Slide Sage creates local HTML presentations. Installing the skill copies files only. It does not run a postinstall script, upload a deck, or add Slide Sage telemetry.
+
+## External touch-points
+
+Generated decks can load version-pinned chart, code-highlighting, font, and animation libraries from a CDN. Those requests happen in the reader's browser only when the generated deck includes the library. Chart-free decks with no web fonts make no network request. Use the documented inline-vendored mode when a deck must work fully offline.
+
+The Python utilities under `scripts/` run only when a user or agent invokes them for PowerPoint extraction, PDF extraction, image processing, validation, or export. Installing the skill does not execute them.
+
+The `npx skills add` installer may record its own anonymous install telemetry. Slide Sage neither adds to nor receives that data.
+
+Generated presentations can contain source material, speaker notes, and embedded data in readable HTML. Review a deck before sharing it and remove anything the audience should not receive.
+
+## Reporting
+
+Found a security issue? Use the repository's private vulnerability reporting, if enabled, or open an issue at https://github.com/rhnfzl/slide-sage/issues when public disclosure is appropriate.

@@ -25,9 +25,12 @@ venv/
 
 # Agent instructions (local only)
 CLAUDE.md
-AGENTS.md
 SPECS.md
+.claude/
+.agent-harness/
 
 # Output
 *.html
 !templates/**/*.html
+!examples/**/*.html
+!index.html

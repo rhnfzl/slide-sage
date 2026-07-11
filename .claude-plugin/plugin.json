@@ -1,0 +1,11 @@
+{
+  "name": "slide-sage",
+  "description": "Create data-rich HTML slide decks with charts, technical diagrams, code, reliable viewport fitting, and browser-native delivery.",
+  "version": "2.0.0",
+  "author": {
+    "name": "rhnfzl"
+  },
+  "homepage": "https://github.com/rhnfzl/slide-sage",
+  "license": "MIT",
+  "keywords": ["skill", "agent-skills", "slides", "presentations", "charts", "diagrams", "html"]
+}
