@@ -30,6 +30,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11 (superseded): Remote installation with Skills CLI 1.5.16 cloned the repository but installed only a root `SKILL.md`. `--full-depth` had the same result. This historical failure led to the nested-runtime decision below and is not current installation guidance.
 - 2026-07-11: The user authorized reopening the root-layout decision. The runtime now lives under `skills/slide-sage/`, so cloned-source installs copy the complete payload. Root marketplace metadata stays at `./`, and a root `SKILL.md` is intentionally absent.
 - 2026-07-12: CodeRabbit reviewed 40 findings. The new plan-path and timeout findings were fixed; the other 38 target 100% unchanged payload moves from the prior merged baseline.
+- 2026-07-12: The reopened installer and render work passed all contracts, cloned-source installation, independent review, and two zero-finding incremental CodeRabbit reviews. Version 2.0.1 is ready for the merged-mainline release.
 - (append dated one-line entries here as phases complete)
 
 ---
@@ -91,7 +92,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 
 ## Definition of done
 
-- [ ] All items checked and reviewed (the cloned-source install contract passes; final review sign-off remains separate)
+- [x] All items checked and reviewed (the cloned-source install contract passes; final review sign-off is complete)
 - [x] `npx skills add rhnfzl/slide-sage` installs a working, full-payload skill from `skills/slide-sage/`
 - [x] README renders with banner; Pages gallery live
 - [x] Evals run green via the named runner
