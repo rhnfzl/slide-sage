@@ -24,6 +24,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11: Ship 3 behavior, executable fixture acceptance evals, CI render checks, and release automation passed local and cross-agent review. The sibling-repo audit found the requested packaging convention already present in all three repos, so no Phase 6 edits were needed. `human-html` had unrelated local changes and was left untouched.
 - 2026-07-11: Full-diff CodeRabbit review found one enhanced-fixture slide-isolation defect. It was fixed with a regression test, browser navigation proof, and a second-eye SHIP review.
 - 2026-07-11: GitHub Pages is enabled with the Actions build type at `https://rhnfzl.github.io/slide-sage/`. The gallery will deploy after the PR merges because the deployment workflow runs from `main`.
+- 2026-07-11: PR #1 is open against `main` and its `evals` workflow passed. Deployment and the first release tag remain post-merge actions so they run from the reviewed mainline code.
 - (append dated one-line entries here as phases complete)
 
 ---
