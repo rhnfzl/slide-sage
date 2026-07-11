@@ -22,19 +22,22 @@ Base HTML structure for AI-generated slide presentations. This is the canonical 
 <body>
   <div class="slides-container" id="slides">
 
-    <div class="slide" id="slide-1">
+    <div class="slide active" id="slide-1" aria-hidden="false">
       <!-- Slide content here -->
     </div>
-    <!-- NOTES: Speaker notes for slide 1 go here. These are HTML comments and are hidden from view. -->
 
-    <div class="slide" id="slide-2">
+    <div class="slide inactive" id="slide-2" aria-hidden="true" inert>
       <!-- Slide content here -->
     </div>
-    <!-- NOTES: Speaker notes for slide 2. -->
 
     <!-- Additional slides follow the same pattern -->
 
   </div>
+
+  <!-- Notes remain readable in the HTML source. Do not put secrets in a shared deck. -->
+  <script id="speaker-notes" type="application/json">
+    [{"slide": 1, "notes": "Opening context and outcome."}, {"slide": 2, "notes": "Key evidence and decision."}]
+  </script>
 
   <!-- Navigation UI -->
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -45,9 +48,12 @@ Base HTML structure for AI-generated slide presentations. This is the canonical 
   </div>
 
   <!-- Keyboard shortcuts overlay -->
-  <div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-label="Keyboard shortcuts" aria-hidden="true">
-    <div class="shortcuts-panel">
-      <h3>Keyboard Shortcuts</h3>
+  <div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle" aria-hidden="true" inert>
+    <div class="shortcuts-panel" tabindex="-1">
+      <div class="shortcuts-heading-row">
+        <h3 id="shortcutsTitle">Keyboard Shortcuts</h3>
+        <button class="shortcuts-close" id="shortcutsClose" type="button" aria-label="Close keyboard shortcuts">&#215;</button>
+      </div>
       <table>
         <tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr>
         <tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr>
@@ -55,6 +61,7 @@ Base HTML structure for AI-generated slide presentations. This is the canonical 
         <tr><td><kbd>End</kbd></td><td>Last slide</td></tr>
         <tr><td><kbd>Page Down</kbd></td><td>Next slide</td></tr>
         <tr><td><kbd>Page Up</kbd></td><td>Previous slide</td></tr>
+        <tr><td><kbd>P</kbd></td><td>Open presenter view when included</td></tr>
         <tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr>
       </table>
       <p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p>
@@ -86,10 +93,15 @@ class SlidePresentation {
     this.swipeThreshold = 50;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.ready = false;
+    this.isPrinting = false;
+    this.lastFocusedElement = null;
+    this.shortcutsFocusFrame = null;
 
     this.progressFill = document.getElementById('progressFill');
     this.slideCounter = document.getElementById('slideCounter');
     this.shortcutsOverlay = document.getElementById('shortcutsOverlay');
+    this.shortcutsPanel = this.shortcutsOverlay?.querySelector('.shortcuts-panel');
+    this.shortcutsClose = document.getElementById('shortcutsClose');
     this.navPrev = document.getElementById('navPrev');
     this.navNext = document.getElementById('navNext');
 
@@ -100,19 +112,44 @@ class SlidePresentation {
     this.bindKeyboard();
     this.bindTouch();
     this.bindNavButtons();
+    this.bindShortcutsDialog();
     this.bindHashChange();
+    this.bindPrintPreparation();
     this.readHashAndNavigate();
     this.updateUI();
     this.ready = true;
 
     // Delay the first lifecycle event until chart scripts in this DOM-ready turn exist.
-    window.requestAnimationFrame(() => this.emitSlideChange(null));
+    window.requestAnimationFrame(() => {
+      this.emitSlideChange(null);
+      this.markPrintReady();
+    });
   }
 
   bindKeyboard() {
     document.addEventListener('keydown', (e) => {
+      if (this.isShortcutsVisible()) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else if (e.key === 'Tab') {
+          this.trapShortcutsFocus(e);
+        } else if (e.key === '?') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else {
+          e.preventDefault();
+        }
+        return;
+      }
+
       // Ignore if user is typing in an input or textarea
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.tagName === 'SELECT' ||
+        e.target.isContentEditable
+      ) return;
 
       switch (e.key) {
         case 'ArrowRight':
@@ -150,7 +187,13 @@ class SlidePresentation {
           this.goTo(this.totalSlides - 1);
           break;
         case '?':
+          e.preventDefault();
           this.toggleShortcuts();
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          this.openPresenterMode();
           break;
         case 'Escape':
           this.hideShortcuts();
@@ -192,8 +235,59 @@ class SlidePresentation {
     }
   }
 
+  bindShortcutsDialog() {
+    if (!this.shortcutsOverlay) return;
+
+    this.shortcutsClose?.addEventListener('click', () => this.hideShortcuts());
+    this.shortcutsOverlay.addEventListener('click', (event) => {
+      if (event.target === this.shortcutsOverlay) this.hideShortcuts();
+    });
+  }
+
   bindHashChange() {
     window.addEventListener('hashchange', () => this.readHashAndNavigate());
+  }
+
+  bindPrintPreparation() {
+    window.addEventListener('beforeprint', () => {
+      this.isPrinting = true;
+      this.slides.forEach((slide) => {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      });
+      void this.markPrintReady();
+    });
+    window.addEventListener('afterprint', () => {
+      this.isPrinting = false;
+      this.updateUI();
+    });
+  }
+
+  async markPrintReady() {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
+    if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+      document.querySelectorAll('canvas').forEach((canvas) => {
+        const chart = Chart.getChart(canvas);
+        if (!chart) return;
+        chart.stop();
+        chart.options.animation = false;
+        chart.update('none');
+      });
+    }
+
+    if (typeof echarts !== 'undefined' && typeof echarts.getInstanceByDom === 'function') {
+      document.querySelectorAll('[data-slide-sage-echarts]').forEach((element) => {
+        const chart = echarts.getInstanceByDom(element);
+        if (!chart) return;
+        chart.setOption({ animation: false }, false);
+        chart.resize();
+      });
+    }
+
+    document.documentElement.dataset.slideSagePrintReady = 'true';
   }
 
   readHashAndNavigate() {
@@ -225,6 +319,7 @@ class SlidePresentation {
 
     const previousSlide = this.slides[this.currentSlide];
     const nextSlide = this.slides[index];
+    const shouldMoveFocus = previousSlide.contains(document.activeElement);
 
     previousSlide.classList.remove('active');
     previousSlide.classList.add('inactive');
@@ -244,6 +339,7 @@ class SlidePresentation {
     }
 
     this.updateUI();
+    if (shouldMoveFocus) this.moveFocusToIncomingSlide(nextSlide);
 
     if (this.ready) {
       this.emitSlideChange(previousSlide);
@@ -281,29 +377,120 @@ class SlidePresentation {
       this.navNext.disabled = this.currentSlide === this.totalSlides - 1;
     }
 
-    // Ensure only active slide is visible
+    // Ensure only the active slide is visible and exposed to assistive technology.
     this.slides.forEach((slide, i) => {
-      if (i === this.currentSlide) {
+      const isActive = i === this.currentSlide;
+      if (isActive) {
         slide.classList.add('active');
         slide.classList.remove('inactive');
       } else {
         slide.classList.remove('active');
         slide.classList.add('inactive');
       }
+
+      if (this.isPrinting || isActive) {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      } else {
+        slide.setAttribute('inert', '');
+        slide.setAttribute('aria-hidden', 'true');
+      }
     });
   }
 
-  toggleShortcuts() {
-    if (this.shortcutsOverlay) {
-      const nowVisible = this.shortcutsOverlay.classList.toggle('visible');
-      this.shortcutsOverlay.setAttribute('aria-hidden', String(!nowVisible));
+  moveFocusToIncomingSlide(nextSlide) {
+    const target = nextSlide.querySelector(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    ) || nextSlide;
+    if (target === nextSlide && !nextSlide.hasAttribute('tabindex')) {
+      nextSlide.setAttribute('tabindex', '-1');
+    }
+    target.focus({ preventScroll: true });
+  }
+
+  isShortcutsVisible() {
+    return Boolean(this.shortcutsOverlay?.classList.contains('visible'));
+  }
+
+  shortcutsFocusableElements() {
+    if (!this.shortcutsOverlay) return [];
+    return [...this.shortcutsOverlay.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => !element.hasAttribute('hidden'));
+  }
+
+  trapShortcutsFocus(event) {
+    const focusable = this.shortcutsFocusableElements();
+    if (focusable.length === 0) {
+      event.preventDefault();
+      this.shortcutsPanel?.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
     }
   }
 
+  restoreShortcutsFocus() {
+    const target = this.lastFocusedElement;
+    this.lastFocusedElement = null;
+    if (target?.isConnected && target !== document.body && typeof target.focus === 'function') {
+      target.focus({ preventScroll: true });
+      return;
+    }
+    const fallback = (!this.navNext?.disabled && this.navNext) ||
+      (!this.navPrev?.disabled && this.navPrev) ||
+      this.slides[this.currentSlide];
+    if (fallback === this.slides[this.currentSlide] && !fallback.hasAttribute('tabindex')) {
+      fallback.setAttribute('tabindex', '-1');
+    }
+    fallback?.focus({ preventScroll: true });
+  }
+
+  toggleShortcuts() {
+    if (this.isShortcutsVisible()) {
+      this.hideShortcuts();
+    } else {
+      this.showShortcuts();
+    }
+  }
+
+  showShortcuts() {
+    if (!this.shortcutsOverlay) return;
+    this.lastFocusedElement = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+      ? document.activeElement
+      : null;
+    this.shortcutsOverlay.removeAttribute('inert');
+    this.shortcutsOverlay.classList.add('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'false');
+    this.shortcutsFocusFrame = window.requestAnimationFrame(() => {
+      this.shortcutsFocusFrame = null;
+      if (this.isShortcutsVisible()) (this.shortcutsClose || this.shortcutsPanel)?.focus();
+    });
+  }
+
   hideShortcuts() {
-    if (this.shortcutsOverlay) {
-      this.shortcutsOverlay.classList.remove('visible');
-      this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
+    if (!this.shortcutsOverlay || !this.isShortcutsVisible()) return;
+    if (this.shortcutsFocusFrame !== null) {
+      window.cancelAnimationFrame(this.shortcutsFocusFrame);
+      this.shortcutsFocusFrame = null;
+    }
+    this.shortcutsOverlay.setAttribute('inert', '');
+    this.shortcutsOverlay.classList.remove('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
+    this.restoreShortcutsFocus();
+  }
+
+  openPresenterMode() {
+    if (typeof window.openSlideSagePresenter === 'function') {
+      window.openSlideSagePresenter(this);
     }
   }
 }
@@ -316,33 +503,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ## Speaker Notes System
 
-Speaker notes are embedded as HTML comments immediately after each `.slide` div. They use the `<!-- NOTES: -->` prefix convention:
+Speaker notes use one JSON data block, placed after the slides and before the navigation UI:
 
 ```html
-<div class="slide" id="slide-1">
-  <div class="slide-content">
-    <h1>Welcome</h1>
-    <p>Introduction to the topic</p>
-  </div>
-</div>
-<!-- NOTES: Welcome the audience. Mention the agenda: 3 main sections, Q&A at end. Estimated time: 30 minutes. -->
-
-<div class="slide" id="slide-2">
-  <div class="slide-content">
-    <h2>Key Metrics</h2>
-    <ul>
-      <li>Revenue grew 23% YoY</li>
-      <li>Customer retention at 94%</li>
-    </ul>
-  </div>
-</div>
-<!-- NOTES: Emphasize the revenue growth - this is a record quarter. The retention number is up from 89% last year. Source: Q4 finance report. -->
+<script id="speaker-notes" type="application/json">
+[
+  {"slide": 1, "notes": "Welcome the audience. Mention the agenda and the time box."},
+  {"slide": 2, "notes": "Read the retention number alongside the revenue evidence."}
+]
+</script>
 ```
 
-Notes are:
-- Invisible in the browser (HTML comments are not rendered)
-- Preserved in the source for presenter reference
-- Visible when printing if a "notes" print mode is added later
+The `slide` values are one-based and must cover the deck in order. Generate the JSON with `JSON.stringify(notes).replace(/</g, '\\u003c')` before embedding it, so note text cannot terminate the script block. Presenter mode reads the block through `textContent` and treats malformed data as empty notes.
+
+Notes remain readable in the shared HTML source and presenter window. Do not put passwords, private links, or other secrets in them.
 
 ## Print Styles
 
@@ -350,6 +524,13 @@ These print-specific styles are included in every presentation:
 
 ```css
 @media print {
+  html,
+  body,
+  .slides-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   /* Each slide gets its own page */
   .slide {
     page-break-after: always;
@@ -404,72 +585,7 @@ These print-specific styles are included in every presentation:
 
 ## Shortcuts Overlay Styles
 
-```css
-.shortcuts-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-speed, 0.3s) ease;
-}
-
-.shortcuts-overlay.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.shortcuts-panel {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border-radius: var(--radius);
-  padding: 2rem;
-  max-width: 420px;
-  width: 90%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-.shortcuts-panel h3 {
-  margin: 0 0 1.2rem 0;
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--color-heading);
-}
-
-.shortcuts-panel table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.shortcuts-panel td {
-  padding: 0.4rem 0;
-  font-size: clamp(0.75rem, 1.3vw, 0.9rem);
-}
-
-.shortcuts-panel td:first-child {
-  white-space: nowrap;
-  padding-right: 1.5rem;
-}
-
-.shortcuts-panel kbd {
-  background: color-mix(in srgb, var(--color-text) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(0.7rem, 1.1vw, 0.8rem);
-}
-
-.shortcuts-dismiss {
-  margin: 1rem 0 0 0;
-  font-size: clamp(0.7rem, 1.1vw, 0.8rem);
-  opacity: 0.6;
-  text-align: center;
-}
-```
+`assets/viewport-base.css` defines `.shortcuts-overlay`, `.shortcuts-panel`, `.shortcuts-heading-row`, `.shortcuts-close`, and `.shortcuts-dismiss`. Inline it unchanged so the dialog has a visible focus state, a keyboard-reachable close control, and viewport-safe sizing.
 
 ## CDN Script Placement
 
@@ -480,9 +596,9 @@ External libraries load before the closing `</body>` tag, before the SlidePresen
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
   <!-- Prism.js (when code blocks are needed) -->
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js" integrity="sha384-Cn/s7dpCMIb2rgIjtCYcpcv3LPJjUciybJ5G/sGMK025lFiqdJ4pRgUEgIcolGuJ" crossorigin="anonymous"></script>
   <!-- Add language grammars as needed, e.g.: -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js" integrity="sha384-WJdEkJKrbsqw0evQ4GB6mlsKe5cGTxBOw4KAEIa52ZLB7DDpliGkwdme/HMa5n1m" crossorigin="anonymous"></script> -->
 
   <!-- SlidePresentation class (always last) -->
   <script>

@@ -35,4 +35,5 @@ skills-lock.json
 *.html
 !templates/**/*.html
 !examples/**/*.html
+!evals/fixtures/**/*.html
 !index.html

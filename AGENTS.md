@@ -2,7 +2,7 @@
 
 > Cross-platform instructions for AI coding tools (Claude Code, Codex CLI, Gemini CLI, Cursor, Copilot)
 
-When a user asks to create a presentation, build slides, convert a PowerPoint, or make a slide deck, follow these instructions.
+When a user asks to create a presentation, build slides, convert a PowerPoint or PDF, or make a slide deck, follow these instructions.
 
 ## Quick Start
 
@@ -22,12 +22,18 @@ Creates **data-rich, interactive HTML presentations** as single files. Specializ
 
 ## Workflow
 
-1. **Detect mode**: New presentation / PPT conversion / Enhancement of existing HTML
-2. **Smart interview**: Confirm audience and style before generating. Ask for other missing context only when needed
+1. **Detect mode**: New presentation / PPT/PDF conversion / enhancement of existing HTML
+2. **Gap-driven intake**: Apply the intake rule below before generating
 3. **Content analysis**: Identify what libraries are needed (charts? diagrams? code?)
 4. **Read relevant references**: Only load the reference files needed for this presentation
 5. **Generate**: Single HTML file with all CSS/JS inline, libraries from CDN
 6. **Deliver**: Save file, mention how to open (browser) and export (Print > Save as PDF)
+
+## Intake rule
+
+Infer audience and style from a detailed prompt and state the choice in one line. Ask only when the prompt is genuinely thin. Never block in one-shot, subagent, or CI runs: choose sensible defaults and state them in one line. Offer a visual preview only when style is unspecified and a browser is available.
+
+When an interactive response would materially change the deck, ask one focused question. The visual preview is optional and must not delay generation.
 
 ## Reference Files (load on demand)
 

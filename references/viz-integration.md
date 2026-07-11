@@ -24,13 +24,30 @@
 
 ### Responsive Container Pattern
 
-Always wrap canvas in a constrained container. Never set width/height on the canvas element directly.
+Always wrap canvas in a constrained container. Never set width/height on the canvas element directly. Every chart needs a canvas label, a screen-reader data table, and a visible fallback that stays available until chart creation succeeds.
 
 ```html
-<div style="position:relative; max-height:min(55vh,420px); width:100%; margin:0 auto;">
-  <canvas id="myChart"></canvas>
+<div class="chart-container" style="position:relative; max-height:min(55vh,420px); width:100%; margin:0 auto;">
+  <canvas id="myChart" role="img" aria-label="Quarterly revenue: Q1 12, Q2 19, Q3 8, Q4 15 million dollars"></canvas>
 </div>
+<div class="chart-render-fallback" id="myChartFallback">
+  <p>Quarterly revenue, millions of dollars</p>
+  <table>
+    <thead><tr><th scope="col">Quarter</th><th scope="col">Revenue</th></tr></thead>
+    <tbody><tr><th scope="row">Q1</th><td>12</td></tr><tr><th scope="row">Q2</th><td>19</td></tr><tr><th scope="row">Q3</th><td>8</td></tr><tr><th scope="row">Q4</th><td>15</td></tr></tbody>
+  </table>
+</div>
+<table class="visually-hidden">
+  <caption>Quarterly revenue, millions of dollars</caption>
+  <thead><tr><th scope="col">Quarter</th><th scope="col">Revenue</th></tr></thead>
+  <tbody><tr><th scope="row">Q1</th><td>12</td></tr><tr><th scope="row">Q2</th><td>19</td></tr><tr><th scope="row">Q3</th><td>8</td></tr><tr><th scope="row">Q4</th><td>15</td></tr></tbody>
+</table>
+<noscript>
+  <p>JavaScript is unavailable. Quarterly revenue: Q1 12, Q2 19, Q3 8, Q4 15 million dollars.</p>
+</noscript>
 ```
+
+After a successful `new Chart()` call, set `document.getElementById('myChartFallback').hidden = true`. If the library, canvas, or configuration fails, leave that fallback visible. Use the same labeled-data pattern for ECharts and D3 containers, not only `<canvas>` charts.
 
 ### Dark Mode Integration
 
@@ -84,20 +101,43 @@ function replayChartOnSlideEnter(chart, reducedMotion) {
 }
 
 const canvas = document.getElementById('barChart');
-const chart = new Chart(canvas, {
-  type: 'bar',
-  data: chartData,
-  options: { responsive: true, maintainAspectRatio: false, animation: false }
-});
+const fallback = document.getElementById('barChartFallback');
+let chart;
+try {
+  chart = new Chart(canvas, {
+    type: 'bar',
+    data: chartData,
+    options: { responsive: true, maintainAspectRatio: false, animation: false }
+  });
+  fallback.hidden = true;
+} catch (error) {
+  console.error('Chart could not render. The data table remains available.', error);
+}
 
 document.addEventListener('slidechange', ({ detail }) => {
-  if (detail.slide.contains(canvas)) {
+  if (chart && detail.slide.contains(canvas)) {
     replayChartOnSlideEnter(chart, detail.reducedMotion);
   }
 });
 ```
 
 For a multi-chart slide, keep each instance in an array and replay only the charts whose canvases are inside `detail.slide`. For CountUp, write the final value directly when `detail.reducedMotion` is true; otherwise reset and start it from this same event. Do not use scroll spying for slide-entry counters.
+
+### Print gutter for a right-hand scale
+
+For a Chart.js configuration with a right-side `y1` axis, reserve a right gutter in the chart layout. This keeps the scale labels inside the canvas in Chromium PDF output:
+
+```javascript
+options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  layout: { padding: { right: 80 } },
+  scales: { y: { position: 'left' }, y1: { position: 'right' } }
+}
+```
+
+Use this only when the chart has a right-hand scale. A single-axis chart should use its natural layout.
 
 ---
 
@@ -338,15 +378,21 @@ new Chart(document.getElementById('chartRight'), {
 ### Responsive Resize Handler
 
 ```javascript
-const chart = echarts.init(document.getElementById('echartDiv'));
-chart.setOption(option);
+const container = document.getElementById('echartDiv');
+container.setAttribute('role', 'img');
+container.setAttribute('aria-label', 'Describe the chart values and comparison in plain language.');
+container.dataset.slideSageEcharts = '';
+const chart = echarts.init(container);
+chart.setOption({ ...option, animation: false });
 window.addEventListener('resize', () => chart.resize());
 ```
+
+Place the same visible fallback table, visually-hidden data table, and `<noscript>` summary shown in the Chart.js pattern after every ECharts container. Mark each container with `data-slide-sage-echarts` so the canonical print hook can settle it before PDF export.
 
 ### Heatmap
 
 ```html
-<div id="heatmapChart" style="width:100%; height:min(55vh,420px);"></div>
+<div id="heatmapChart" data-slide-sage-echarts role="img" aria-label="Weekday resource heatmap, with CPU, memory, disk, and network values from zero to one hundred." style="width:100%; height:min(55vh,420px);"></div>
 <script>
 const chart = echarts.init(document.getElementById('heatmapChart'));
 const hours = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
@@ -359,6 +405,7 @@ const data = [
   [4,0,50],[4,1,35],[4,2,60],[4,3,40]
 ];
 chart.setOption({
+  animation: false,
   tooltip: { position: 'top' },
   grid: { left: 80, right: 20, top: 20, bottom: 40 },
   xAxis: { type: 'category', data: metrics, splitArea: { show: true } },
@@ -375,10 +422,11 @@ window.addEventListener('resize', () => chart.resize());
 ### Sankey Diagram
 
 ```html
-<div id="sankeyChart" style="width:100%; height:min(55vh,420px);"></div>
+<div id="sankeyChart" data-slide-sage-echarts role="img" aria-label="Sankey flow from sources through processes to outputs." style="width:100%; height:min(55vh,420px);"></div>
 <script>
 const chart = echarts.init(document.getElementById('sankeyChart'));
 chart.setOption({
+  animation: false,
   tooltip: { trigger: 'item' },
   series: [{
     type: 'sankey',
@@ -409,10 +457,11 @@ window.addEventListener('resize', () => chart.resize());
 ### Treemap
 
 ```html
-<div id="treemapChart" style="width:100%; height:min(55vh,420px);"></div>
+<div id="treemapChart" data-slide-sage-echarts role="img" aria-label="Treemap of frontend, backend, DevOps, and quality assurance investment." style="width:100%; height:min(55vh,420px);"></div>
 <script>
 const chart = echarts.init(document.getElementById('treemapChart'));
 chart.setOption({
+  animation: false,
   tooltip: { formatter: '{b}: {c}' },
   series: [{
     type: 'treemap',

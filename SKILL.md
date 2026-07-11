@@ -1,6 +1,6 @@
 ---
 name: slide-sage
-description: Create data-rich, interactive HTML presentations with charts, architecture diagrams, code highlighting, and professional styling. Use when the user wants to build a presentation with data visualization, technical diagrams, metrics dashboards, or code examples. Supports Chart.js, ECharts, D3, CSS/HTML diagrams, inline SVG, Prism.js code highlighting, and 8 tone-first style presets.
+description: Create or enhance a data-rich, single-file HTML slide deck or pitch deck. Use when the user asks for a new presentation, to convert a PowerPoint (.pptx) or PDF into an HTML deck, or to improve an existing HTML presentation. Not for native PowerPoint editing or high-fidelity PPTX export.
 license: MIT
 metadata:
   version: "2.0.0"
@@ -14,7 +14,7 @@ Create data-rich, interactive HTML presentations as a single HTML runtime with c
 ## Core Principles
 
 1. **Data-First** - Charts, diagrams, and metrics are first-class citizens, not afterthoughts
-2. **Single HTML Runtime** - Keep presentation HTML, CSS, and JavaScript in one file. Use an `assets/` directory only for many or large images. Load libraries from CDN only.
+2. **Single HTML Runtime** - Keep presentation HTML, CSS, and JavaScript in one file. Use an `assets/` directory only for many or large images. Load pinned libraries from a CDN by default. When offline delivery is requested, run `scripts/inline-vendor.py` after generation and keep the bundled notices with the output.
 3. **Viewport Fitting (NON-NEGOTIABLE)** - Every slide fits exactly within 100vh. No scrolling. Content overflows? Split into multiple slides
 4. **Adaptive Intelligence** - When given raw data, act as narrative director. When given a clear outline, act as layout executor
 5. **Colorblind Safe** - All data visualization uses accessible color palettes by default
@@ -43,57 +43,24 @@ When enhancing existing presentations:
 4. If modifications cause overflow, split into additional slides automatically
 5. Preserve all existing speaker notes and keyboard navigation
 
-## Phase 1: Smart Interview
+## Phase 1: Gap-driven intake
 
-**Goal**: Always confirm key decisions with the user before generating - even when the prompt is detailed.
+Infer audience and style from a detailed prompt and state the choice in one line. Ask only when the prompt is genuinely thin. Never block in one-shot, subagent, or CI runs: choose sensible defaults and state them in one line. Offer a visual preview only when style is unspecified and a browser is available.
 
-### Always-Ask Questions (mandatory, every presentation)
+When an interactive response would materially change the deck, ask one focused question. The visual preview is optional and must not delay generation.
 
-Always ask these two questions together in a single message, regardless of how much detail the user provides:
+### Genuine gaps
 
-**Question 1 - Audience & Purpose:**
-> "Who is the audience? (e.g., investors, engineers, students, general)"
-
-**Question 2 - Style:**
-> "Any style preference? I have 8 presets:
-> - **Arctic Dawn** - Cool blues, clean (science/research)
-> - **Ember** - Warm on dark, high contrast (dashboards/metrics)
-> - **Jade Circuit** - Green/gold on charcoal (engineering/architecture)
-> - **Dusk Palette** - Muted purple/pink (creative/design)
-> - **Monochrome Pro** - Grayscale + accent (executive/formal)
-> - **Ocean Deep** - Navy, aqua, coral (corporate/professional)
-> - **Editorial Ledger** - Serif-led, explanatory (teaching/strategy)
-> - **Serif Signal** - Dramatic serif display (keynotes/narrative)
-> - Or tell me your brand colors for a custom theme"
-
-If the user already specified audience and style in their prompt, acknowledge their choices and confirm: "I'll use [audience] targeting with [preset]. Sound good?"
-
-### Conditional Questions (only when info is missing)
-
-After the always-ask questions, add any of these that apply:
-
-| Missing Info | Question |
+| Gap | Focused question |
 |---|---|
-| No data provided but topic implies data | "Do you have the numbers and their source?" |
-| Ambiguous scope | "Roughly how many slides? (5 for a quick update, 15+ for a deep dive)" |
-| Business/corporate context and no brand info | "Any brand colors or logo to incorporate? (Skip if not needed)" |
+| No data provided but the topic requires factual chart data | "Do you have the numbers and their source?" |
+| Scope is too ambiguous to choose a useful slide count | "Roughly how many slides? (5 for a quick update, 15+ for a deep dive)" |
 
-**Never ask about**: animation level (detect from audience), library choices (auto-select), file format (auto-detect), presenter mode (default to comment notes).
+**Never ask about**: animation level (detect from audience), library choices (auto-select), file format (auto-detect), presenter mode (use JSON notes when presenter mode is included), or brand information when a named preset is sufficient.
 
-### Outline Confirmation (for large presentations)
+### Large decks
 
-If the planned presentation has **more than 15 slides**, present a brief slide outline before generating:
-
-> "Here's the planned structure ([N] slides):
-> 1. Title
-> 2. Agenda
-> 3-5. [Section name]
-> ...
-> [N]. Closing
->
-> Does this look right, or should I adjust?"
-
-For 15 slides or fewer, skip the outline confirmation and proceed directly to Phase 2.
+For a presentation with more than 15 slides, share a brief outline only when it resolves a genuine scope gap in an interactive run. Otherwise choose a sensible structure, state it in one line, and continue.
 
 ## Phase 2: Content Analysis
 
@@ -124,14 +91,14 @@ Based on content types, decide which CDN libraries to include. Do NOT ask the us
 | Bar, line, pie, scatter, radar charts | Chart.js 4.4 | `cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` |
 | Heatmap, sankey, treemap | ECharts 5.5 | `cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js` |
 | Custom statistical charts | D3.js v7 | `cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` |
-| Code syntax highlighting | Prism.js | `cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js` |
+| Code syntax highlighting | Prism.js | `cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js` |
 | Number animations | CountUp.js | `cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js` |
 | Typing effects (title slides) | Typed.js | `cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js` |
 | Hand-drawn diagram accents | Rough.js | `cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js` |
 | Generative backgrounds | q5.js | `cdn.jsdelivr.net/npm/q5@2.1.2/q5.min.js` |
 | Icons for diagrams/content | Lucide (inline) | Inline SVG paths from `templates/icons/lucide-sprite.svg` - no CDN needed |
 
-**Default**: If the presentation has only text, include NO extra libraries. CSS animations suffice.
+**Default**: If the presentation has only text, include NO extra libraries. CSS animations suffice. Use CDN libraries by default. If the user explicitly needs offline delivery, create the deck first, run `scripts/inline-vendor.py`, and keep `THIRD_PARTY_NOTICES.md` with the offline copy. Do not call a deck offline if the converter reports an unsupported static remote asset.
 
 ### Detect Animation Level
 
@@ -162,9 +129,10 @@ Read `references/style-guide.md` for the full style system.
 ### Style Application
 
 1. Set `data-theme` and `data-mode` on `<html>` from the chosen preset
-2. Inline the selected preset CSS after `viewport-base.css`, including its system-font fallback
-3. Use the Tier 1 palette for charts, independently of the preset accent
-4. Apply the preset's light or dark default unless the user overrides it
+2. Add the preset's matching font `<link>` in `<head>` before the presentation `<style>` block. If CSS is the only option, place the preset's `@import` as the first stylesheet statement, before `viewport-base.css` and all other rules.
+3. Inline the selected preset CSS with its system-font fallback, then inline `viewport-base.css` so the base classes consume the preset tokens.
+4. Use the Tier 1 palette for charts, independently of the preset accent
+5. Apply the preset's light or dark default unless the user overrides it
 
 ## Phase 4: Generate Presentation
 
@@ -229,10 +197,10 @@ Structure the HTML file:
       <div class="slide-content">
         <!-- Slide content -->
       </div>
-      <!-- NOTES: Speaker notes here -->
     </div>
     <!-- More slides -->
   </div>
+  <script id="speaker-notes" type="application/json">[{"slide":1,"notes":"Speaker note text"}]</script>
 
   <div class="progress-bar"><div class="progress-fill"></div></div>
   <div class="slide-counter"></div>
@@ -410,14 +378,18 @@ Verify that custom CSS classes use theme variables, not hard-coded values:
 
 This ensures the presentation respects the chosen theme and can be re-themed by changing `:root` variables.
 
+#### Check 5: Run the static fallback
+
+Run `scripts/validate presentation.html`. It checks class integrity, inline-style density, and theme-variable references without requiring browser automation. When a browser is available, also capture two or three representative slides and inspect console errors and overflow before delivery.
+
 ### Output
 
 1. Write the HTML file to the user's specified path (or suggest a reasonable filename like `presentation.html`)
 2. Briefly mention:
    - How to open: "Open in any browser"
    - Keyboard shortcuts: "Use arrow keys to navigate, '?' for help"
-   - PDF export: "Print > Save as PDF for a printable version"
-   - Presenter mode: "Press 'P' for presenter view with speaker notes"
+   - PDF export: "Run `scripts/export-pdf presentation.html`; Browser Print > Save as PDF remains a fallback"
+   - Presenter mode: "Press 'P' for presenter view with readable JSON speaker notes when presenter mode is included"
 3. Note the tech stack used: "Built with [Chart.js, Prism.js] via CDN"
 
 ### Do NOT
@@ -447,7 +419,7 @@ If the user pastes or references structured data:
 
 If the user describes data without specific numbers:
 - In an interactive run, ask for the numbers and their source before plotting a chart.
-- In a non-interactive, subagent, or CI run, continue with clearly-labeled `SAMPLE DATA` only.
+- In a one-shot, non-interactive, subagent, or CI run, continue with clearly-labeled `SAMPLE DATA` only.
 - Put a visible `SAMPLE DATA` badge on the chart slide and this speaker note: `SAMPLE DATA, replace before sharing`.
 - Never present sample values as factual evidence or cite an invented source.
 

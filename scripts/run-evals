@@ -1,0 +1,200 @@
+#!/usr/bin/env python3
+"""Run deterministic acceptance checks for Slide Sage HTML output fixtures."""
+
+from __future__ import annotations
+
+import argparse
+from html.parser import HTMLParser
+import json
+from pathlib import Path
+import sys
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REQUIRED_FIELDS = (
+    "id",
+    "name",
+    "prompt",
+    "expected_output",
+    "assertions",
+    "files",
+    "output_fixture",
+    "checks",
+)
+
+
+class DeckProbe(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.slide_count = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if "slide" in (dict(attrs).get("class") or "").split():
+            self.slide_count += 1
+
+
+def fail(message: str) -> None:
+    raise ValueError(message)
+
+
+def require_text(value: object, label: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{label} must be a non-empty string")
+    return value
+
+
+def repository_file(path: str, label: str) -> Path:
+    file_path = (ROOT / path).resolve()
+    if ROOT not in file_path.parents or not file_path.is_file():
+        fail(f"{label} references a missing repository file: {path}")
+    return file_path
+
+
+def validate_checks(value: object, label: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{label}.checks must be an object")
+    slide_count = value.get("slide_count")
+    if not isinstance(slide_count, dict):
+        fail(f"{label}.checks.slide_count must be an object")
+    modes = [name for name in ("exact", "min") if name in slide_count]
+    if len(modes) != 1 or not isinstance(slide_count[modes[0]], int) or isinstance(slide_count[modes[0]], bool):
+        fail(f"{label}.checks.slide_count must set one integer exact or min value")
+    if "required_strings" in value:
+        fail(f"{label}.checks.required_strings belong on assertions")
+
+
+def validate_assertions(value: object, label: str) -> None:
+    if not isinstance(value, list) or not value:
+        fail(f"{label}.assertions must be a non-empty list")
+    for index, assertion in enumerate(value, start=1):
+        assertion_label = f"{label}.assertions[{index}]"
+        if not isinstance(assertion, dict):
+            fail(f"{assertion_label} must be an object")
+        require_text(assertion.get("description"), f"{assertion_label}.description")
+        required_strings = assertion.get("required_strings")
+        if not isinstance(required_strings, list) or not required_strings:
+            fail(f"{assertion_label}.required_strings must be a non-empty list")
+        for item in required_strings:
+            require_text(item, f"{assertion_label}.required_strings")
+
+
+def validate(data: object) -> list[dict[str, object]]:
+    if not isinstance(data, dict):
+        fail("eval bundle must be an object with skill_name and evals")
+    if data.get("skill_name") != "slide-sage":
+        fail("skill_name must be slide-sage")
+    evals = data.get("evals")
+    if not isinstance(evals, list) or not evals:
+        fail("evals must include at least one eval")
+    if "mermaid" in json.dumps(data).lower():
+        fail("evals must not reference Mermaid")
+
+    ids: set[int] = set()
+    validated: list[dict[str, object]] = []
+    for index, case in enumerate(evals):
+        label = f"evals[{index}]"
+        if not isinstance(case, dict):
+            fail(f"{label} must be an object")
+        missing = [field for field in REQUIRED_FIELDS if field not in case]
+        if missing:
+            fail(f"{label} is missing: {', '.join(missing)}")
+        eval_id = case["id"]
+        if not isinstance(eval_id, int) or isinstance(eval_id, bool) or eval_id in ids:
+            fail(f"{label}.id must be a unique integer")
+        ids.add(eval_id)
+        for field in ("name", "prompt", "expected_output"):
+            require_text(case[field], f"{label}.{field}")
+        validate_assertions(case["assertions"], label)
+        files = case["files"]
+        if not isinstance(files, list):
+            fail(f"{label}.files must be a list")
+        for file_path in files:
+            repository_file(require_text(file_path, f"{label}.files"), label)
+        repository_file(require_text(case["output_fixture"], f"{label}.output_fixture"), label)
+        validate_checks(case["checks"], label)
+        validated.append(case)
+
+    return validated
+
+
+def select_evals(evals: list[dict[str, object]], selector: str | None, output: Path | None) -> list[dict[str, object]]:
+    if output is not None and selector is None:
+        fail("--output requires --id so the correct acceptance checks are selected")
+    if selector is None:
+        return evals
+    selected = [case for case in evals if selector in (str(case["id"]), str(case["name"]))]
+    if len(selected) != 1:
+        fail(f"--id must match one eval id or name: {selector}")
+    return selected
+
+
+def acceptance_errors(case: dict[str, object], output: Path) -> list[str]:
+    try:
+        source = output.read_text(encoding="utf-8")
+    except OSError as error:
+        return [f"could not read output: {error}"]
+    probe = DeckProbe()
+    probe.feed(source)
+    probe.close()
+    checks = case["checks"]
+    assert isinstance(checks, dict)
+    slide_count = checks["slide_count"]
+    assert isinstance(slide_count, dict)
+    errors: list[str] = []
+    if "exact" in slide_count and probe.slide_count != slide_count["exact"]:
+        errors.append(f"expected exactly {slide_count['exact']} slides, found {probe.slide_count}")
+    if "min" in slide_count and probe.slide_count < slide_count["min"]:
+        errors.append(f"expected at least {slide_count['min']} slides, found {probe.slide_count}")
+    for index, assertion in enumerate(case["assertions"], start=1):
+        assert isinstance(assertion, dict)
+        description = assertion["description"]
+        required_strings = assertion["required_strings"]
+        assert isinstance(description, str)
+        assert isinstance(required_strings, list)
+        for required in required_strings:
+            assert isinstance(required, str)
+            if required not in source:
+                errors.append(f"assertion {index} ({description}): missing required string: {required}")
+    return errors
+
+
+def output_path(case: dict[str, object], override: Path | None) -> Path:
+    if override is not None:
+        return override.expanduser().resolve()
+    return repository_file(str(case["output_fixture"]), str(case["name"]))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Run Slide Sage HTML fixture acceptance checks.")
+    parser.add_argument("--path", type=Path, default=ROOT / "evals" / "evals.json")
+    parser.add_argument("--id", help="Eval id or name to run")
+    parser.add_argument("--output", type=Path, help="Agent-generated HTML output for the selected eval")
+    args = parser.parse_args()
+    try:
+        cases = select_evals(
+            validate(json.loads(args.path.read_text(encoding="utf-8"))), args.id, args.output
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        print(f"run-evals: {error}", file=sys.stderr)
+        return 1
+
+    failures = False
+    for case in cases:
+        errors = acceptance_errors(case, output_path(case, args.output))
+        if errors:
+            failures = True
+            for error in errors:
+                print(f"FAIL {case['id']} {case['name']}: {error}", file=sys.stderr)
+        else:
+            for index, assertion in enumerate(case["assertions"], start=1):
+                assert isinstance(assertion, dict)
+                print(f"PASS {case['id']} {case['name']} assertion {index}: {assertion['description']}")
+            print(f"PASS {case['id']} {case['name']}: {output_path(case, args.output)}")
+    if failures:
+        return 1
+    print(f"{len(cases)} fixture acceptance checks passed")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

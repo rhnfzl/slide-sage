@@ -28,6 +28,13 @@ Authoritative list of every CSS class available in slide-sage presentations. Whe
 | `.nav-arrows` | Arrow navigation container | `<div>` |
 | `.nav-arrow` | Individual prev/next button | `<button>` |
 | `.nav-arrow:disabled` | Disabled state at start/end | modifier |
+| `.visually-hidden` | Screen-reader-only content, including chart data tables | any |
+| `.chart-render-fallback` | Visible chart data table until the chart initializes | `<div>` |
+| `.shortcuts-overlay` | Modal keyboard-shortcuts backdrop | `<div>` |
+| `.shortcuts-panel` | Keyboard-shortcuts dialog content | `<div>` |
+| `.shortcuts-heading-row` | Dialog title and close-button row | `<div>` |
+| `.shortcuts-close` | Keyboard-shortcuts close control | `<button>` |
+| `.shortcuts-dismiss` | Dialog dismissal guidance | `<p>` |
 | `.caption` | Small caption text (0.7-0.9rem, opacity: 0.7) | `<small>`, `<figcaption>` |
 | `.eyebrow`, `.kicker` | Preset-aware mono label with preset tracking | `<span>` |
 | `.accent-rule`, `.presentation-divider` | Preset-aware accent divider | `<div>` |

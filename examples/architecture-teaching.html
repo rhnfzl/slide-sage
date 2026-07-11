@@ -20,6 +20,11 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:focus-visible {
+  outline: max(2px, 0.15em) solid var(--color-gold, #BBAA33);
+  outline-offset: 3px;
+}
+
 /* ============================================
    CSS Custom Properties
    ============================================ */
@@ -128,6 +133,45 @@ html, body {
   opacity: 0;
   z-index: 0;
   pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.chart-render-fallback {
+  width: 100%;
+  max-width: min(94vw, 56rem);
+  margin: var(--spacing-sm) auto 0;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.chart-render-fallback[hidden] {
+  display: none;
+}
+
+.chart-render-fallback table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.chart-render-fallback th,
+.chart-render-fallback td {
+  padding: var(--spacing-xs);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
 }
 
 /* ============================================
@@ -245,6 +289,12 @@ pre code {
   font-size: inherit;
 }
 
+.code-block {
+  width: 100%;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
 blockquote {
   border-left: 4px solid var(--color-accent);
   padding-left: var(--spacing-md);
@@ -349,7 +399,8 @@ blockquote {
 }
 
 .slides-container:hover ~ .nav-arrows,
-.nav-arrows:hover {
+.nav-arrows:hover,
+.nav-arrows:focus-within {
   opacity: 1;
 }
 
@@ -381,6 +432,101 @@ blockquote {
 .nav-arrow:disabled:hover {
   background: var(--color-surface);
   color: var(--color-text);
+}
+
+/* ============================================
+   Keyboard Shortcuts Dialog
+   ============================================ */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.shortcuts-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.shortcuts-panel {
+  width: min(92vw, 34rem);
+  max-height: min(86vh, 38rem);
+  overflow: auto;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+}
+
+.shortcuts-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.shortcuts-heading-row h3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: clamp(1.75rem, 3vw, 2.25rem);
+  height: clamp(1.75rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1;
+}
+
+.shortcuts-close:hover {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.shortcuts-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-panel td {
+  padding: var(--spacing-xs) 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+}
+
+.shortcuts-panel td:first-child {
+  padding-right: var(--spacing-md);
+  white-space: nowrap;
+}
+
+.shortcuts-panel kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  font-family: var(--font-mono);
+}
+
+.shortcuts-dismiss {
+  margin-top: var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  text-align: center;
 }
 
 /* ============================================
@@ -698,6 +844,13 @@ blockquote {
    Print Styles
    ============================================ */
 @media print {
+  html,
+  body,
+  .slides-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   .slide {
     position: relative;
     page-break-after: always;
@@ -831,21 +984,21 @@ html[data-theme="jade-circuit"][data-mode="dark"] {
   --color-accent: #48BC78; --color-accent-secondary: #4AA3D8; --color-gold: #D4B02A; --color-accent-hover: #78D69B; --color-accent-subtle: #173522;
 }body{background:var(--color-bg-primary);color:var(--color-text-primary);font-family:var(--font-body)}.slide{background:var(--color-bg-primary)}.kicker{font-family:var(--font-mono);font-size:clamp(.65rem,1vw,.85rem);color:var(--color-accent);letter-spacing:.14em;text-transform:uppercase}.arch-title{font-size:clamp(3rem,8vw,7rem);line-height:.88;letter-spacing:-.055em;max-width:13ch}.arch-sub{color:var(--color-text-secondary);max-width:45ch}.system-flow{display:grid;grid-template-columns:1fr auto 1.2fr auto 1fr;gap:var(--spacing-sm);align-items:center;width:100%}.node{border:1px solid var(--color-border);background:var(--color-bg-surface);padding:var(--spacing-lg) var(--spacing-md);min-height:clamp(7rem,20vh,12rem);display:flex;flex-direction:column;justify-content:center;text-align:center}.node.bus{border-color:var(--color-accent);background:var(--color-accent-subtle)}.node strong{font-family:var(--font-heading);font-size:clamp(1.2rem,2.2vw,2rem)}.node small{color:var(--color-text-secondary)}.arrow{color:var(--color-accent);font-size:clamp(1.4rem,3vw,2.5rem)}.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-md);width:100%}.lesson{border-top:clamp(.15rem,.35vw,.28rem) solid var(--color-accent);padding:var(--spacing-md);background:var(--color-bg-surface)}.lesson strong{display:block;font-family:var(--font-heading);font-size:clamp(1.2rem,2vw,1.8rem);margin-bottom:var(--spacing-sm)}.lesson span{color:var(--color-text-secondary);font-size:clamp(.75rem,1.1vw,.95rem)}.event-code{width:100%;background:#06100a;border:1px solid var(--color-border);padding:var(--spacing-lg);font-family:var(--font-mono);font-size:clamp(.7rem,1.2vw,.98rem);line-height:1.65;white-space:pre-wrap;color:#d9eddf}.code-key{color:#ee7733}.code-string{color:#55c88d}.code-name{color:#79aee3}.shortcuts-panel{width:min(90vw,42rem);background:var(--color-bg-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--spacing-lg)}.shortcuts-panel h3{margin:0 0 var(--spacing-md);color:var(--color-heading);font-size:clamp(1.1rem,2vw,1.5rem)}.shortcuts-panel table{width:100%;border-collapse:collapse}.shortcuts-panel td{padding:var(--spacing-xs) 0}.shortcuts-panel td:first-child{padding-right:var(--spacing-md);white-space:nowrap}.shortcuts-dismiss{margin:var(--spacing-md) 0 0;color:var(--color-text-muted);text-align:center}@media(max-width:760px){.system-flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);text-align:center}.lesson-grid{grid-template-columns:1fr 1fr}}
 .shortcuts-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:var(--spacing-lg);background:color-mix(in srgb,var(--color-bg-primary) 78%,transparent);opacity:0;pointer-events:none;transition:opacity .2s ease}.shortcuts-overlay.visible{opacity:1;pointer-events:auto}</style></head><body><main class="slides-container" id="slides">
-<section class="slide active"><div class="slide-content gap-md"><span class="kicker">Architecture teaching</span><h1 class="arch-title">Events separate the decision from the reaction.</h1><p class="arch-sub">A four-slide primer for engineers deciding where asynchronous communication earns its complexity.</p></div></section>
-<!-- NOTES: Introduce eventing as a boundary choice. It is not a default replacement for every request-response call. -->
-<section class="slide inactive"><div class="slide-content gap-lg"><span class="kicker">Core shape</span><h2>Publish once, let consumers choose.</h2><div class="system-flow"><div class="node"><strong>Order service</strong><small>Commits the business decision</small></div><div class="arrow">&#8594;</div><div class="node bus"><strong>Event bus</strong><small>Durable order.created stream</small></div><div class="arrow">&#8594;</div><div class="node"><strong>Independent consumers</strong><small>Inventory, email, analytics</small></div></div></div></section>
-<!-- NOTES: The producer owns the business decision. Consumers own their reactions and can evolve independently. -->
-<section class="slide inactive"><div class="slide-content gap-lg"><span class="kicker">Trade-off</span><h2>The decoupling is real. So is the operational bill.</h2><div class="lesson-grid"><div class="lesson"><strong>Gain</strong><span>Producers stop coordinating every downstream release.</span></div><div class="lesson"><strong>Cost</strong><span>Delivery, ordering, replay, and visibility become platform concerns.</span></div><div class="lesson"><strong>Rule</strong><span>Use events for independent reactions, not for hiding a synchronous workflow.</span></div></div></div></section>
-<!-- NOTES: Be explicit that the asynchronous boundary moves complexity into a shared platform concern. -->
-<section class="slide inactive"><div class="slide-content gap-md"><span class="kicker">Consumer contract</span><h2>Idempotency makes replay safe.</h2><pre class="event-code"><span class="code-key">INPUT</span> event.id + order.id
+<section class="slide active" aria-hidden="false"><div class="slide-content gap-md"><span class="kicker">Architecture teaching</span><h1 class="arch-title">Events separate the decision from the reaction.</h1><p class="arch-sub">A four-slide primer for engineers deciding where asynchronous communication earns its complexity.</p></div></section>
+
+<section class="slide inactive" aria-hidden="true" inert><div class="slide-content gap-lg"><span class="kicker">Core shape</span><h2>Publish once, let consumers choose.</h2><div class="system-flow"><div class="node"><strong>Order service</strong><small>Commits the business decision</small></div><div class="arrow">&#8594;</div><div class="node bus"><strong>Event bus</strong><small>Durable order.created stream</small></div><div class="arrow">&#8594;</div><div class="node"><strong>Independent consumers</strong><small>Inventory, email, analytics</small></div></div></div></section>
+
+<section class="slide inactive" aria-hidden="true" inert><div class="slide-content gap-lg"><span class="kicker">Trade-off</span><h2>The decoupling is real. So is the operational bill.</h2><div class="lesson-grid"><div class="lesson"><strong>Gain</strong><span>Producers stop coordinating every downstream release.</span></div><div class="lesson"><strong>Cost</strong><span>Delivery, ordering, replay, and visibility become platform concerns.</span></div><div class="lesson"><strong>Rule</strong><span>Use events for independent reactions, not for hiding a synchronous workflow.</span></div></div></div></section>
+
+<section class="slide inactive" aria-hidden="true" inert><div class="slide-content gap-md"><span class="kicker">Consumer contract</span><h2>Idempotency makes replay safe.</h2><pre class="event-code"><span class="code-key">INPUT</span> event.id + order.id
 <span class="code-key">IF</span> <span class="code-name">event.id</span> already processed: <span class="code-key">STOP</span>
 
 <span class="code-key">EFFECT</span> reserve inventory for order.id
 <span class="code-key">RECORD</span> event.id as processed
 
 <span class="code-string">Commit the effect and dedupe record together.</span></pre></div></section>
-<!-- NOTES: Replay safety starts with a durable event identity and an idempotent consumer contract. -->
-</main><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div><div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div><div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-label="Keyboard shortcuts" aria-hidden="true"><div class="shortcuts-panel"><h3>Keyboard Shortcuts</h3><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div><script>
+
+</main><script id="speaker-notes" type="application/json">[{"slide":1,"notes":"Introduce eventing as a boundary choice. It is not a default replacement for every request-response call."},{"slide":2,"notes":"The producer owns the business decision. Consumers own their reactions and can evolve independently."},{"slide":3,"notes":"Be explicit that the asynchronous boundary moves complexity into a shared platform concern."},{"slide":4,"notes":"Replay safety starts with a durable event identity and an idempotent consumer contract."}]</script><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div><div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div><div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle" aria-hidden="true" inert><div class="shortcuts-panel" tabindex="-1"><div class="shortcuts-heading-row"><h3 id="shortcutsTitle">Keyboard Shortcuts</h3><button class="shortcuts-close" id="shortcutsClose" type="button" aria-label="Close keyboard shortcuts">&#215;</button></div><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>P</kbd></td><td>Open presenter view when included</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div><script>
 class SlidePresentation {
   constructor() {
     this.slides = document.querySelectorAll('.slide');
@@ -856,10 +1009,15 @@ class SlidePresentation {
     this.swipeThreshold = 50;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.ready = false;
+    this.isPrinting = false;
+    this.lastFocusedElement = null;
+    this.shortcutsFocusFrame = null;
 
     this.progressFill = document.getElementById('progressFill');
     this.slideCounter = document.getElementById('slideCounter');
     this.shortcutsOverlay = document.getElementById('shortcutsOverlay');
+    this.shortcutsPanel = this.shortcutsOverlay?.querySelector('.shortcuts-panel');
+    this.shortcutsClose = document.getElementById('shortcutsClose');
     this.navPrev = document.getElementById('navPrev');
     this.navNext = document.getElementById('navNext');
 
@@ -870,19 +1028,44 @@ class SlidePresentation {
     this.bindKeyboard();
     this.bindTouch();
     this.bindNavButtons();
+    this.bindShortcutsDialog();
     this.bindHashChange();
+    this.bindPrintPreparation();
     this.readHashAndNavigate();
     this.updateUI();
     this.ready = true;
 
     // Delay the first lifecycle event until chart scripts in this DOM-ready turn exist.
-    window.requestAnimationFrame(() => this.emitSlideChange(null));
+    window.requestAnimationFrame(() => {
+      this.emitSlideChange(null);
+      this.markPrintReady();
+    });
   }
 
   bindKeyboard() {
     document.addEventListener('keydown', (e) => {
+      if (this.isShortcutsVisible()) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else if (e.key === 'Tab') {
+          this.trapShortcutsFocus(e);
+        } else if (e.key === '?') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else {
+          e.preventDefault();
+        }
+        return;
+      }
+
       // Ignore if user is typing in an input or textarea
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.tagName === 'SELECT' ||
+        e.target.isContentEditable
+      ) return;
 
       switch (e.key) {
         case 'ArrowRight':
@@ -920,7 +1103,13 @@ class SlidePresentation {
           this.goTo(this.totalSlides - 1);
           break;
         case '?':
+          e.preventDefault();
           this.toggleShortcuts();
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          this.openPresenterMode();
           break;
         case 'Escape':
           this.hideShortcuts();
@@ -962,8 +1151,59 @@ class SlidePresentation {
     }
   }
 
+  bindShortcutsDialog() {
+    if (!this.shortcutsOverlay) return;
+
+    this.shortcutsClose?.addEventListener('click', () => this.hideShortcuts());
+    this.shortcutsOverlay.addEventListener('click', (event) => {
+      if (event.target === this.shortcutsOverlay) this.hideShortcuts();
+    });
+  }
+
   bindHashChange() {
     window.addEventListener('hashchange', () => this.readHashAndNavigate());
+  }
+
+  bindPrintPreparation() {
+    window.addEventListener('beforeprint', () => {
+      this.isPrinting = true;
+      this.slides.forEach((slide) => {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      });
+      void this.markPrintReady();
+    });
+    window.addEventListener('afterprint', () => {
+      this.isPrinting = false;
+      this.updateUI();
+    });
+  }
+
+  async markPrintReady() {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
+    if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+      document.querySelectorAll('canvas').forEach((canvas) => {
+        const chart = Chart.getChart(canvas);
+        if (!chart) return;
+        chart.stop();
+        chart.options.animation = false;
+        chart.update('none');
+      });
+    }
+
+    if (typeof echarts !== 'undefined' && typeof echarts.getInstanceByDom === 'function') {
+      document.querySelectorAll('[data-slide-sage-echarts]').forEach((element) => {
+        const chart = echarts.getInstanceByDom(element);
+        if (!chart) return;
+        chart.setOption({ animation: false }, false);
+        chart.resize();
+      });
+    }
+
+    document.documentElement.dataset.slideSagePrintReady = 'true';
   }
 
   readHashAndNavigate() {
@@ -995,6 +1235,7 @@ class SlidePresentation {
 
     const previousSlide = this.slides[this.currentSlide];
     const nextSlide = this.slides[index];
+    const shouldMoveFocus = previousSlide.contains(document.activeElement);
 
     previousSlide.classList.remove('active');
     previousSlide.classList.add('inactive');
@@ -1014,6 +1255,7 @@ class SlidePresentation {
     }
 
     this.updateUI();
+    if (shouldMoveFocus) this.moveFocusToIncomingSlide(nextSlide);
 
     if (this.ready) {
       this.emitSlideChange(previousSlide);
@@ -1051,29 +1293,120 @@ class SlidePresentation {
       this.navNext.disabled = this.currentSlide === this.totalSlides - 1;
     }
 
-    // Ensure only active slide is visible
+    // Ensure only the active slide is visible and exposed to assistive technology.
     this.slides.forEach((slide, i) => {
-      if (i === this.currentSlide) {
+      const isActive = i === this.currentSlide;
+      if (isActive) {
         slide.classList.add('active');
         slide.classList.remove('inactive');
       } else {
         slide.classList.remove('active');
         slide.classList.add('inactive');
       }
+
+      if (this.isPrinting || isActive) {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      } else {
+        slide.setAttribute('inert', '');
+        slide.setAttribute('aria-hidden', 'true');
+      }
     });
   }
 
-  toggleShortcuts() {
-    if (this.shortcutsOverlay) {
-      const nowVisible = this.shortcutsOverlay.classList.toggle('visible');
-      this.shortcutsOverlay.setAttribute('aria-hidden', String(!nowVisible));
+  moveFocusToIncomingSlide(nextSlide) {
+    const target = nextSlide.querySelector(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    ) || nextSlide;
+    if (target === nextSlide && !nextSlide.hasAttribute('tabindex')) {
+      nextSlide.setAttribute('tabindex', '-1');
+    }
+    target.focus({ preventScroll: true });
+  }
+
+  isShortcutsVisible() {
+    return Boolean(this.shortcutsOverlay?.classList.contains('visible'));
+  }
+
+  shortcutsFocusableElements() {
+    if (!this.shortcutsOverlay) return [];
+    return [...this.shortcutsOverlay.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => !element.hasAttribute('hidden'));
+  }
+
+  trapShortcutsFocus(event) {
+    const focusable = this.shortcutsFocusableElements();
+    if (focusable.length === 0) {
+      event.preventDefault();
+      this.shortcutsPanel?.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
     }
   }
 
+  restoreShortcutsFocus() {
+    const target = this.lastFocusedElement;
+    this.lastFocusedElement = null;
+    if (target?.isConnected && target !== document.body && typeof target.focus === 'function') {
+      target.focus({ preventScroll: true });
+      return;
+    }
+    const fallback = (!this.navNext?.disabled && this.navNext) ||
+      (!this.navPrev?.disabled && this.navPrev) ||
+      this.slides[this.currentSlide];
+    if (fallback === this.slides[this.currentSlide] && !fallback.hasAttribute('tabindex')) {
+      fallback.setAttribute('tabindex', '-1');
+    }
+    fallback?.focus({ preventScroll: true });
+  }
+
+  toggleShortcuts() {
+    if (this.isShortcutsVisible()) {
+      this.hideShortcuts();
+    } else {
+      this.showShortcuts();
+    }
+  }
+
+  showShortcuts() {
+    if (!this.shortcutsOverlay) return;
+    this.lastFocusedElement = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+      ? document.activeElement
+      : null;
+    this.shortcutsOverlay.removeAttribute('inert');
+    this.shortcutsOverlay.classList.add('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'false');
+    this.shortcutsFocusFrame = window.requestAnimationFrame(() => {
+      this.shortcutsFocusFrame = null;
+      if (this.isShortcutsVisible()) (this.shortcutsClose || this.shortcutsPanel)?.focus();
+    });
+  }
+
   hideShortcuts() {
-    if (this.shortcutsOverlay) {
-      this.shortcutsOverlay.classList.remove('visible');
-      this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
+    if (!this.shortcutsOverlay || !this.isShortcutsVisible()) return;
+    if (this.shortcutsFocusFrame !== null) {
+      window.cancelAnimationFrame(this.shortcutsFocusFrame);
+      this.shortcutsFocusFrame = null;
+    }
+    this.shortcutsOverlay.setAttribute('inert', '');
+    this.shortcutsOverlay.classList.remove('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
+    this.restoreShortcutsFocus();
+  }
+
+  openPresenterMode() {
+    if (typeof window.openSlideSagePresenter === 'function') {
+      window.openSlideSagePresenter(this);
     }
   }
 }

@@ -16,6 +16,11 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:focus-visible {
+  outline: max(2px, 0.15em) solid var(--color-gold, #BBAA33);
+  outline-offset: 3px;
+}
+
 /* ============================================
    CSS Custom Properties
    ============================================ */
@@ -124,6 +129,45 @@ html, body {
   opacity: 0;
   z-index: 0;
   pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.chart-render-fallback {
+  width: 100%;
+  max-width: min(94vw, 56rem);
+  margin: var(--spacing-sm) auto 0;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.chart-render-fallback[hidden] {
+  display: none;
+}
+
+.chart-render-fallback table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.chart-render-fallback th,
+.chart-render-fallback td {
+  padding: var(--spacing-xs);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
 }
 
 /* ============================================
@@ -241,6 +285,12 @@ pre code {
   font-size: inherit;
 }
 
+.code-block {
+  width: 100%;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
 blockquote {
   border-left: 4px solid var(--color-accent);
   padding-left: var(--spacing-md);
@@ -345,7 +395,8 @@ blockquote {
 }
 
 .slides-container:hover ~ .nav-arrows,
-.nav-arrows:hover {
+.nav-arrows:hover,
+.nav-arrows:focus-within {
   opacity: 1;
 }
 
@@ -377,6 +428,101 @@ blockquote {
 .nav-arrow:disabled:hover {
   background: var(--color-surface);
   color: var(--color-text);
+}
+
+/* ============================================
+   Keyboard Shortcuts Dialog
+   ============================================ */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.shortcuts-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.shortcuts-panel {
+  width: min(92vw, 34rem);
+  max-height: min(86vh, 38rem);
+  overflow: auto;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+}
+
+.shortcuts-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.shortcuts-heading-row h3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: clamp(1.75rem, 3vw, 2.25rem);
+  height: clamp(1.75rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1;
+}
+
+.shortcuts-close:hover {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.shortcuts-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-panel td {
+  padding: var(--spacing-xs) 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+}
+
+.shortcuts-panel td:first-child {
+  padding-right: var(--spacing-md);
+  white-space: nowrap;
+}
+
+.shortcuts-panel kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  font-family: var(--font-mono);
+}
+
+.shortcuts-dismiss {
+  margin-top: var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  text-align: center;
 }
 
 /* ============================================
@@ -694,6 +840,13 @@ blockquote {
    Print Styles
    ============================================ */
 @media print {
+  html,
+  body,
+  .slides-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   .slide {
     position: relative;
     page-break-after: always;

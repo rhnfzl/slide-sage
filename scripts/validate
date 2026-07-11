@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Run dependency-free source checks on generated Slide Sage presentations."""
+
+from __future__ import annotations
+
+import argparse
+import re
+from dataclasses import dataclass, field
+from html.parser import HTMLParser
+from pathlib import Path
+
+
+CLASS_RE = re.compile(r"\.([A-Za-z_][\w-]*)")
+VAR_CALL_RE = re.compile(r"var\(\s*(--[\w-]+)(?P<fallback>\s*,[^)]*)?\)")
+VAR_DEFINITION_RE = re.compile(r"(--[\w-]+)\s*:")
+COLOR_LITERAL_RE = re.compile(r"(?<![\w-])(?:#[0-9A-Fa-f]{3,8}\b|rgba?\(|hsla?\()")
+COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+PRISM_CLASS_PREFIXES = ("language-", "token")
+PRISM_CLASSES = {"line-numbers", "line-numbers-rows", "line-highlight", "command-line-prompt"}
+
+
+class DeckSource(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.classes: set[str] = set()
+        self.style_blocks: list[str] = []
+        self.inline_styles = 0
+        self.slide_count = 0
+        self._inside_style = False
+        self._style_parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        class_names = set((attributes.get("class") or "").split())
+        self.classes.update(class_names)
+        if "style" in attributes:
+            self.inline_styles += 1
+        if tag == "style":
+            self._inside_style = True
+            self._style_parts = []
+        if "slide" in class_names:
+            self.slide_count += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "style" and self._inside_style:
+            self.style_blocks.append("".join(self._style_parts))
+            self._style_parts = []
+            self._inside_style = False
+
+    def handle_data(self, data: str) -> None:
+        if self._inside_style:
+            self._style_parts.append(data)
+
+
+@dataclass
+class Result:
+    path: Path
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    messages: list[str] = field(default_factory=list)
+
+
+def parse_deck(path: Path, max_inline_per_slide: float) -> Result:
+    result = Result(path=path)
+    parser = DeckSource()
+    try:
+        parser.feed(path.read_text(encoding="utf-8"))
+        parser.close()
+    except OSError as error:
+        result.errors.append(f"could not read file: {error}")
+        return result
+
+    css = "\n".join(parser.style_blocks)
+    css_without_comments = COMMENT_RE.sub("", css)
+    defined_classes = set(CLASS_RE.findall(css_without_comments))
+    missing_classes = sorted(
+        class_name
+        for class_name in parser.classes - defined_classes
+        if not class_name.startswith(PRISM_CLASS_PREFIXES) and class_name not in PRISM_CLASSES
+    )
+    if missing_classes:
+        result.errors.append("undefined CSS classes: " + ", ".join(missing_classes))
+    else:
+        result.messages.append(f"class integrity: {len(parser.classes)} HTML classes are defined")
+
+    slide_count = max(parser.slide_count, 1)
+    inline_average = parser.inline_styles / slide_count
+    result.messages.append(
+        f"inline-style audit: {parser.inline_styles} attributes across {parser.slide_count} slides "
+        f"({inline_average:.2f} per slide)"
+    )
+    if inline_average > max_inline_per_slide:
+        result.warnings.append(
+            f"inline styles exceed the {max_inline_per_slide:g}-per-slide guidance"
+        )
+
+    defined_vars = set(VAR_DEFINITION_RE.findall(css_without_comments))
+    variable_calls = list(VAR_CALL_RE.finditer(css_without_comments))
+    referenced_vars = {match.group(1) for match in variable_calls}
+    required_vars = {
+        match.group(1) for match in variable_calls if match.group("fallback") is None
+    }
+    missing_vars = sorted(required_vars - defined_vars)
+    if missing_vars:
+        result.errors.append("undefined theme variables: " + ", ".join(missing_vars))
+    else:
+        result.messages.append(f"theme variable usage: {len(referenced_vars)} variables resolve")
+
+    literal_colors = len(COLOR_LITERAL_RE.findall(css_without_comments))
+    result.messages.append(
+        f"theme literal audit: {literal_colors} color literals (preset definitions and intentional visual assets need review)"
+    )
+    if "--accent-rgb" in css_without_comments:
+        result.errors.append("legacy --accent-rgb token is not allowed")
+    if "Inter" in css_without_comments:
+        result.warnings.append("Inter appears in deck CSS. Choose a named preset or documented fallback instead.")
+    if not parser.style_blocks:
+        result.errors.append("no inline CSS found. Generated decks must inline their presentation styles.")
+    return result
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Check Slide Sage HTML for class integrity, inline styles, and theme variables."
+    )
+    parser.add_argument("presentations", nargs="+", type=Path, help="HTML files to validate")
+    parser.add_argument(
+        "--max-inline-per-slide",
+        type=float,
+        default=3.0,
+        help="Warn when inline styles exceed this average per slide (default: 3)",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    any_errors = False
+    for path in args.presentations:
+        result = parse_deck(path, args.max_inline_per_slide)
+        print(f"{result.path}:")
+        for message in result.messages:
+            print(f"  ok: {message}")
+        for warning in result.warnings:
+            print(f"  warning: {warning}")
+        for error in result.errors:
+            print(f"  error: {error}")
+        any_errors = any_errors or bool(result.errors)
+    return 1 if any_errors else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,58 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Derive version from tag
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "value=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify version consistency
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          set -euo pipefail
+          fail=0
+          plugin=$(jq -r '.version' .claude-plugin/plugin.json)
+          skill=$(sed -n 's/^  version: *"\(.*\)"/\1/p' SKILL.md | head -1)
+          [ "$plugin" = "$VERSION" ] || { echo "::error::.claude-plugin/plugin.json version '$plugin' != tag '$VERSION'"; fail=1; }
+          [ "$skill" = "$VERSION" ] || { echo "::error::SKILL.md version '$skill' != tag '$VERSION'"; fail=1; }
+          grep -qE "^## ${VERSION//./\\.} " CHANGELOG.md || { echo "::error::CHANGELOG.md has no '## $VERSION' section"; fail=1; }
+          exit "$fail"
+
+      - name: Extract release notes
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          set -euo pipefail
+          awk -v version="$VERSION" '
+            $0 ~ "^## " version " " { take = 1; next }
+            take && /^## / { exit }
+            take { print }
+          ' CHANGELOG.md > release-notes.md
+
+      - name: Create or update the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --notes-file release-notes.md --latest
+          else
+            gh release create "$TAG" --title "$TAG" --notes-file release-notes.md --latest --verify-tag
+          fi

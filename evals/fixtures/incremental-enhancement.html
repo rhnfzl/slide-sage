@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" data-theme="ocean-deep" data-mode="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar API review</title>
+  <style>
+    :root { --bg: #071421; --surface: #0d2336; --text: #e8f4ff; --muted: #9fc0d7; --accent: #39b7d4; --border: #25506d; --font-heading: Georgia, serif; --font-body: ui-sans-serif, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+    body { font-family: var(--font-body); }
+    .slides-container { min-height: 100vh; }
+    .slide { min-height: 100vh; padding: clamp(2rem, 7vw, 7rem); display: grid; place-items: center; overflow: hidden; }
+    .slide.inactive { display: none; }
+    .slide-content { width: min(100%, 66rem); }
+    .kicker { color: var(--accent); font-size: clamp(.7rem, 1vw, .9rem); font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    h1, h2 { margin: .35rem 0 1rem; font-family: var(--font-heading); font-weight: 500; line-height: .95; }
+    h1 { font-size: clamp(3rem, 9vw, 7rem); }
+    h2 { font-size: clamp(2.2rem, 6vw, 5rem); }
+    p { max-width: 46rem; color: var(--muted); font-size: clamp(1rem, 2vw, 1.45rem); line-height: 1.5; }
+    .metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+    .metric { padding: 1rem; border: 1px solid var(--border); background: var(--surface); }
+    .metric strong { display: block; color: var(--accent); font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 3.5rem); }
+    .metric span { color: var(--muted); font-size: clamp(.75rem, 1.2vw, .95rem); }
+    .progress-bar { position: fixed; right: 0; bottom: 0; left: 0; height: .25rem; background: var(--border); }
+    .progress-fill { width: 50%; height: 100%; background: var(--accent); }
+    .slide-counter { position: fixed; right: 1rem; bottom: .75rem; color: var(--muted); }
+    .nav-arrows { position: fixed; right: 1rem; bottom: 2.5rem; display: flex; gap: .5rem; }
+    .nav-arrow { border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+    @media (max-width: 700px) { .metric-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="slides-container" id="slides">
+    <section class="slide active" aria-hidden="false" id="slide-1">
+      <div class="slide-content">
+        <span class="kicker">Northstar platform</span>
+        <h1>API reliability review</h1>
+        <p>Current service performance and the next reliability decision for the platform team.</p>
+      </div>
+    </section>
+    <section class="slide inactive" aria-hidden="true" inert id="slide-2">
+      <div class="slide-content">
+        <span class="kicker">Current state</span>
+        <h2>Latency has become the constraint.</h2>
+        <div class="metric-row">
+          <div class="metric"><strong>240 ms</strong><span>average request latency</span></div>
+          <div class="metric"><strong>99.9%</strong><span>monthly availability</span></div>
+          <div class="metric"><strong>18</strong><span>critical API routes</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="slide-counter" id="slideCounter"></div>
+  <div class="nav-arrows"><button class="nav-arrow" id="navPrev" type="button" aria-label="Previous slide">Previous</button><button class="nav-arrow" id="navNext" type="button" aria-label="Next slide">Next</button></div>
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.currentSlide = 0;
+        document.getElementById('navPrev').addEventListener('click', () => this.goTo(this.currentSlide - 1));
+        document.getElementById('navNext').addEventListener('click', () => this.goTo(this.currentSlide + 1));
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') this.goTo(this.currentSlide - 1);
+          if (event.key === 'ArrowRight' || event.key === ' ') this.goTo(this.currentSlide + 1);
+        });
+        this.updateUI();
+      }
+      goTo(index) {
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach((slide, current) => {
+          const active = current === this.currentSlide;
+          slide.classList.toggle('active', active);
+          slide.classList.toggle('inactive', !active);
+          slide.setAttribute('aria-hidden', String(!active));
+          if (active) slide.removeAttribute('inert'); else slide.setAttribute('inert', '');
+        });
+        this.updateUI();
+      }
+      updateUI() {
+        document.getElementById('progressFill').style.width = `${((this.currentSlide + 1) / this.slides.length) * 100}%`;
+        document.getElementById('slideCounter').textContent = `${this.currentSlide + 1} / ${this.slides.length}`;
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      new SlidePresentation();
+      document.documentElement.dataset.slideSagePrintReady = 'true';
+    });
+  </script>
+</body>
+</html>

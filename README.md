@@ -43,7 +43,7 @@ and change failure rate 11% to 7%.
 
 1. **Technical presentations need evidence.** Slide Sage treats metrics, charts, diagrams, and code as first-class content instead of decoration.
 2. **Generated slides need guardrails.** Every slide is constrained to the viewport, uses responsive type, supports keyboard navigation, and includes reduced-motion and print behavior.
-3. **The output should stay portable.** A deck opens directly in a browser. Chart-free decks can be fully local, while richer decks use pinned CDN libraries by default and need network access on first load.
+3. **The output should stay portable.** A deck opens directly in a browser. Richer decks use pinned CDN libraries by default, and `scripts/inline-vendor.py` can make a supported-library copy local when offline delivery matters.
 
 ## What it makes
 
@@ -61,7 +61,7 @@ and change failure rate 11% to 7%.
 | `assets/viewport-base.css` | Enforces one-screen slides, responsive type, navigation, print, and accessibility basics |
 | `references/` | Focused guidance for charts, diagrams, code, animation, themes, and presenter mode |
 | `templates/` | Reusable comparison layouts, SVG diagrams, and icons |
-| `scripts/` | PowerPoint/PDF extraction and image processing helpers |
+| `scripts/` | Source, render, and eval checks, PDF export, opt-in offline vendoring, and conversion helpers |
 | `examples/` | Finished decks showing metrics, architecture, and code treatment |
 | `evals/` | Behavior cases for new, conversion, and enhancement workflows |
 
@@ -86,7 +86,7 @@ Use Slide Sage when the final delivery can be HTML or PDF and the material benef
 - Code uses language-aware highlighting and stays within a readable line budget
 - Arrow keys, space, page keys, Home, End, and touch gestures navigate the deck
 - `prefers-reduced-motion` and print styles are included
-- Pre-delivery source checks cover CSS classes, inline styles, and theme variables
+- Pre-delivery source checks cover CSS classes, inline styles, and theme variables with `scripts/validate presentation.html`
 
 ## Examples
 
@@ -96,17 +96,17 @@ Use Slide Sage when the final delivery can be HTML or PDF and the material benef
 | [Engineering metrics review](examples/metrics-review.html) | KPI hierarchy and a sourced trend chart |
 | [Event-driven architecture](examples/architecture-teaching.html) | A technical teaching flow with CSS diagrams and code |
 
-Open any example in a browser. Use arrow keys to navigate, `?` for shortcuts, and Print > Save as PDF for a printable copy.
+Open any example in a browser. Use arrow keys to navigate, `?` for shortcuts, and `scripts/export-pdf examples/metrics-review.html` for a PDF. Browser Print > Save as PDF remains a fallback.
 
 ## Requirements
 
-A modern browser is enough for generated decks. Python 3.11+ plus the packages in `scripts/requirements.txt` is needed only for PowerPoint/PDF conversion and image processing. Browser Print > Save as PDF is the current export path.
+A modern browser is enough for generated decks. Python 3.11+ plus the packages in `scripts/requirements.txt` is needed only for PowerPoint/PDF conversion and image processing. `scripts/export-pdf` uses an installed Playwright CLI or its pinned `npx` fallback, and downloads matching Chromium on the first export when it is not already available.
 
 ## Trust
 
 - Installing copies files. It does not run code or add a postinstall hook.
 - Slide Sage adds no telemetry or analytics.
-- Package CDN imports are browser-only, version-pinned, and included only when a deck uses them. Web fonts follow the preset's supplied Google Fonts stylesheet.
+- Package CDN imports are browser-only, version-pinned, and included only when a deck uses them. `scripts/inline-vendor.py` is opt-in, embeds only its supported pinned libraries, removes web-font imports, and refuses remaining static remote assets.
 - Python scripts run only on explicit invocation.
 - Speaker notes and embedded data remain readable inside a shared HTML file.
 

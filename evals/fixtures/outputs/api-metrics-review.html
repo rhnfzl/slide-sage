@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" data-style="technical-minimal">
+<head><meta charset="utf-8"><title>API metrics review</title><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script></head>
+<body>
+  <main class="slides-container">
+    <section class="slide"><h1>API metrics review</h1></section>
+    <section class="slide"><h2>Executive summary</h2><p>0.3% error rate and 99.95% uptime</p></section>
+    <section class="slide"><h2>Average latency</h2><canvas id="latencyChart" aria-label="Average latency by endpoint"></canvas></section>
+    <section class="slide"><h2>p99 latency</h2><canvas id="volumeChart" aria-label="p99 latency by endpoint"></canvas></section>
+    <section class="slide"><h2>Endpoint data</h2><table><thead><tr><th>path</th><th>avg_latency_ms</th><th>p99_latency_ms</th><th>requests_per_day</th></tr></thead><tbody><tr><td>/users</td><td>45</td><td>230</td><td>50000</td></tr><tr><td>/orders</td><td>120</td><td>890</td><td>25000</td></tr><tr><td>/search</td><td>200</td><td>1500</td><td>15000</td></tr></tbody></table></section>
+    <section class="slide"><h2>Request volume</h2></section>
+    <section class="slide"><h2>Error budget</h2></section>
+    <section class="slide"><h2>Availability</h2></section>
+    <section class="slide"><h2>Risks</h2></section>
+    <section class="slide"><h2>Next actions</h2></section>
+  </main>
+  <script>const latencyChartConfig = { type: 'bar' };</script>
+</body>
+</html>

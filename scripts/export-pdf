@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: scripts/export-pdf <presentation.html> [output.pdf] [--no-open]
+
+Render a Slide Sage HTML presentation to PDF with Playwright. The deck signals
+when fonts and charts are settled, so charts do not print half-animated.
+EOF
+}
+
+if [[ $# -eq 0 || "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  usage
+  exit 0
+fi
+
+input=$1
+shift
+output=""
+open_output=true
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --no-open)
+      open_output=false
+      ;;
+    *)
+      if [[ -n "$output" ]]; then
+        usage >&2
+        exit 2
+      fi
+      output=$1
+      ;;
+  esac
+  shift
+done
+
+if [[ ! -f "$input" ]]; then
+  printf 'Presentation not found: %s\n' "$input" >&2
+  exit 1
+fi
+
+input_path=$(cd "$(dirname "$input")" && pwd)/$(basename "$input")
+if [[ -z "$output" ]]; then
+  output="${input_path%.html}.pdf"
+fi
+if [[ "$output" != *.pdf ]]; then
+  printf 'Output must end in .pdf: %s\n' "$output" >&2
+  exit 2
+fi
+output_parent=$(dirname "$output")
+mkdir -p "$output_parent"
+output_path=$(cd "$output_parent" && pwd)/$(basename "$output")
+
+if command -v playwright >/dev/null 2>&1; then
+  playwright_cmd=(playwright)
+else
+  playwright_cmd=(npx --yes playwright@1.58.0)
+fi
+
+printf 'Ensuring Playwright Chromium is available...\n'
+"${playwright_cmd[@]}" install chromium
+
+"${playwright_cmd[@]}" pdf \
+  --browser chromium \
+  --viewport-size '1123,794' \
+  --wait-for-selector 'html[data-slide-sage-print-ready="true"]' \
+  --wait-for-timeout 250 \
+  --paper-format A4 \
+  "file://${input_path}" \
+  "$output_path"
+
+if [[ "$open_output" == true ]] && command -v open >/dev/null 2>&1; then
+  open "$output_path"
+fi
+
+printf 'PDF ready: %s\n' "$output_path"
