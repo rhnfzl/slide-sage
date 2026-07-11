@@ -42,12 +42,12 @@ It is a phased plan so value ships early. Nothing here starts until you confirm.
 - **Direct source verification** of the single highest-stakes claim (see the correction below).
 - **A grill-me session** (three AskUserQuestion rounds) that locked every design fork.
 
-## Correction to the research (highest-stakes finding)
+## Superseded correction to the research (historical context)
 
 The synthesis ranked "the root-level `SKILL.md` ships broken via npx because the installer drops all
 support directories" as the #1 change and prescribed relocating the skill into `skills/slide-sage/`.
 
-**Direct reading of the vercel-labs/skills CLI source shows this is wrong for this repo.**
+**The following source-reading conclusion was later superseded by cloned-source verification. It is retained only to explain the decision change.**
 
 - The support-dir-dropping filter is on the **blob fast-path only**, and that path runs solely for
   `BLOB_ALLOWED_OWNERS = ['vercel', 'vercel-labs', 'heygen-com']` (`src/add.ts:1152`).
@@ -55,21 +55,20 @@ support directories" as the #1 change and prescribed relocating the skill into `
   `discoverSkills` sets the skill path to the repo root and `installSkillForAgent` calls
   `copyDirectory` (`src/installer.ts:462`), which copies the **entire** skill directory recursively,
   excluding only `.git`, `metadata.json`, `__pycache__`, `__pypackages__`.
-- So `references/`, `templates/`, `assets/`, and `scripts/` **do** ship on `npx skills add rhnfzl/slide-sage`.
-  The skill is not broken.
+- The source reading therefore inferred that `references/`, `templates/`, `assets/`, and `scripts/` **do** ship on
+  `npx skills add rhnfzl/slide-sage`. Cloned-source verification disproved that inference for the root layout.
 
-**Consequence:** the real gap versus the two reference repos is the packaging/metadata files they have
-and Slide Sage lacks, plus junk that currently gets copied into installs. This is a non-breaking additive
-change, not a restructure, and it does not break the existing installs or git-clone users. This is what
-the plan does in Phase 1.
+**Historical consequence (superseded):** the original plan treated packaging metadata and copied junk as
+the only gap and rejected restructuring. Do not use that conclusion for current implementation work.
 
-### 2026-07-11 layout decision
+### 2026-07-11 current layout decision
 
 Cloned-source verification with Skills CLI 1.5.16 later showed the actual install copied only a root
 `SKILL.md`, despite the earlier source reading. The user explicitly authorized reopening the root-layout
 decision. The runtime now lives at `skills/slide-sage/`, with `SKILL.md`, `AGENTS.md`, and every runtime
-dependency in that directory. The root marketplace source remains `./`; a root `SKILL.md` must not be
-retained because root discovery would recreate the incomplete installation.
+dependency in that directory. This is the authoritative packaging decision: keep the root marketplace
+source at `./`, and do not retain a root `SKILL.md` because root discovery would recreate the incomplete
+installation.
 
 ## Locked decisions (grill-me results)
 
@@ -79,7 +78,7 @@ retained because root discovery would recreate the incomplete installation.
 | B | Slide canvas | **Keep fluid 100vh default, add opt-in fixed 16:9 mode** | Projector/PDF determinism without discarding the working fluid system |
 | C | Offline claim | **CDN default (quality first), opt-in inline-vendored mode, honest README** | User: "offline-first preference, but online OK if it improves quality" |
 | D | README top | **Concise, text-first anatomy matching the two reference repos** | Consistency across the author's skills; visual proof lives in a gallery, not the README body |
-| E | Packaging | **Match reference repos, non-breaking** (add manifests, drop junk) | Corrected finding above; no restructure, no broken installs |
+| E | Packaging | **Nested runtime at `skills/slide-sage/`** (retain root marketplace metadata) | Cloned-source installs copy the discovered skill directory; a root `SKILL.md` would win discovery and omit support files |
 | F | Interview | **Gap-driven + hard non-interactive rule** | Current mandatory interview fails the skill's own evals and hangs in CI/subagent runs |
 | G | Sister repos | **Audit all three together for consistency** | Local at `../explore-unknowns` and `../human-html`; make them a coherent set |
 | H | PDF export | **Playwright export script + force animations to settle; browser-print stays as fallback** | Export fidelity is the #1 documented AI-deck pain point |
@@ -114,16 +113,16 @@ Each item lists the change, why it matters, the files it touches, and how we kno
 
 ### Phase 1 - Packaging, install, and listing (Goal 1)
 
-Non-breaking. Makes the one command the headline, matches the reference repos, and stops shipping junk.
+Nested-runtime packaging. Keeps the one command as the headline, preserves root marketplace metadata, and stops shipping incomplete payloads.
 
 1. **Add the packaging/metadata files the reference repos have.**
    - `.claude-plugin/marketplace.json` (`"source": "./"`, owner `rhnfzl`) and `.claude-plugin/plugin.json`
      (name, description, version, author, license MIT, keywords) mirroring human-html's shape.
    - `skills.sh.json` with a single grouping whose `title`/`description` are human-facing storefront copy.
-   - Add SKILL.md frontmatter `license: MIT` and `metadata: { version, author }`.
+   - Add `skills/slide-sage/SKILL.md` frontmatter `license: MIT` and `metadata: { version, author }`.
    - *Why:* required for a clean skills.sh listing and the version-consistency guard the release workflow uses.
-   - *Done when:* `npx skills add ./ --list` (local) resolves one skill `slide-sage` with all support dirs, and
-     the three manifests validate.
+   - *Done when:* `npx skills add ./ --list` (local) resolves `skills/slide-sage` as one skill with all support dirs,
+     the cloned-source install copies the payload, and the three manifests validate.
 
 2. **Rewrite the README install section to a single hero command.**
    - Lead with `npx skills add rhnfzl/slide-sage` (auto-detects Claude Code, Codex, Cursor, Copilot, Gemini,
@@ -156,12 +155,12 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
    - *Done when:* the README opens with a banner and reads top-to-bottom without install clutter.
 
 6. **Build a demo deck about Slide Sage, using Slide Sage.**
-   - `examples/slide-sage-intro.html` plus 2-3 more example decks (a metrics review, an architecture teaching deck).
-   - Add the `!examples/**/*.html` gitignore negation so they are tracked.
+   - `skills/slide-sage/examples/slide-sage-intro.html` plus 2-3 more example decks (a metrics review, an architecture teaching deck).
+   - Add the nested examples gitignore negation so they are tracked.
    - *Why:* the product demonstrates itself; this is the banner + gallery source and the strongest credibility asset.
 
 7. **Banner + GitHub Pages gallery.**
-   - Banner (`assets/banner.webp`) composed from the demo deck's best slides.
+   - Banner (`skills/slide-sage/assets/banner.webp`) composed from the demo deck's best slides.
    - A Pages `index.html` gallery linking the live example decks (one per showcased preset: chart slide, diagram slide, code slide).
    - *Done when:* the README banner renders and the Pages gallery is live and linked.
 
@@ -171,11 +170,11 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
    - Unify the two variable vocabularies (base `--color-*` vs preset `--color-*-primary`) with a bridge block
      so applying a preset actually recolors slides. Replace hardcoded `rgba(255,255,255,x)` literals with `color-mix`.
      Delete the dead `[data-theme=light]` blocks no preset ever sets.
-   - *Files:* `assets/viewport-base.css`, `references/style-guide.md`.
+   - *Files:* `skills/slide-sage/assets/viewport-base.css`, `skills/slide-sage/references/style-guide.md`.
    - *Why:* today presets barely change the output and light presets render white text on white.
 
 9. **Full preset rebuild (8-10 opinionated presets).**
-   - Restructure presets as `references/presets/<slug>.md` behind a compact index carrying
+   - Restructure presets as `skills/slide-sage/references/presets/<slug>.md` behind a compact index carrying
      `mood/tone/best_for/avoid_for/formality/density/scheme`. Give each preset 2-3 structural signatures beyond
      color (hairline dividers vs cards, oversized stat numerals, mono kicker labels, per-preset type scale).
    - Drop the Inter default and the catppuccin base theme; add at least one serif-display and one editorial preset;
@@ -183,7 +182,7 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
    - Switch preset matching from industry-mapping to tone-first.
    - *Why:* two decks in different presets are currently the same deck recolored; Inter is the exact "AI look" font anti-slop guides ban.
 
-10. **Anti-slop design doctrine + no-fake-data rule in SKILL.md.**
+10. **Anti-slop design doctrine + no-fake-data rule in `skills/slide-sage/SKILL.md`.**
     - Banned fonts/hexes, committed palettes, one orchestrated reveal per slide.
     - No-fake-data: charts plot user-provided numbers whenever they exist. Interactive run with a chart implied but
       no data provided -> ask for the numbers. Non-interactive/subagent/CI run -> use obviously-labeled SAMPLE data
@@ -191,7 +190,7 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
     - *Why:* directly targets the top-two documented failures (generic look, hallucinated data).
 
 11. **Re-palette and de-bug the SVG diagram templates.**
-    - Recolor all `templates/diagrams/*.svg` to the Tier-1 colorblind-safe categorical palette; prefix every filter
+    - Recolor all `skills/slide-sage/templates/diagrams/*.svg` to the Tier-1 colorblind-safe categorical palette; prefix every filter
       `id` per-diagram to avoid collisions when two diagrams share one deck; derive cylinder shading from a
       semi-transparent overlay instead of a second hardcoded hex; make label fill a variable.
     - *Why:* out of the box the diagrams use a dated flat palette that clashes with every preset and has real
@@ -201,17 +200,17 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
     - Add a `slidechange`/`onSlideEnter` lifecycle to the `SlidePresentation` class; init charts with
       `animation:false` and replay the animation / start CountUp when the slide becomes active, respecting
       `prefers-reduced-motion`.
-    - *Files:* `references/html-template.md`, `references/viz-integration.md`.
+    - *Files:* `skills/slide-sage/references/html-template.md`, `skills/slide-sage/references/viz-integration.md`.
     - *Why:* charts currently finish animating on load, before the audience ever reaches the slide.
 
 ### Phase 4 - Reliability, accessibility, and honest offline
 
-13. **Prism security bump + SRI.** Bump Prism `1.29.0 -> 1.30.0` across SKILL.md, html-template.md, and
+13. **Prism security bump + SRI.** Bump Prism `1.29.0 -> 1.30.0` across `skills/slide-sage/SKILL.md`, html-template.md, and
     code-highlighting.md (1.29.0 carries CVE-2024-53382, DOM-clobbering to XSS), and add SRI
     `integrity`+`crossorigin` to the canonical CDN snippets. One-line-per-file, ships in every generated deck.
 
 14. **Playwright PDF export + delivery contract.**
-    - `scripts/export-pdf` that headless-renders to a reliable PDF; force chart animations to complete before print
+    - `skills/slide-sage/scripts/export-pdf` that headless-renders to a reliable PDF; force chart animations to complete before print
       so nothing prints blank. Keep browser Print-to-PDF documented as the zero-dependency fallback and fix its
       print CSS. Always open the file and send the absolute path at the end of a run.
     - *Why:* PDF export is claimed but not engineered; the audience presents minutes after generating.
@@ -228,18 +227,18 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
     - `focus-visible` outlines, `inert`/`aria-hidden` on inactive slides, `dialog` role + focus trap on the shortcuts overlay.
     - Chart-data accessibility: `role="img"` + `aria-label` on canvases, a visually-hidden data-table fallback, and a
       `noscript`/no-canvas fallback (which doubles as the honest offline degradation path: a table when the chart cannot render).
-    - *Why:* SKILL.md promises visible focus and WCAG AA that the CSS/JS do not implement; screen-reader access to chart data is entirely uncovered.
+    - *Why:* `skills/slide-sage/SKILL.md` promises visible focus and WCAG AA that the CSS/JS do not implement; screen-reader access to chart data is entirely uncovered.
 
 17. **Fix presenter mode.**
     - One speaker-notes format (JSON `<script>` block) so the two contradicting references agree; rename the presenter
       integration to the actual `goTo()` method; switch the timer from `requestAnimationFrame` to `setInterval` on
       `Date.now()`; render real scaled slide previews. Add a privacy note: speaker notes ship readable inside the shared file.
-    - *Files:* `references/presenter-mode.md`, `references/html-template.md`.
+    - *Files:* `skills/slide-sage/references/presenter-mode.md`, `skills/slide-sage/references/html-template.md`.
 
 18. **Render-verification step.**
     - When a browser/Playwright tool is available, screenshot 2-3 representative slides (chart slides especially) at a
       reference viewport and a short viewport, check `scrollHeight > clientHeight` and console errors, and fix before delivery.
-    - Ship a small static validator (`scripts/validate`) as the always-available fallback: class-integrity, inline-style
+    - Ship a small static validator (`skills/slide-sage/scripts/validate`) as the always-available fallback: class-integrity, inline-style
       audit, theme-variable usage.
     - *Why:* converts the "NON-NEGOTIABLE" viewport rule into an enforced check; catches the one failure class you cannot see from source.
 
@@ -248,7 +247,7 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
 19. **Gap-driven interview + non-interactive rule.**
     - Infer audience/style when the prompt is detailed and state the choice in one line; ask only when genuinely thin.
       Hard rule: never block in one-shot/subagent/CI runs (pick sensible defaults and note them). Align AGENTS.md and
-      SKILL.md to identical wording. Optional visual-preview step only when style is unspecified and a browser is available.
+      `skills/slide-sage/SKILL.md` to identical wording. Optional visual-preview step only when style is unspecified and a browser is available.
     - *Why:* the current mandatory interview contradicts AGENTS.md, fails the skill's own evals, and stalls forever in CI.
 
 20. **Frontmatter description rewrite for triggering.**
@@ -257,7 +256,7 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
     - *Why:* the description omits the conversion mode entirely, which hurts auto-triggering.
 
 21. **Migrate and actually run the evals.**
-    - Rewrite `evals/evals.json` to the reference schema (skill_name wrapper, id, expected_output, checkable assertions),
+    - Rewrite `skills/slide-sage/evals/evals.json` to the reference schema (skill_name wrapper, id, expected_output, checkable assertions),
       remove the stale Mermaid references (Mermaid was replaced by CSS/HTML diagrams two commits ago), add a fixture for
       the enhancement case, and name a concrete runner (a GitHub Action + a local script) so the evals are executable,
       not documentation.
@@ -272,10 +271,10 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
 ### Phase 6 - Cross-repo consistency (parallel, light touch)
 
 23. **Align all three repos** (`slide-sage`, `../human-html`, `../explore-unknowns`).
-    - Confirm the three share one packaging convention (root SKILL.md + `.claude-plugin/marketplace.json` `source:"./"` +
-      `plugin.json` + `skills.sh.json` + SECURITY + CHANGELOG + release.yml). Apply only the deltas needed for consistency
-      to the other two; do not rewrite their content.
-    - *Why:* they become a coherent "rhnfzl skills" set with one layout decision.
+    - Confirm the three share marketplace metadata, manifests, `skills.sh.json`, SECURITY, CHANGELOG, and release automation.
+      Slide Sage's runtime is `skills/slide-sage/SKILL.md` and must not regain a root `SKILL.md`; apply only the needed
+      consistency deltas to the other two and do not rewrite their content.
+    - *Why:* they become a coherent "rhnfzl skills" set with valid install behavior, even where their runtime layouts differ.
 
 ---
 
