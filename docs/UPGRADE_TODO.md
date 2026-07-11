@@ -19,28 +19,29 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11: Ship 1 implementation committed; review fixes in progress after Codex and CodeRabbit findings.
 - 2026-07-11: CodeRabbit reference-loading finding declined because the project contract requires the three base references for every deck.
 - 2026-07-11: Added installed-payload inspection as a stricter verification sub-item without changing the locked packaging decision.
+- 2026-07-11: Ship 1 items 1-12 passed Codex second-eye and CodeRabbit review. Pages workflow is ready; item 13 awaits repository Pages activation after merge.
 - (append dated one-line entries here as phases complete)
 
 ---
 
 ## Phase 1 - Packaging, install, listing (Ship 1)
 
-- [ ] 1. Add `.claude-plugin/marketplace.json` (`source: "./"`, owner rhnfzl) + `.claude-plugin/plugin.json` (name/desc/version/author/license MIT/keywords)
-- [ ] 2. Add `skills.sh.json` (one grouping, human-facing title/description)
-- [ ] 3. Add SKILL.md frontmatter `license: MIT` + `metadata: {version, author}`
-- [ ] 4. Rewrite README install to lead with `npx skills add rhnfzl/slide-sage`; remove `claude skill add`; collapse per-tool matrix into one `<details>`
-- [ ] 5. Delete `CLONE.md` and `.github/workflows/clone-count.yml`; replace badge row (skills.sh install + Release + License)
-- [ ] 6. `.gitignore` `.claude/` and `.agent-harness/`; track `AGENTS.md`
-- [ ] 7. Add `SECURITY.md` + condensed Trust section in README
-- [ ] 8. Verify locally: `npx skills add ./ --list` resolves one skill with all support dirs
-  - [ ] Install into an isolated temporary agent home and assert `references/`, `templates/`, `assets/`, and `scripts/` are present
+- [x] 1. Add `.claude-plugin/marketplace.json` (`source: "./"`, owner rhnfzl) + `.claude-plugin/plugin.json` (name/desc/version/author/license MIT/keywords)
+- [x] 2. Add `skills.sh.json` (one grouping, human-facing title/description)
+- [x] 3. Add SKILL.md frontmatter `license: MIT` + `metadata: {version, author}`
+- [x] 4. Rewrite README install to lead with `npx skills add rhnfzl/slide-sage`; remove `claude skill add`; collapse per-tool matrix into one `<details>`
+- [x] 5. Delete `CLONE.md` and `.github/workflows/clone-count.yml`; replace badge row (skills.sh install + Release + License)
+- [x] 6. `.gitignore` `.claude/` and `.agent-harness/`; track `AGENTS.md`
+- [x] 7. Add `SECURITY.md` + condensed Trust section in README
+- [x] 8. Verify locally: `npx skills add ./ --list` resolves one skill with all support dirs
+  - [x] Install into an isolated temporary agent home and assert `references/`, `templates/`, `assets/`, and `scripts/` are present
 
 ## Phase 2 - README, banner, visual proof (Ship 1)
 
-- [ ] 9. Rewrite README to reference-repo anatomy (~120-150 lines, banner + 3 badges + one-liner + quickstart + why + what's-in-the-box + trust); scrub em dashes; engineer/tech-lead audience
-- [ ] 10. Drop competitor comparison table; add one honest positioning paragraph + gallery link (name pptx skill for native PPTX)
-- [ ] 11. Build `examples/slide-sage-intro.html` + 2-3 more decks (metrics review, architecture teaching) using the skill itself; add `!examples/**/*.html` gitignore negation
-- [ ] 12. Compose banner `assets/banner.webp` from the demo deck's best slides
+- [x] 9. Rewrite README to reference-repo anatomy (~120-150 lines, banner + 3 badges + one-liner + quickstart + why + what's-in-the-box + trust); scrub em dashes; engineer/tech-lead audience
+- [x] 10. Drop competitor comparison table; add one honest positioning paragraph + gallery link (name pptx skill for native PPTX)
+- [x] 11. Build `examples/slide-sage-intro.html` + 2-3 more decks (metrics review, architecture teaching) using the skill itself; add `!examples/**/*.html` gitignore negation
+- [x] 12. Compose banner `assets/banner.webp` from the demo deck's best slides
 - [ ] 13. GitHub Pages `index.html` gallery linking live example decks; wire into README
 
 ## Phase 3 - Output quality (Ship 2)
