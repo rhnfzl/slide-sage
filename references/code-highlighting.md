@@ -687,13 +687,13 @@ For short code references within slide text (e.g., function names, variable name
 <p>Set <code class="inline-code">previous_response_id: 'auto'</code> for caching.</p>
 ```
 
-**Never** place a multi-line code block below content cards or comparison layouts — if code is needed alongside a comparison, put it on the next slide.
+**Never** place a multi-line code block below content cards or comparison layouts - if code is needed alongside a comparison, put it on the next slide.
 
 ---
 
 ## Manual Syntax Classes (Domain-Specific Pseudo-Code)
 
-For content Prism.js cannot tokenize — HTTP endpoints, file trees, data flow diagrams, config snippets — use manual CSS helper classes. These complement Prism.js (Tier 1) as a lighter-weight Tier 2 approach.
+For content Prism.js cannot tokenize - HTTP endpoints, file trees, data flow diagrams, config snippets - use manual CSS helper classes. These complement Prism.js (Tier 1) as a lighter-weight Tier 2 approach.
 
 ### Dark Theme CSS
 

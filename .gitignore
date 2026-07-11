@@ -28,6 +28,8 @@ CLAUDE.md
 SPECS.md
 .claude/
 .agent-harness/
+.agents/
+skills-lock.json
 
 # Output
 *.html

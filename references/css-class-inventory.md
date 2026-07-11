@@ -137,9 +137,9 @@ For domain-specific pseudo-code that Prism.js cannot tokenize (HTTP endpoints, f
 
 ### Rules for Custom Classes
 
-1. **Define before use** — The class must exist in `<style>` before any HTML references it
-2. **Use theme variables** — `var(--color-accent)` not `#89b4fa`, `var(--spacing-md)` not `1.25rem`
-3. **Use `clamp()` for sizing** — Never fixed px/rem for font-size or spacing
-4. **Use modifier pattern for variants** — `.card.highlight` not `.card-highlight` and `.highlighted-card`
+1. **Define before use** - The class must exist in `<style>` before any HTML references it
+2. **Use theme variables** - `var(--color-accent)` not `#89b4fa`, `var(--spacing-md)` not `1.25rem`
+3. **Use `clamp()` for sizing** - Never fixed px/rem for font-size or spacing
+4. **Use modifier pattern for variants** - `.card.highlight` not `.card-highlight` and `.highlighted-card`
 
 **Never use a class without defining it. Never use inline styles for something that appears on 2+ elements.**

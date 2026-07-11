@@ -1,4 +1,4 @@
-# Slide Sage — AI Presentation Skill
+# Slide Sage - AI Presentation Skill
 
 > Cross-platform instructions for AI coding tools (Claude Code, Codex CLI, Gemini CLI, Cursor, Copilot)
 
@@ -23,7 +23,7 @@ Creates **data-rich, interactive HTML presentations** as single files. Specializ
 ## Workflow
 
 1. **Detect mode**: New presentation / PPT conversion / Enhancement of existing HTML
-2. **Smart interview**: Skip questions if user provided enough context. Otherwise ask about audience, tone, and style
+2. **Smart interview**: Confirm audience and style before generating. Ask for other missing context only when needed
 3. **Content analysis**: Identify what libraries are needed (charts? diagrams? code?)
 4. **Read relevant references**: Only load the reference files needed for this presentation
 5. **Generate**: Single HTML file with all CSS/JS inline, libraries from CDN
@@ -45,8 +45,8 @@ Creates **data-rich, interactive HTML presentations** as single files. Specializ
 
 ## Non-Negotiable Rules
 
-- Every slide: `height: 100vh; overflow: hidden` — no scrolling
-- All font sizes use `clamp()` — never fixed px/rem
+- Every slide: `height: 100vh; overflow: hidden` - no scrolling
+- All font sizes use `clamp()` - never fixed px/rem
 - Include `assets/viewport-base.css` content inline
 - Colorblind-safe palettes for all data visualization
 - Support `prefers-reduced-motion` and `@media print`
@@ -63,4 +63,4 @@ This skill works with any AI coding tool that can:
 - Run bash commands (for PPT conversion scripts)
 
 If your tool has `WebFetch`, you can verify CDN URLs are current.
-If your tool lacks `WebFetch`, use the pinned CDN URLs in the reference files — they are stable.
+If your tool lacks `WebFetch`, use the pinned CDN URLs in the reference files - they are stable.

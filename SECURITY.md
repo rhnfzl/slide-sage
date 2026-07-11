@@ -4,9 +4,9 @@ Slide Sage creates local HTML presentations. Installing the skill copies files o
 
 ## External touch-points
 
-Generated decks can load version-pinned chart, code-highlighting, font, and animation libraries from a CDN. Those requests happen in the reader's browser only when the generated deck includes the library. Chart-free decks with no web fonts make no network request. Use the documented inline-vendored mode when a deck must work fully offline.
+Generated decks can load version-pinned chart, code-highlighting, font, and animation libraries from a CDN. Those requests happen in the reader's browser only when the generated deck includes the library. Chart-free decks with no web fonts make no network request. CDN-backed decks need network access on first load.
 
-The Python utilities under `scripts/` run only when a user or agent invokes them for PowerPoint extraction, PDF extraction, image processing, validation, or export. Installing the skill does not execute them.
+The Python utilities under `scripts/` run only when a user or agent invokes them for PowerPoint extraction, PDF extraction, or image processing. Installing the skill does not execute them.
 
 The `npx skills add` installer may record its own anonymous install telemetry. Slide Sage neither adds to nor receives that data.
 

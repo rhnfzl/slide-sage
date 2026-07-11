@@ -313,7 +313,7 @@ Speaker notes are embedded as HTML comments immediately after each `.slide` div.
     </ul>
   </div>
 </div>
-<!-- NOTES: Emphasize the revenue growth — this is a record quarter. The retention number is up from 89% last year. Source: Q4 finance report. -->
+<!-- NOTES: Emphasize the revenue growth - this is a record quarter. The retention number is up from 89% last year. Source: Q4 finance report. -->
 ```
 
 Notes are:
@@ -454,7 +454,7 @@ External libraries load before the closing `</body>` tag, before the SlidePresen
 
 ```html
   <!-- Chart.js (when charts are needed) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
   <!-- Prism.js (when code blocks are needed) -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>

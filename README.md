@@ -12,7 +12,7 @@
 
 Slide Sage is an open-source Agent Skill for engineers, tech leads, data teams, and technical PMs. It creates data-rich HTML slide decks with charts, architecture diagrams, and code, then packages each deck as a browser-ready file.
 
-See the [live gallery](https://rhnfzl.github.io/slide-sage/) for chart, diagram, and code examples.
+Browse the [gallery source](index.html) for chart, diagram, and code examples. The hosted gallery will follow when this branch is reviewed and merged.
 
 ## Quickstart
 
@@ -43,7 +43,7 @@ and change failure rate 11% to 7%.
 
 1. **Technical presentations need evidence.** Slide Sage treats metrics, charts, diagrams, and code as first-class content instead of decoration.
 2. **Generated slides need guardrails.** Every slide is constrained to the viewport, uses responsive type, supports keyboard navigation, and includes reduced-motion and print behavior.
-3. **The output should stay portable.** A deck opens directly in a browser. Chart-free decks can be fully local, while richer decks use pinned CDN libraries by default or opt into inline-vendored assets for offline delivery.
+3. **The output should stay portable.** A deck opens directly in a browser. Chart-free decks can be fully local, while richer decks use pinned CDN libraries by default and need network access on first load.
 
 ## What it makes
 
@@ -61,9 +61,9 @@ and change failure rate 11% to 7%.
 | `assets/viewport-base.css` | Enforces one-screen slides, responsive type, navigation, print, and accessibility basics |
 | `references/` | Focused guidance for charts, diagrams, code, animation, themes, and presenter mode |
 | `templates/` | Reusable comparison layouts, SVG diagrams, and icons |
-| `scripts/` | PowerPoint/PDF extraction, image processing, validation, and export helpers |
+| `scripts/` | PowerPoint/PDF extraction and image processing helpers |
 | `examples/` | Finished decks showing metrics, architecture, and code treatment |
-| `evals/` | Executable behavior checks for new, conversion, and enhancement workflows |
+| `evals/` | Behavior cases for new, conversion, and enhancement workflows |
 
 ## A deck stays a file
 
@@ -81,12 +81,12 @@ Use Slide Sage when the final delivery can be HTML or PDF and the material benef
 
 - Every slide fits `100vh` with no internal scrolling
 - All text scales with `clamp()` and short-height breakpoints
-- Charts use colorblind-safe palettes and visible data labels or accessible fallbacks
+- Charts use colorblind-safe palettes and descriptive canvas labels
 - Diagrams prefer CSS/HTML, then reusable SVG templates, then custom inline SVG
 - Code uses language-aware highlighting and stays within a readable line budget
 - Arrow keys, space, page keys, Home, End, and touch gestures navigate the deck
 - `prefers-reduced-motion` and print styles are included
-- Static validation runs even when a browser is unavailable
+- Pre-delivery source checks cover CSS classes, inline styles, and theme variables
 
 ## Examples
 
@@ -100,7 +100,7 @@ Open any example in a browser. Use arrow keys to navigate, `?` for shortcuts, an
 
 ## Requirements
 
-A modern browser is enough for generated decks. Python 3.11+ plus the packages in `scripts/requirements.txt` is needed only for PowerPoint/PDF conversion and image processing. Automated PDF export uses Playwright when available; browser print remains the zero-dependency fallback.
+A modern browser is enough for generated decks. Python 3.11+ plus the packages in `scripts/requirements.txt` is needed only for PowerPoint/PDF conversion and image processing. Browser Print > Save as PDF is the current export path.
 
 ## Trust
 

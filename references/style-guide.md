@@ -613,25 +613,25 @@ function hexToHSL(hex) {
 Given `brandH` (hue), `brandS` (saturation), `brandL` (lightness):
 
 ```
-Accent:            hsl(brandH, brandS, brandL)          — the brand color itself
-Accent Hover:      hsl(brandH, brandS, brandL - 10)     — darker for hover
-Accent Subtle:     hsl(brandH, brandS - 20, 92)         — very light tint
+Accent:            hsl(brandH, brandS, brandL) - the brand color itself
+Accent Hover:      hsl(brandH, brandS, brandL - 10) - darker for hover
+Accent Subtle:     hsl(brandH, brandS - 20, 92) - very light tint
 
-Surface Light:     hsl(brandH, 8, 99)                    — near-white with brand warmth
-Secondary Light:   hsl(brandH, 10, 95)                   — subtle tinted background
-Border Light:      hsl(brandH, 12, 82)                   — border with brand hint
+Surface Light:     hsl(brandH, 8, 99) - near-white with brand warmth
+Secondary Light:   hsl(brandH, 10, 95) - subtle tinted background
+Border Light:      hsl(brandH, 12, 82) - border with brand hint
 
-Surface Dark:      hsl(brandH, 15, 11)                   — deep dark with brand warmth
-Secondary Dark:    hsl(brandH, 18, 14)                   — slightly lighter dark
-Border Dark:       hsl(brandH, 20, 22)                   — dark border with brand hint
+Surface Dark:      hsl(brandH, 15, 11) - deep dark with brand warmth
+Secondary Dark:    hsl(brandH, 18, 14) - slightly lighter dark
+Border Dark:       hsl(brandH, 20, 22) - dark border with brand hint
 
-Text Primary L:    hsl(brandH, 25, 12)                   — near-black with warmth
-Text Secondary L:  hsl(brandH, 15, 35)                   — mid-tone text
-Text Muted L:      hsl(brandH, 10, 55)                   — light text
+Text Primary L:    hsl(brandH, 25, 12) - near-black with warmth
+Text Secondary L:  hsl(brandH, 15, 35) - mid-tone text
+Text Muted L:      hsl(brandH, 10, 55) - light text
 
-Text Primary D:    hsl(brandH, 15, 90)                   — near-white with warmth
-Text Secondary D:  hsl(brandH, 12, 68)                   — mid-tone light text
-Text Muted D:      hsl(brandH, 8, 42)                    — muted dark text
+Text Primary D:    hsl(brandH, 15, 90) - near-white with warmth
+Text Secondary D:  hsl(brandH, 12, 68) - mid-tone light text
+Text Muted D:      hsl(brandH, 8, 42) - muted dark text
 ```
 
 ### Step 3: Auto Light/Dark Mode Generation
@@ -679,11 +679,11 @@ function generateTheme(brandHex, secondaryHex = null) {
 Given the brand color HSL `(H, S, L)`:
 
 ```
-Step 1 — Base:        hsl(H, S, 45)               The brand at chart-optimal lightness
-Step 2 — Complement:  hsl((H + 180) % 360, S, 45) Opposite hue for contrast
-Step 3 — Triadic A:   hsl((H + 120) % 360, S - 10, 50) First triadic
-Step 4 — Triadic B:   hsl((H + 240) % 360, S - 10, 50) Second triadic
-Step 5 — Analogous:   hsl((H + 30) % 360, S, 48)  Adjacent hue for gradual series
+Step 1 - Base:        hsl(H, S, 45)               The brand at chart-optimal lightness
+Step 2 - Complement:  hsl((H + 180) % 360, S, 45) Opposite hue for contrast
+Step 3 - Triadic A:   hsl((H + 120) % 360, S - 10, 50) First triadic
+Step 4 - Triadic B:   hsl((H + 240) % 360, S - 10, 50) Second triadic
+Step 5 - Analogous:   hsl((H + 30) % 360, S, 48)  Adjacent hue for gradual series
 
 Then add 3 lighter variants:
 Step 6: Step 1 at L=65
@@ -736,7 +736,7 @@ function deriveChartPalette(brandHex) {
   --color-warning: #C49225;
   --color-error: #C43838;
 
-  /* Typography — choose from approved fonts */
+  /* Typography - choose from approved fonts */
   --font-heading: {{heading_font}};
   --font-body: {{body_font}};
   --font-mono: 'JetBrains Mono', monospace;
@@ -891,5 +891,5 @@ When naming a presentation about a platform or product, the title must represent
 **Rule of thumb:** If the presentation has N major sections and the title only describes one of them, the title is too narrow. Pick the umbrella term that covers all sections.
 
 **Example:** A platform with AI chat, agents, MCP tools, security, deployment, and observability:
-- **Wrong:** "8vance Agent Platform" — "Agent" is only one of many segments
-- **Right:** "8vance AI Platform" — "AI" encompasses the full scope
+- **Wrong:** "8vance Agent Platform" - "Agent" is only one of many segments
+- **Right:** "8vance AI Platform" - "AI" encompasses the full scope

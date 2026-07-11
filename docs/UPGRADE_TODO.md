@@ -16,6 +16,9 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 
 ## Progress log
 
+- 2026-07-11: Ship 1 implementation committed; review fixes in progress after Codex and CodeRabbit findings.
+- 2026-07-11: CodeRabbit reference-loading finding declined because the project contract requires the three base references for every deck.
+- 2026-07-11: Added installed-payload inspection as a stricter verification sub-item without changing the locked packaging decision.
 - (append dated one-line entries here as phases complete)
 
 ---
@@ -30,6 +33,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - [ ] 6. `.gitignore` `.claude/` and `.agent-harness/`; track `AGENTS.md`
 - [ ] 7. Add `SECURITY.md` + condensed Trust section in README
 - [ ] 8. Verify locally: `npx skills add ./ --list` resolves one skill with all support dirs
+  - [ ] Install into an isolated temporary agent home and assert `references/`, `templates/`, `assets/`, and `scripts/` are present
 
 ## Phase 2 - README, banner, visual proof (Ship 1)
 

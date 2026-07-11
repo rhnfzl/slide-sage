@@ -108,7 +108,7 @@ const minimalChartOptions = {
 ### Numbers
 
 ```css
-/* Static display — no counting effect */
+/* Static display - no counting effect */
 .anim-minimal .stat-number {
   /* Number is just rendered as-is in the HTML */
 }
@@ -393,7 +393,7 @@ High-energy presentations. Conference keynotes, pitch decks, storytelling.
 ### Chart Animation (Sequential Draw)
 
 ```js
-// Chart.js config for dramatic mode — sequential dataset reveal
+// Chart.js config for dramatic mode - sequential dataset reveal
 const dramaticChartOptions = {
   animation: {
     duration: 1200,
@@ -438,7 +438,7 @@ function createDramaticChart(ctx, config) {
 ```
 
 ```js
-// Dramatic CountUp — longer duration, scroll effect
+// Dramatic CountUp - longer duration, scroll effect
 function initDramaticCountUp(elementId, endValue, options = {}) {
   const defaults = {
     duration: 2.5,
@@ -788,16 +788,16 @@ function getChartAnimationConfig() {
 ### CDN Reference Summary
 
 ```html
-<!-- CountUp.js — number animation (balanced + dramatic) -->
+<!-- CountUp.js - number animation (balanced + dramatic) -->
 <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js"></script>
 
-<!-- Typed.js — typing effect (dramatic only) -->
+<!-- Typed.js - typing effect (dramatic only) -->
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js"></script>
 
-<!-- q5.js — particle effects (dramatic only) -->
+<!-- q5.js - particle effects (dramatic only) -->
 <script src="https://cdn.jsdelivr.net/npm/q5@2.1.2/q5.min.js"></script>
 
-<!-- Chart.js — data visualization (all levels) -->
+<!-- Chart.js - data visualization (all levels) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 ```
 

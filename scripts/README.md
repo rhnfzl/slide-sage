@@ -1,6 +1,6 @@
 # Scripts
 
-Optional Python utilities for extracting content from existing presentations. These are **not required** for creating presentations — they're only needed when converting PPTX or PDF files.
+Optional Python utilities for extracting content from existing presentations. These are **not required** for creating presentations - they're only needed when converting PPTX or PDF files.
 
 ## Setup
 

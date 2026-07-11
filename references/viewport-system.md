@@ -9,7 +9,7 @@ Every slide must fill exactly one viewport height and never scroll:
 ```css
 .slide {
   height: 100vh;
-  height: 100dvh; /* dynamic viewport height — accounts for mobile browser chrome */
+  height: 100dvh; /* dynamic viewport height - accounts for mobile browser chrome */
   overflow: hidden;
 }
 ```
@@ -25,10 +25,10 @@ h1 { font-size: clamp(1.8rem, 4vw, 3.5rem); }
 h2 { font-size: clamp(1.4rem, 3vw, 2.5rem); }
 h3 { font-size: clamp(1.1rem, 2.2vw, 1.8rem); }
 
-/* Body text — paragraphs, list items */
+/* Body text - paragraphs, list items */
 p, li { font-size: clamp(0.85rem, 1.5vw, 1.2rem); }
 
-/* Small text — captions, footnotes, labels */
+/* Small text - captions, footnotes, labels */
 small, .caption, figcaption { font-size: clamp(0.7rem, 1.1vw, 0.9rem); }
 ```
 
@@ -176,7 +176,7 @@ For flex layouts where children must fit within the viewport:
   overflow: hidden;
 }
 
-/* Grid cards — cap individual card height */
+/* Grid cards - cap individual card height */
 .feature-grid {
   display: grid;
   gap: var(--spacing-md);
@@ -203,7 +203,7 @@ For flex layouts where children must fit within the viewport:
 }
 ```
 
-## CSS Layout — Viewport Filling Rules
+## CSS Layout - Viewport Filling Rules
 
 Hard rules for making slide content fill the viewport correctly. These prevent the most common layout bugs in scroll-snap presentations.
 
@@ -214,7 +214,7 @@ Hard rules for making slide content fill the viewport correctly. These prevent t
 - `.card`, `.code-block`, `table`, `.callout`, `.badge`
 - Any element with `border`, `background`, or `box-shadow`
 
-These elements have intrinsic content sizes. Growing them creates huge empty bordered areas — the border stretches to fill the viewport while the content stays small inside.
+These elements have intrinsic content sizes. Growing them creates huge empty bordered areas - the border stretches to fill the viewport while the content stays small inside.
 
 **Only apply `flex: 1` to borderless layout containers:** `.grid-2`, `.grid-3`, `.flex-row`, `.flex-col`, `.diagram-container`, plain wrapper `<div>` elements.
 
@@ -228,7 +228,7 @@ Flex items default to `min-height: auto` (not `0`). This means a flex child will
 .slide-content > .grid-2,
 .slide-content > .diagram-container {
   flex: 1;
-  min-height: 0; /* CRITICAL — allows shrinking below content size */
+  min-height: 0; /* CRITICAL - allows shrinking below content size */
 }
 ```
 
@@ -236,8 +236,8 @@ Flex items default to `min-height: auto` (not `0`). This means a flex child will
 
 When a CSS Grid container gets `flex: 1` to fill available space:
 
-- Add `align-content: center` — centers the group of rows within the expanded grid
-- Add `align-items: start` — prevents individual grid items (cards) from stretching to fill row height
+- Add `align-content: center` - centers the group of rows within the expanded grid
+- Add `align-items: start` - prevents individual grid items (cards) from stretching to fill row height
 - Without `align-items: start`, cards stretch their borders to match the tallest possible row
 
 ```css
@@ -254,7 +254,7 @@ When a CSS Grid container gets `flex: 1` to fill available space:
 Before writing any CSS rule that uses `:has()`, `:not()`, or complex descendant selectors:
 
 1. Pick 3-4 actual slides from the presentation
-2. Manually walk through the HTML: "Does `.reveal.card.card-accent` on slide 5 match this selector? Yes/No — What happens?"
+2. Manually walk through the HTML: "Does `.reveal.card.card-accent` on slide 5 match this selector? Yes/No - What happens?"
 3. Check for elements with **multiple classes** (e.g., `class="reveal card card-accent"` matches BOTH `.reveal` and `.card` rules)
 4. Only commit the CSS after all traces pass
 
@@ -315,7 +315,7 @@ For layout problems (viewport filling, spacing, responsive sizing):
 }
 ```
 
-**Key: `:has()` selector must NEVER include `.card`, `.code-block`, or `table`** — these cause the wrapper to grow, which then stretches the bordered child.
+**Key: `:has()` selector must NEVER include `.card`, `.code-block`, or `table`** - these cause the wrapper to grow, which then stretches the bordered child.
 
 ---
 

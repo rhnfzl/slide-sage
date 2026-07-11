@@ -63,7 +63,7 @@
   <!-- Conversion rate 4->5 -->
   <text id="conv-4" x="400" y="292" text-anchor="end" class="fn-conv">25%</text>
 
-  <!-- Stage 5 (bottom, narrowest — hidden by default) -->
+  <!-- Stage 5 (bottom, narrowest - hidden by default) -->
   <g id="stage-5-group" style="display:none;">
     <polygon class="fn-stage" points="220,290 380,290 350,350 250,350"
              fill="var(--diagram-red, #DC5A5A)" filter="url(#fn-shadow)" />

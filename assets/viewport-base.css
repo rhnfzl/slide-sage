@@ -1,4 +1,4 @@
-/* viewport-base.css — inlined into every slide-sage presentation */
+/* viewport-base.css - inlined into every slide-sage presentation */
 
 /* ============================================
    Reset
@@ -20,7 +20,7 @@ html, body {
    CSS Custom Properties
    ============================================ */
 :root {
-  /* Colors — overridden per theme */
+  /* Colors - overridden per theme */
   --color-bg: #0f0f1a;
   --color-text: #cdd6f4;
   --color-heading: #ffffff;
@@ -159,7 +159,7 @@ small, .caption, figcaption {
 
 code {
   font-family: var(--font-mono);
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
   background: rgba(255, 255, 255, 0.08);
   padding: 0.15em 0.4em;
   border-radius: 4px;
@@ -263,7 +263,7 @@ blockquote {
   bottom: 12px;
   right: 16px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
   color: var(--color-text);
   opacity: 0.4;
   z-index: 100;
@@ -301,7 +301,7 @@ blockquote {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
   transition: background 0.15s ease, opacity 0.15s ease;
 }
 
@@ -431,7 +431,7 @@ blockquote {
    ============================================ */
 .inline-code {
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
   background: rgba(255, 255, 255, 0.1);
   padding: 0.2em 0.45em;
   border-radius: 4px;
@@ -503,14 +503,14 @@ blockquote {
 .seq-step .seq-label {
   font-family: var(--font-mono);
   color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .seq-step .seq-from,
 .seq-step .seq-to {
   font-weight: 600;
   min-width: 4em;
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .seq-step.dashed {
@@ -619,7 +619,7 @@ blockquote {
 }
 
 .process-arrow {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
   color: var(--color-accent, #89b4fa);
   flex-shrink: 0;
 }

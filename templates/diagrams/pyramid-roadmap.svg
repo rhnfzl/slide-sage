@@ -23,7 +23,7 @@
   <line x1="12" y1="40" x2="12" y2="410" class="pr-connector" stroke-dasharray="6,4" marker-end="url(#pr-arrow)" />
   <text id="axis-label" x="12" y="430" text-anchor="middle" class="pr-axis">Maturity</text>
 
-  <!-- Level 5 (top, narrowest — most advanced) -->
+  <!-- Level 5 (top, narrowest - most advanced) -->
   <g id="level-5-group">
     <rect class="pr-box" x="240" y="30" width="220" height="60" rx="10" ry="10"
           fill="var(--diagram-red, #DC5A5A)" filter="url(#pr-shadow)" />

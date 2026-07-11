@@ -52,7 +52,7 @@
     <text id="inner-item-3" x="415" y="163" text-anchor="middle" class="ns-item-label">Module C</text>
   </g>
 
-  <!-- Scope 4 (innermost — hidden by default) -->
+  <!-- Scope 4 (innermost - hidden by default) -->
   <g id="scope-4-group" style="display:none;">
     <rect class="ns-scope" x="170" y="140" width="260" height="120" rx="10" ry="10"
           fill="var(--diagram-purple, #9B59B6)" opacity="0.20" />

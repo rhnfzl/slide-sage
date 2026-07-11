@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slide Sage: technical stories with evidence</title>
   <style>
-/* viewport-base.css — inlined into every slide-sage presentation */
+/* viewport-base.css - inlined into every slide-sage presentation */
 
 /* ============================================
    Reset
@@ -27,7 +27,7 @@ html, body {
    CSS Custom Properties
    ============================================ */
 :root {
-  /* Colors — overridden per theme */
+  /* Colors - overridden per theme */
   --color-bg: #0f0f1a;
   --color-text: #cdd6f4;
   --color-heading: #ffffff;
@@ -166,7 +166,7 @@ small, .caption, figcaption {
 
 code {
   font-family: var(--font-mono);
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
   background: rgba(255, 255, 255, 0.08);
   padding: 0.15em 0.4em;
   border-radius: 4px;
@@ -270,7 +270,7 @@ blockquote {
   bottom: 12px;
   right: 16px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
   color: var(--color-text);
   opacity: 0.4;
   z-index: 100;
@@ -308,7 +308,7 @@ blockquote {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
   transition: background 0.15s ease, opacity 0.15s ease;
 }
 
@@ -438,7 +438,7 @@ blockquote {
    ============================================ */
 .inline-code {
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
   background: rgba(255, 255, 255, 0.1);
   padding: 0.2em 0.45em;
   border-radius: 4px;
@@ -510,14 +510,14 @@ blockquote {
 .seq-step .seq-label {
   font-family: var(--font-mono);
   color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .seq-step .seq-from,
 .seq-step .seq-to {
   font-weight: 600;
   min-width: 4em;
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .seq-step.dashed {
@@ -626,7 +626,7 @@ blockquote {
 }
 
 .process-arrow {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
   color: var(--color-accent, #89b4fa);
   flex-shrink: 0;
 }
@@ -788,6 +788,14 @@ blockquote {
     .code-demo { width: 100%; background: #071018; border-left: clamp(.18rem, .4vw, .3rem) solid var(--color-accent); padding: var(--spacing-lg); font-family: var(--font-mono); font-size: clamp(.72rem, 1.25vw, 1rem); line-height: 1.7; color: #dce9ef; white-space: pre-wrap; }
     .code-key { color: #ee7733; } .code-string { color: #42c6a4; } .code-call { color: #61a9dc; }
     .closing-line { max-width: 18ch; font-size: clamp(2.5rem, 6vw, 5.8rem); line-height: .98; }
+    .shortcuts-panel { width: min(90vw, 42rem); background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--spacing-lg); }
+    .shortcuts-panel h3 { margin: 0 0 var(--spacing-md); color: var(--color-heading); font-size: clamp(1.1rem, 2vw, 1.5rem); }
+    .shortcuts-panel table { width: 100%; border-collapse: collapse; }
+    .shortcuts-panel td { padding: var(--spacing-xs) 0; }
+    .shortcuts-panel td:first-child { padding-right: var(--spacing-md); white-space: nowrap; }
+    .shortcuts-dismiss { margin: var(--spacing-md) 0 0; color: var(--color-text-muted); text-align: center; }
+    .shortcuts-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: var(--spacing-lg); background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+    .shortcuts-overlay.visible { opacity: 1; pointer-events: auto; }
     @media (max-width: 760px) { .proof-grid, .flow { grid-template-columns: 1fr 1fr; } }
     @media (max-height: 600px) { .flow-step { min-height: 5rem; } .proof-number { font-size: clamp(1.5rem, 3vw, 2.4rem); } }
   </style>
@@ -801,6 +809,7 @@ blockquote {
         <p class="hero-subtitle">One Agent Skill for metrics, architecture, and code, delivered as a browser-ready presentation.</p>
       </div>
     </section>
+    <!-- NOTES: Open with the promise. Slide Sage keeps technical evidence legible without turning the deck into an app. -->
     <section class="slide inactive" id="slide-2">
       <div class="slide-content gap-lg"><span class="eyebrow">The contract</span><h2>Every output earns the screen.</h2>
         <div class="proof-grid">
@@ -810,37 +819,250 @@ blockquote {
         </div>
       </div>
     </section>
+    <!-- NOTES: Explain the three non-negotiable constraints: viewport fit, portable output, and visual choices that carry meaning. -->
     <section class="slide inactive" id="slide-3">
       <div class="slide-content gap-sm"><span class="eyebrow">Metrics</span><h2>Show the trend, keep the source visible.</h2><span class="sample-badge">SAMPLE DATA</span>
         <div class="chart-wrap"><canvas id="qualityChart" role="img" aria-label="Sample chart showing slide quality checks improving across four releases"></canvas></div>
         <p class="caption">Sample values for demonstration. Replace before sharing.</p>
       </div>
     </section>
+    <!-- NOTES: The visible SAMPLE DATA label is intentional. Never share invented chart values as factual evidence. -->
     <section class="slide inactive" id="slide-4">
       <div class="slide-content gap-lg"><span class="eyebrow">Workflow</span><h2>From prompt to a checked deck.</h2>
         <div class="flow"><div class="flow-step"><strong>01</strong><small>Read the audience and purpose</small></div><div class="flow-step"><strong>02</strong><small>Choose the evidence and visual form</small></div><div class="flow-step"><strong>03</strong><small>Generate a single HTML deck</small></div><div class="flow-step"><strong>04</strong><small>Validate fit, classes, and delivery</small></div></div>
       </div>
     </section>
+    <!-- NOTES: The flow describes the generation sequence, not a long-running service or hosted product. -->
     <section class="slide inactive" id="slide-5">
       <div class="slide-content gap-md"><span class="eyebrow">Code</span><h2>The output stays understandable.</h2>
-        <pre class="code-demo"><span class="code-key">const</span> deck = <span class="code-call">createPresentation</span>({
-  audience: <span class="code-string">'engineering leadership'</span>,
-  evidence: metrics,
-  format: <span class="code-string">'single-html'</span>
-});
-
-<span class="code-key">await</span> deck.<span class="code-call">validate</span>();</pre>
+        <pre class="code-demo"><span class="code-key">INPUT</span> audience + evidence
+<span class="code-key">CHOOSE</span> <span class="code-call">visual form</span> for each claim
+<span class="code-key">BUILD</span> <span class="code-string">single HTML deck</span>
+<span class="code-key">CHECK</span> viewport, classes, delivery
+<span class="code-key">OUTPUT</span> browser-ready presentation</pre>
       </div>
     </section>
+    <!-- NOTES: Point out that the generated deck remains readable source, so teams can inspect what they present. -->
     <section class="slide inactive" id="slide-6">
       <div class="slide-content gap-md"><span class="eyebrow">Start here</span><h2 class="closing-line">Bring the facts. Slide Sage shapes the room.</h2><p class="hero-subtitle">npx skills add rhnfzl/slide-sage</p></div>
     </section>
+    <!-- NOTES: End with the install command and invite the audience to bring their next metrics review or architecture walkthrough. -->
   </main>
-  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="slide-counter" id="slideCounter"></div>
+  <div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div>
+  <div class="shortcuts-overlay" id="shortcutsOverlay"><div class="shortcuts-panel"><h3>Keyboard Shortcuts</h3><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script>
-    class Deck { constructor(){this.s=[...document.querySelectorAll('.slide')];this.i=0;addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();this.go(this.i+1)}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();this.go(this.i-1)}if(e.key==='Home')this.go(0);if(e.key==='End')this.go(this.s.length-1)});const m=location.hash.match(/^#slide-(\d+)$/);this.go(m?Number(m[1])-1:0)} go(n){if(n<0||n>=this.s.length)return;this.s.forEach((x,j)=>{x.classList.toggle('active',j===n);x.classList.toggle('inactive',j!==n)});this.i=n;progressFill.style.width=`${(n+1)/this.s.length*100}%`;slideCounter.textContent=`${n+1} / ${this.s.length}`;history.replaceState(null,'',`#slide-${n+1}`)}}
-    addEventListener('DOMContentLoaded',()=>{new Deck();new Chart(document.getElementById('qualityChart'),{type:'line',data:{labels:['v1.0','v1.2','v1.6','v2.0'],datasets:[{label:'Checks passed',data:[58,72,86,96],borderColor:'#29c4c9',backgroundColor:'rgba(41,196,201,.16)',fill:true,tension:.32,pointBackgroundColor:'#ee7733',pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:40,max:100,ticks:{color:'#a9c4d8'},grid:{color:'rgba(169,196,216,.15)'},title:{display:true,text:'Quality checks passed (%)',color:'#a9c4d8'}},x:{ticks:{color:'#a9c4d8'},grid:{display:false}}}}})});
+    class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.totalSlides = this.slides.length;
+    this.currentSlide = 0;
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+    this.swipeThreshold = 50;
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    this.progressFill = document.getElementById('progressFill');
+    this.slideCounter = document.getElementById('slideCounter');
+    this.shortcutsOverlay = document.getElementById('shortcutsOverlay');
+    this.navPrev = document.getElementById('navPrev');
+    this.navNext = document.getElementById('navNext');
+
+    this.init();
+  }
+
+  init() {
+    this.bindKeyboard();
+    this.bindTouch();
+    this.bindNavButtons();
+    this.bindHashChange();
+    this.readHashAndNavigate();
+    this.updateUI();
+  }
+
+  bindKeyboard() {
+    document.addEventListener('keydown', (e) => {
+      // Ignore if user is typing in an input or textarea
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case ' ':
+          e.preventDefault();
+          if (e.shiftKey) {
+            this.prev();
+          } else {
+            this.next();
+          }
+          break;
+        case 'PageDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'PageUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case 'Home':
+          e.preventDefault();
+          this.goTo(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          this.goTo(this.totalSlides - 1);
+          break;
+        case '?':
+          this.toggleShortcuts();
+          break;
+        case 'Escape':
+          this.hideShortcuts();
+          break;
+      }
+    });
+  }
+
+  bindTouch() {
+    const container = document.getElementById('slides');
+
+    container.addEventListener('touchstart', (e) => {
+      this.touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      this.touchEndX = e.changedTouches[0].screenX;
+      this.handleSwipe();
+    }, { passive: true });
+  }
+
+  handleSwipe() {
+    const diff = this.touchStartX - this.touchEndX;
+    if (Math.abs(diff) < this.swipeThreshold) return;
+
+    if (diff > 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
+  }
+
+  bindNavButtons() {
+    if (this.navPrev) {
+      this.navPrev.addEventListener('click', () => this.prev());
+    }
+    if (this.navNext) {
+      this.navNext.addEventListener('click', () => this.next());
+    }
+  }
+
+  bindHashChange() {
+    window.addEventListener('hashchange', () => this.readHashAndNavigate());
+  }
+
+  readHashAndNavigate() {
+    const hash = window.location.hash;
+    const match = hash.match(/^#slide-(\d+)$/);
+    if (match) {
+      const index = parseInt(match[1], 10) - 1;
+      if (index >= 0 && index < this.totalSlides) {
+        this.goTo(index, false);
+      }
+    }
+  }
+
+  next() {
+    if (this.currentSlide < this.totalSlides - 1) {
+      this.goTo(this.currentSlide + 1);
+    }
+  }
+
+  prev() {
+    if (this.currentSlide > 0) {
+      this.goTo(this.currentSlide - 1);
+    }
+  }
+
+  goTo(index, updateHash = true) {
+    if (index < 0 || index >= this.totalSlides) return;
+
+    const previousSlide = this.slides[this.currentSlide];
+    const nextSlide = this.slides[index];
+
+    previousSlide.classList.remove('active');
+    previousSlide.classList.add('inactive');
+
+    nextSlide.classList.remove('inactive');
+    nextSlide.classList.add('active');
+
+    if (this.reducedMotion) {
+      previousSlide.style.transition = 'none';
+      nextSlide.style.transition = 'none';
+    }
+
+    this.currentSlide = index;
+
+    if (updateHash) {
+      history.replaceState(null, '', `#slide-${index + 1}`);
+    }
+
+    this.updateUI();
+  }
+
+  updateUI() {
+    // Update progress bar
+    if (this.progressFill) {
+      const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+      this.progressFill.style.width = `${progress}%`;
+    }
+
+    // Update slide counter
+    if (this.slideCounter) {
+      this.slideCounter.textContent = `${this.currentSlide + 1} / ${this.totalSlides}`;
+    }
+
+    // Update nav button states
+    if (this.navPrev) {
+      this.navPrev.disabled = this.currentSlide === 0;
+    }
+    if (this.navNext) {
+      this.navNext.disabled = this.currentSlide === this.totalSlides - 1;
+    }
+
+    // Ensure only active slide is visible
+    this.slides.forEach((slide, i) => {
+      if (i === this.currentSlide) {
+        slide.classList.add('active');
+        slide.classList.remove('inactive');
+      } else {
+        slide.classList.remove('active');
+        slide.classList.add('inactive');
+      }
+    });
+  }
+
+  toggleShortcuts() {
+    if (this.shortcutsOverlay) {
+      this.shortcutsOverlay.classList.toggle('visible');
+    }
+  }
+
+  hideShortcuts() {
+    if (this.shortcutsOverlay) {
+      this.shortcutsOverlay.classList.remove('visible');
+    }
+  }
+}
+    addEventListener('DOMContentLoaded',()=>{new SlidePresentation();new Chart(document.getElementById('qualityChart'),{type:'line',data:{labels:['v1.0','v1.2','v1.6','v2.0'],datasets:[{label:'Checks passed',data:[58,72,86,96],borderColor:'#29c4c9',backgroundColor:'rgba(41,196,201,.16)',fill:true,tension:.32,pointBackgroundColor:'#ee7733',pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:40,max:100,ticks:{color:'#a9c4d8'},grid:{color:'rgba(169,196,216,.15)'},title:{display:true,text:'Quality checks passed (%)',color:'#a9c4d8'}},x:{ticks:{color:'#a9c4d8'},grid:{display:false}}}}})});
   </script>
 </body>
 </html>
