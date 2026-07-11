@@ -45,7 +45,7 @@ Base HTML structure for AI-generated slide presentations. This is the canonical 
   </div>
 
   <!-- Keyboard shortcuts overlay -->
-  <div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true">
+  <div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-label="Keyboard shortcuts" aria-hidden="true">
     <div class="shortcuts-panel">
       <h3>Keyboard Shortcuts</h3>
       <table>
