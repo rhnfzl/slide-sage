@@ -12,7 +12,7 @@
 
 Slide Sage is an open-source Agent Skill for engineers, tech leads, data teams, and technical PMs. It creates data-rich HTML slide decks with charts, architecture diagrams, and code, then packages each deck as a browser-ready file.
 
-Browse the [gallery source](index.html) for chart, diagram, and code examples. The hosted gallery will follow when this branch is reviewed and merged.
+Browse the [live gallery](https://rhnfzl.github.io/slide-sage/) for chart, diagram, and code examples, or inspect its [source](index.html).
 
 ## Quickstart
 
@@ -21,6 +21,8 @@ One command auto-detects your installed agents:
 ```bash
 npx skills add rhnfzl/slide-sage
 ```
+
+> **Known limitation:** the current Skills CLI copies only `SKILL.md` from this root-level repository, not its support directories. Until a packaging fix lands, use the manual clone route below for the full payload.
 
 Then ask your agent:
 
