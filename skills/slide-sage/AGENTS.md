@@ -6,8 +6,8 @@ When a user asks to create a presentation, build slides, convert a PowerPoint or
 
 ## Quick Start
 
-1. Read `skills/slide-sage/SKILL.md` for the full workflow
-2. Read only the reference files you need from `skills/slide-sage/references/`
+1. Read `SKILL.md` in this directory for the full workflow
+2. Read only the reference files you need from `references/`
 3. Generate a single HTML file with inline CSS/JS
 4. All chart/diagram libraries loaded from CDN
 
@@ -39,21 +39,21 @@ When an interactive response would materially change the deck, ask one focused q
 
 | File | When to Load |
 |------|-------------|
-| `skills/slide-sage/references/html-template.md` | Always (base HTML structure) |
-| `skills/slide-sage/references/viewport-system.md` | Always (responsive CSS rules) |
-| `skills/slide-sage/references/style-guide.md` | When choosing visual style |
-| `skills/slide-sage/references/viz-integration.md` | When slides have charts or data |
-| `skills/slide-sage/references/diagram-patterns.md` | When slides have architecture/flow diagrams |
-| `skills/slide-sage/references/animation-guide.md` | When choosing animation intensity |
-| `skills/slide-sage/references/code-highlighting.md` | When slides have code snippets |
-| `skills/slide-sage/references/presenter-mode.md` | When user requests presenter view |
-| `skills/slide-sage/references/css-class-inventory.md` | Always (CSS class lookup + inline style rules) |
+| `references/html-template.md` | Always (base HTML structure) |
+| `references/viewport-system.md` | Always (responsive CSS rules) |
+| `references/style-guide.md` | When choosing visual style |
+| `references/viz-integration.md` | When slides have charts or data |
+| `references/diagram-patterns.md` | When slides have architecture/flow diagrams |
+| `references/animation-guide.md` | When choosing animation intensity |
+| `references/code-highlighting.md` | When slides have code snippets |
+| `references/presenter-mode.md` | When user requests presenter view |
+| `references/css-class-inventory.md` | Always (CSS class lookup + inline style rules) |
 
 ## Non-Negotiable Rules
 
 - Every slide: `height: 100vh; overflow: hidden` - no scrolling
 - All font sizes use `clamp()` - never fixed px/rem
-- Include `skills/slide-sage/assets/viewport-base.css` content inline
+- Include `assets/viewport-base.css` content inline
 - Colorblind-safe palettes for all data visualization
 - Support `prefers-reduced-motion` and `@media print`
 - Keyboard navigation: arrows, space, page up/down
@@ -64,7 +64,7 @@ When an interactive response would materially change the deck, ask one focused q
 ## Tool Compatibility
 
 This skill works with any AI coding tool that can:
-- Read markdown files (`skills/slide-sage/SKILL.md`, `skills/slide-sage/references/`)
+- Read markdown files (SKILL.md, references/)
 - Write HTML files
 - Run bash commands (for PPT conversion scripts)
 

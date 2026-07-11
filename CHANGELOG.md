@@ -1,8 +1,15 @@
 # Changelog
 
 All notable changes to this skill are documented here. The version in this file,
-in `.claude-plugin/plugin.json`, and in `SKILL.md` frontmatter must match the
+in `.claude-plugin/plugin.json`, and in `skills/slide-sage/SKILL.md` frontmatter must match the
 release tag. The release workflow fails if they drift.
+
+## Unreleased
+
+### Fixed
+
+- Moved the complete runtime payload under `skills/slide-sage/` so cloned-source
+  installs copy the skill guide, agent guide, and support directories together.
 
 ## 2.0.0 - 2026-07-11
 
@@ -11,7 +18,7 @@ release tag. The release workflow fails if they drift.
 - Existing `npx skills add` installations and manual `git clone` users can get
   the upgraded skill by running `npx skills add rhnfzl/slide-sage` again. Clone
   users can alternatively pull this tag and keep their agent pointed at
-  `SKILL.md`.
+  `skills/slide-sage/SKILL.md`.
 
 ### Added
 

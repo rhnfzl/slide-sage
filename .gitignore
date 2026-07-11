@@ -29,11 +29,12 @@ SPECS.md
 .claude/
 .agent-harness/
 .agents/
+.superpowers/
 skills-lock.json
 
 # Output
 *.html
-!templates/**/*.html
-!examples/**/*.html
-!evals/fixtures/**/*.html
+!skills/slide-sage/templates/**/*.html
+!skills/slide-sage/examples/**/*.html
+!skills/slide-sage/evals/fixtures/**/*.html
 !index.html

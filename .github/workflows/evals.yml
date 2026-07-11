@@ -18,9 +18,9 @@ jobs:
         with:
           python-version: "3.11"
       - name: Validate behavior evals
-        run: python3 scripts/run-evals
+        run: python3 skills/slide-sage/scripts/run-evals
       - name: Validate the metrics example source
-        run: scripts/validate examples/metrics-review.html
+        run: skills/slide-sage/scripts/validate skills/slide-sage/examples/metrics-review.html
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -30,8 +30,8 @@ jobs:
           playwright install --with-deps chromium
       - name: Render the metrics chart at reference and short viewports
         run: |
-          scripts/render-check --slide 3 --viewport-size 1123,794 examples/metrics-review.html artifacts/metrics-chart-reference.png
-          scripts/render-check --slide 3 --viewport-size 1123,500 examples/metrics-review.html artifacts/metrics-chart-short.png
+          skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html artifacts/metrics-chart-reference.png
+          skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html artifacts/metrics-chart-short.png
       - name: Upload render evidence
         if: always()
         uses: actions/upload-artifact@v4

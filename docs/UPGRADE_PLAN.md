@@ -63,6 +63,14 @@ and Slide Sage lacks, plus junk that currently gets copied into installs. This i
 change, not a restructure, and it does not break the existing installs or git-clone users. This is what
 the plan does in Phase 1.
 
+### 2026-07-11 layout decision
+
+Cloned-source verification with Skills CLI 1.5.16 later showed the actual install copied only a root
+`SKILL.md`, despite the earlier source reading. The user explicitly authorized reopening the root-layout
+decision. The runtime now lives at `skills/slide-sage/`, with `SKILL.md`, `AGENTS.md`, and every runtime
+dependency in that directory. The root marketplace source remains `./`; a root `SKILL.md` must not be
+retained because root discovery would recreate the incomplete installation.
+
 ## Locked decisions (grill-me results)
 
 | # | Decision | Choice | Rationale |
@@ -291,7 +299,7 @@ Non-breaking. Makes the one command the headline, matches the reference repos, a
 
 - Live real-time collaboration, hosted SaaS, or accounts (Slide Sage stays local-first, single-file).
 - Native high-fidelity PPTX export (documented as a known limitation; point users to Anthropic's pptx skill for that need).
-- Relocating any repo to a `skills/<name>/` subfolder (rejected: non-breaking manifests achieve the same listing outcome).
+- Relocating another repo to a `skills/<name>/` subfolder. Slide Sage's user-authorized runtime layout is already resolved above.
 
 ## Open implementation details (decided at build time, not blocking)
 
