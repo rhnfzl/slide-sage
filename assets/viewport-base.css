@@ -1,4 +1,4 @@
-/* viewport-base.css — inlined into every slide-sage presentation */
+/* viewport-base.css - inlined into every slide-sage presentation */
 
 /* ============================================
    Reset
@@ -16,23 +16,55 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:focus-visible {
+  outline: max(2px, 0.15em) solid var(--color-gold, #BBAA33);
+  outline-offset: 3px;
+}
+
 /* ============================================
    CSS Custom Properties
    ============================================ */
 :root {
-  /* Colors — overridden per theme */
-  --color-bg: #0f0f1a;
-  --color-text: #cdd6f4;
-  --color-heading: #ffffff;
-  --color-accent: #89b4fa;
-  --color-accent-secondary: #a6e3a1;
-  --color-surface: #1e1e2e;
-  --color-border: rgba(255, 255, 255, 0.1);
+  /* Theme vocabulary - presets override the rich values below. */
+  --color-bg-primary: #101820;
+  --color-bg-secondary: #182632;
+  --color-bg-surface: #203442;
+  --color-bg-elevated: #294354;
+  --color-text-primary: #edf4f8;
+  --color-text-secondary: #b8cad5;
+  --color-text-muted: #8299aa;
+  --color-text-inverse: #101820;
+  --color-accent: #0077BB;
+  --color-accent-secondary: #009988;
+  --color-gold: #BBAA33;
+  --color-accent-hover: #4A9ACE;
+  --color-accent-subtle: #17384a;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+
+  /* Bridge rich preset values to the shared presentation components. */
+  --color-bg: var(--color-bg-primary);
+  --color-text: var(--color-text-primary);
+  --color-heading: var(--color-text-primary);
+  --color-surface: var(--color-bg-surface);
+
+  /* Colorblind-safe categorical defaults. */
+  --cat-1: #0077BB;
+  --cat-2: #CC3311;
+  --cat-3: #009988;
+  --cat-4: #EE7733;
+  --cat-5: #3344AA;
+  --cat-6: #EE3377;
+  --cat-7: #BBAA33;
+  --cat-8: #888888;
+  --chart-positive: #2A9D5C;
+  --chart-negative: #CC3311;
+  --chart-neutral: #888888;
+  --chart-highlight: #EE7733;
 
   /* Typography */
-  --font-heading: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
 
   /* Spacing scale */
   --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
@@ -42,7 +74,15 @@ html, body {
   --spacing-xl: clamp(1.5rem, 3.5vw, 3rem);
 
   /* Shape & Motion */
-  --radius: 12px;
+  --radius-sm: clamp(0.2rem, 0.4vw, 0.35rem);
+  --radius-md: clamp(0.35rem, 0.7vw, 0.6rem);
+  --radius-lg: clamp(0.5rem, 1vw, 0.85rem);
+  --radius: var(--radius-lg);
+  --preset-title-size: clamp(1.8rem, 4vw, 3.5rem);
+  --preset-section-size: clamp(1.4rem, 3vw, 2.5rem);
+  --preset-kicker-tracking: 0.12em;
+  --preset-divider-width: 1px;
+  --preset-stat-treatment: tabular-nums;
   --transition-speed: 0.3s;
 }
 
@@ -91,6 +131,45 @@ html, body {
   pointer-events: none;
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.chart-render-fallback {
+  width: 100%;
+  max-width: min(94vw, 56rem);
+  margin: var(--spacing-sm) auto 0;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.chart-render-fallback[hidden] {
+  display: none;
+}
+
+.chart-render-fallback table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.chart-render-fallback th,
+.chart-render-fallback td {
+  padding: var(--spacing-xs);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
 /* ============================================
    Slide Content Wrapper
    ============================================ */
@@ -108,7 +187,7 @@ html, body {
    ============================================ */
 h1 {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  font-size: var(--preset-title-size);
   font-weight: 700;
   line-height: 1.2;
   color: var(--color-heading);
@@ -117,7 +196,7 @@ h1 {
 
 h2 {
   font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  font-size: var(--preset-section-size);
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-heading);
@@ -157,10 +236,34 @@ small, .caption, figcaption {
   opacity: 0.7;
 }
 
+.eyebrow,
+.kicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: var(--preset-kicker-tracking);
+  text-transform: uppercase;
+}
+
+.accent-rule,
+.presentation-divider {
+  width: clamp(4rem, 10vw, 9rem);
+  height: var(--preset-divider-width);
+  background: var(--color-accent);
+}
+
+.stat-value,
+.metric-value {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-variant-numeric: var(--preset-stat-treatment);
+}
+
 code {
   font-family: var(--font-mono);
-  font-size: 0.9em;
-  background: rgba(255, 255, 255, 0.08);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
   padding: 0.15em 0.4em;
   border-radius: 4px;
 }
@@ -169,7 +272,7 @@ pre {
   font-family: var(--font-mono);
   font-size: clamp(0.7rem, 1.2vw, 0.95rem);
   line-height: 1.5;
-  background: rgba(0, 0, 0, 0.3);
+  background: color-mix(in srgb, var(--color-bg) 74%, black);
   border-radius: var(--radius);
   padding: var(--spacing-md);
   overflow: hidden;
@@ -180,6 +283,12 @@ pre code {
   background: none;
   padding: 0;
   font-size: inherit;
+}
+
+.code-block {
+  width: 100%;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
 }
 
 blockquote {
@@ -244,7 +353,7 @@ blockquote {
   left: 0;
   width: 100%;
   height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
   z-index: 100;
 }
 
@@ -263,7 +372,7 @@ blockquote {
   bottom: 12px;
   right: 16px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
   color: var(--color-text);
   opacity: 0.4;
   z-index: 100;
@@ -286,7 +395,8 @@ blockquote {
 }
 
 .slides-container:hover ~ .nav-arrows,
-.nav-arrows:hover {
+.nav-arrows:hover,
+.nav-arrows:focus-within {
   opacity: 1;
 }
 
@@ -301,7 +411,7 @@ blockquote {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
   transition: background 0.15s ease, opacity 0.15s ease;
 }
 
@@ -321,6 +431,101 @@ blockquote {
 }
 
 /* ============================================
+   Keyboard Shortcuts Dialog
+   ============================================ */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.shortcuts-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.shortcuts-panel {
+  width: min(92vw, 34rem);
+  max-height: min(86vh, 38rem);
+  overflow: auto;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+}
+
+.shortcuts-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.shortcuts-heading-row h3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: clamp(1.75rem, 3vw, 2.25rem);
+  height: clamp(1.75rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1;
+}
+
+.shortcuts-close:hover {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.shortcuts-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-panel td {
+  padding: var(--spacing-xs) 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+}
+
+.shortcuts-panel td:first-child {
+  padding-right: var(--spacing-md);
+  white-space: nowrap;
+}
+
+.shortcuts-panel kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  font-family: var(--font-mono);
+}
+
+.shortcuts-dismiss {
+  margin-top: var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  text-align: center;
+}
+
+/* ============================================
    Visual Polish: Background Grid
    ============================================ */
 .bg-grid::before {
@@ -328,8 +533,8 @@ blockquote {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--accent-rgb, 137, 180, 250), 0.03) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
@@ -339,7 +544,7 @@ blockquote {
    Visual Polish: Glow Effects
    ============================================ */
 .glow {
-  box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.3);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .glow-pulse {
@@ -347,30 +552,30 @@ blockquote {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(var(--accent-rgb, 137, 180, 250), 0.2); }
-  50% { box-shadow: 0 0 20px rgba(var(--accent-rgb, 137, 180, 250), 0.4); }
+  0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent); }
+  50% { box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent); }
 }
 
 /* ============================================
    Visual Polish: Card Accents
    ============================================ */
 .card {
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
-  border-radius: var(--radius, 12px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
   padding: var(--spacing-md);
 }
 
 .card-accent {
-  border-left: 3px solid var(--color-accent, #89b4fa);
+  border-left: 3px solid var(--color-accent);
 }
 
 .card-top-accent {
-  border-top: 3px solid var(--color-accent, #89b4fa);
+  border-top: 3px solid var(--color-accent);
 }
 
 .card-gold {
-  border-left: 3px solid var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+  border-left: 3px solid var(--color-gold);
 }
 
 /* ============================================
@@ -406,24 +611,24 @@ blockquote {
   font-size: clamp(0.6rem, 0.9vw, 0.75rem);
   font-family: var(--font-mono);
   font-weight: 600;
-  background: rgba(var(--accent-rgb, 137, 180, 250), 0.15);
-  color: var(--color-accent, #89b4fa);
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
   vertical-align: middle;
 }
 
 .badge-gold {
-  background: rgba(var(--gold-rgb, 166, 227, 161), 0.15);
-  color: var(--color-gold, var(--color-accent-secondary, #a6e3a1));
+  background: color-mix(in srgb, var(--color-gold) 15%, transparent);
+  color: var(--color-gold);
 }
 
 .badge-blue {
-  background: rgba(74, 163, 216, 0.15);
-  color: #4AA3D8;
+  background: color-mix(in srgb, var(--cat-1) 15%, transparent);
+  color: var(--cat-1);
 }
 
 .badge-orange {
-  background: rgba(232, 152, 56, 0.15);
-  color: #E89838;
+  background: color-mix(in srgb, var(--cat-4) 15%, transparent);
+  color: var(--cat-4);
 }
 
 /* ============================================
@@ -431,11 +636,11 @@ blockquote {
    ============================================ */
 .inline-code {
   font-family: var(--font-mono);
-  font-size: 0.85em;
-  background: rgba(255, 255, 255, 0.1);
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
   padding: 0.2em 0.45em;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
 }
 
 /* ============================================
@@ -447,7 +652,7 @@ blockquote {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--color-accent, #89b4fa);
+  color: var(--color-accent);
   margin-bottom: var(--spacing-xs);
 }
 
@@ -472,8 +677,8 @@ blockquote {
   flex: 1;
   text-align: center;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-family: var(--font-mono);
   font-weight: 600;
@@ -481,8 +686,8 @@ blockquote {
 }
 
 .seq-actor.accent {
-  border-color: var(--color-accent, #89b4fa);
-  color: var(--color-accent, #89b4fa);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .seq-step {
@@ -490,27 +695,27 @@ blockquote {
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-left: 2px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-left: 2px solid var(--color-border);
   margin-left: var(--spacing-md);
 }
 
 .seq-step .seq-arrow {
-  color: var(--color-accent, #89b4fa);
+  color: var(--color-accent);
   font-weight: bold;
   flex-shrink: 0;
 }
 
 .seq-step .seq-label {
   font-family: var(--font-mono);
-  color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
-  font-size: 0.9em;
+  color: var(--color-text-muted);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .seq-step .seq-from,
 .seq-step .seq-to {
   font-weight: 600;
   min-width: 4em;
-  font-size: 0.9em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .seq-step.dashed {
@@ -518,11 +723,11 @@ blockquote {
 }
 
 .seq-step.response {
-  border-left-color: var(--color-accent-secondary, #a6e3a1);
+  border-left-color: var(--color-accent-secondary);
 }
 
 .seq-step.response .seq-arrow {
-  color: var(--color-accent-secondary, #a6e3a1);
+  color: var(--color-accent-secondary);
 }
 
 /* ============================================
@@ -540,8 +745,8 @@ blockquote {
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: clamp(0.65rem, 1.1vw, 0.85rem);
 }
@@ -579,8 +784,8 @@ blockquote {
   width: var(--width, 80%);
   text-align: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: clamp(0.7rem, 1.2vw, 0.9rem);
   font-weight: 600;
@@ -612,15 +817,15 @@ blockquote {
   min-width: 120px;
   text-align: center;
   padding: var(--spacing-sm) var(--spacing-xs);
-  background: var(--color-surface, #1e1e2e);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: clamp(0.65rem, 1vw, 0.8rem);
 }
 
 .process-arrow {
-  font-size: 1.2rem;
-  color: var(--color-accent, #89b4fa);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 
@@ -635,6 +840,13 @@ blockquote {
    Print Styles
    ============================================ */
 @media print {
+  html,
+  body,
+  .slides-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   .slide {
     position: relative;
     page-break-after: always;

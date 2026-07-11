@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean-deep" data-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide Sage: technical stories with evidence</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:wght@500;600;700&amp;display=swap">
+  <style>
+/* viewport-base.css - inlined into every slide-sage presentation */
+
+/* ============================================
+   Reset
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: max(2px, 0.15em) solid var(--color-gold, #BBAA33);
+  outline-offset: 3px;
+}
+
+/* ============================================
+   CSS Custom Properties
+   ============================================ */
+:root {
+  /* Theme vocabulary - presets override the rich values below. */
+  --color-bg-primary: #101820;
+  --color-bg-secondary: #182632;
+  --color-bg-surface: #203442;
+  --color-bg-elevated: #294354;
+  --color-text-primary: #edf4f8;
+  --color-text-secondary: #b8cad5;
+  --color-text-muted: #8299aa;
+  --color-text-inverse: #101820;
+  --color-accent: #0077BB;
+  --color-accent-secondary: #009988;
+  --color-gold: #BBAA33;
+  --color-accent-hover: #4A9ACE;
+  --color-accent-subtle: #17384a;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+
+  /* Bridge rich preset values to the shared presentation components. */
+  --color-bg: var(--color-bg-primary);
+  --color-text: var(--color-text-primary);
+  --color-heading: var(--color-text-primary);
+  --color-surface: var(--color-bg-surface);
+
+  /* Colorblind-safe categorical defaults. */
+  --cat-1: #0077BB;
+  --cat-2: #CC3311;
+  --cat-3: #009988;
+  --cat-4: #EE7733;
+  --cat-5: #3344AA;
+  --cat-6: #EE3377;
+  --cat-7: #BBAA33;
+  --cat-8: #888888;
+  --chart-positive: #2A9D5C;
+  --chart-negative: #CC3311;
+  --chart-neutral: #888888;
+  --chart-highlight: #EE7733;
+
+  /* Typography */
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* Spacing scale */
+  --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --spacing-md: clamp(0.75rem, 1.5vw, 1.25rem);
+  --spacing-lg: clamp(1rem, 2.5vw, 2rem);
+  --spacing-xl: clamp(1.5rem, 3.5vw, 3rem);
+
+  /* Shape & Motion */
+  --radius-sm: clamp(0.2rem, 0.4vw, 0.35rem);
+  --radius-md: clamp(0.35rem, 0.7vw, 0.6rem);
+  --radius-lg: clamp(0.5rem, 1vw, 0.85rem);
+  --radius: var(--radius-lg);
+  --preset-title-size: clamp(1.8rem, 4vw, 3.5rem);
+  --preset-section-size: clamp(1.4rem, 3vw, 2.5rem);
+  --preset-kicker-tracking: 0.12em;
+  --preset-divider-width: 1px;
+  --preset-stat-treatment: tabular-nums;
+  --transition-speed: 0.3s;
+}
+
+/* ============================================
+   Slides Container
+   ============================================ */
+.slides-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+}
+
+/* ============================================
+   Individual Slide
+   ============================================ */
+.slide {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(1.5rem, 4vh, 3rem) clamp(1.5rem, 5vw, 4rem);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.slide.inactive {
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.chart-render-fallback {
+  width: 100%;
+  max-width: min(94vw, 56rem);
+  margin: var(--spacing-sm) auto 0;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.chart-render-fallback[hidden] {
+  display: none;
+}
+
+.chart-render-fallback table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.chart-render-fallback th,
+.chart-render-fallback td {
+  padding: var(--spacing-xs);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ============================================
+   Slide Content Wrapper
+   ============================================ */
+.slide-content {
+  max-width: min(90%, 1100px);
+  max-height: 85vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+h1 {
+  font-family: var(--font-heading);
+  font-size: var(--preset-title-size);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-size: var(--preset-section-size);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-sm);
+}
+
+p {
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-sm);
+}
+
+li {
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+}
+
+ul, ol {
+  padding-left: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+small, .caption, figcaption {
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
+.eyebrow,
+.kicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: var(--preset-kicker-tracking);
+  text-transform: uppercase;
+}
+
+.accent-rule,
+.presentation-divider {
+  width: clamp(4rem, 10vw, 9rem);
+  height: var(--preset-divider-width);
+  background: var(--color-accent);
+}
+
+.stat-value,
+.metric-value {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-variant-numeric: var(--preset-stat-treatment);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.2vw, 0.95rem);
+  line-height: 1.5;
+  background: color-mix(in srgb, var(--color-bg) 74%, black);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  overflow: hidden;
+  max-height: 55vh;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.code-block {
+  width: 100%;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--spacing-md);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* ============================================
+   Images
+   ============================================ */
+.slide img {
+  max-height: min(50vh, 400px);
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.text-center { text-align: center; }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+/* ============================================
+   Navigation: Progress Bar
+   ============================================ */
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  width: 0%;
+  transition: width var(--transition-speed) ease;
+}
+
+/* ============================================
+   Navigation: Slide Counter
+   ============================================ */
+.slide-counter {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+  color: var(--color-text);
+  opacity: 0.4;
+  z-index: 100;
+  user-select: none;
+}
+
+/* ============================================
+   Navigation: Arrow Buttons
+   ============================================ */
+.nav-arrows {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.slides-container:hover ~ .nav-arrows,
+.nav-arrows:hover,
+.nav-arrows:focus-within {
+  opacity: 1;
+}
+
+.nav-arrow {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.nav-arrow:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.nav-arrow:disabled:hover {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* ============================================
+   Keyboard Shortcuts Dialog
+   ============================================ */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.shortcuts-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.shortcuts-panel {
+  width: min(92vw, 34rem);
+  max-height: min(86vh, 38rem);
+  overflow: auto;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+}
+
+.shortcuts-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.shortcuts-heading-row h3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: clamp(1.75rem, 3vw, 2.25rem);
+  height: clamp(1.75rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1;
+}
+
+.shortcuts-close:hover {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.shortcuts-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-panel td {
+  padding: var(--spacing-xs) 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+}
+
+.shortcuts-panel td:first-child {
+  padding-right: var(--spacing-md);
+  white-space: nowrap;
+}
+
+.shortcuts-panel kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  font-family: var(--font-mono);
+}
+
+.shortcuts-dismiss {
+  margin-top: var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  text-align: center;
+}
+
+/* ============================================
+   Visual Polish: Background Grid
+   ============================================ */
+.bg-grid::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Visual Polish: Glow Effects
+   ============================================ */
+.glow {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent); }
+  50% { box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent); }
+}
+
+/* ============================================
+   Visual Polish: Card Accents
+   ============================================ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+}
+
+.card-accent {
+  border-left: 3px solid var(--color-accent);
+}
+
+.card-top-accent {
+  border-top: 3px solid var(--color-accent);
+}
+
+.card-gold {
+  border-left: 3px solid var(--color-gold);
+}
+
+/* ============================================
+   Visual Polish: Staggered Reveal
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .reveal:nth-child(2) { transition-delay: 0.1s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.15s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.2s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.25s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.3s; }
+.slide.active .reveal:nth-child(7) { transition-delay: 0.35s; }
+.slide.active .reveal:nth-child(8) { transition-delay: 0.4s; }
+
+/* ============================================
+   Visual Polish: Badges
+   ============================================ */
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
+  vertical-align: middle;
+}
+
+.badge-gold {
+  background: color-mix(in srgb, var(--color-gold) 15%, transparent);
+  color: var(--color-gold);
+}
+
+.badge-blue {
+  background: color-mix(in srgb, var(--cat-1) 15%, transparent);
+  color: var(--cat-1);
+}
+
+.badge-orange {
+  background: color-mix(in srgb, var(--cat-4) 15%, transparent);
+  color: var(--cat-4);
+}
+
+/* ============================================
+   Visual Polish: Inline Code
+   ============================================ */
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  padding: 0.2em 0.45em;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+/* ============================================
+   Visual Polish: Section Label
+   ============================================ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ============================================
+   CSS Diagrams: Sequence Flow
+   ============================================ */
+.sequence-flow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.seq-participants {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.seq-actor {
+  flex: 1;
+  text-align: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(0.6rem, 1vw, 0.8rem);
+}
+
+.seq-actor.accent {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.seq-step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-left: 2px solid var(--color-border);
+  margin-left: var(--spacing-md);
+}
+
+.seq-step .seq-arrow {
+  color: var(--color-accent);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.seq-step .seq-label {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+}
+
+.seq-step .seq-from,
+.seq-step .seq-to {
+  font-weight: 600;
+  min-width: 4em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+}
+
+.seq-step.dashed {
+  border-left-style: dashed;
+}
+
+.seq-step.response {
+  border-left-color: var(--color-accent-secondary);
+}
+
+.seq-step.response .seq-arrow {
+  color: var(--color-accent-secondary);
+}
+
+/* ============================================
+   CSS Diagrams: Architecture Stack
+   ============================================ */
+.arch-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.arch-row.full {
+  width: 100%;
+}
+
+.arch-row-group {
+  display: flex;
+  gap: 4px;
+}
+
+.arch-row-group .arch-row {
+  flex: 1;
+}
+
+.arch-row.muted {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* ============================================
+   CSS Diagrams: Pyramid
+   ============================================ */
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.pyramid-layer {
+  width: var(--width, 80%);
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  transition: width 0.3s ease;
+}
+
+.pyramid-layer:first-child {
+  border-radius: 6px 6px 4px 4px;
+}
+
+.pyramid-layer:last-child {
+  border-radius: 4px 4px 6px 6px;
+}
+
+/* ============================================
+   CSS Diagrams: Process Flow (Horizontal)
+   ============================================ */
+.process-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.process-step {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+}
+
+.process-arrow {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Typography Enhancements
+   ============================================ */
+.tight-heading {
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  html,
+  body,
+  .slides-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .slide {
+    position: relative;
+    page-break-after: always;
+    height: 100vh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .slide:last-child {
+    page-break-after: avoid;
+  }
+
+  .slide.inactive {
+    display: flex !important;
+    opacity: 1 !important;
+    position: relative !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  .progress-bar,
+  .slide-counter,
+  .nav-arrows,
+  .shortcuts-overlay {
+    display: none !important;
+  }
+
+  @page {
+    margin: 1cm;
+    size: landscape;
+  }
+
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Height Breakpoints
+   ============================================ */
+@media (max-height: 700px) {
+  h1 { font-size: clamp(1.5rem, 3.5vw, 2.8rem); }
+  h2 { font-size: clamp(1.2rem, 2.5vw, 2rem); }
+  h3 { font-size: clamp(1rem, 2vw, 1.5rem); }
+  p, li { font-size: clamp(0.8rem, 1.3vw, 1.05rem); }
+
+  .slide { padding: var(--spacing-sm) var(--spacing-md); }
+  .slide-content { max-height: 88vh; }
+
+  :root {
+    --spacing-md: clamp(0.5rem, 1.2vw, 1rem);
+    --spacing-lg: clamp(0.75rem, 2vw, 1.5rem);
+    --spacing-xl: clamp(1rem, 2.5vw, 2rem);
+  }
+}
+
+@media (max-height: 600px) {
+  h1 { font-size: clamp(1.3rem, 3vw, 2.2rem); }
+  h2 { font-size: clamp(1.1rem, 2.2vw, 1.7rem); }
+  h3 { font-size: clamp(0.95rem, 1.8vw, 1.3rem); }
+  p, li { font-size: clamp(0.75rem, 1.2vw, 0.95rem); }
+  small, .caption { font-size: clamp(0.65rem, 1vw, 0.8rem); }
+
+  .slide { padding: var(--spacing-xs) var(--spacing-sm); }
+  .slide-content { max-height: 90vh; }
+  .slide img { max-height: min(40vh, 300px); }
+}
+
+@media (max-height: 500px) {
+  h1 { font-size: clamp(1.1rem, 2.5vw, 1.8rem); }
+  h2 { font-size: clamp(0.95rem, 2vw, 1.4rem); }
+  h3 { font-size: clamp(0.85rem, 1.6vw, 1.1rem); }
+  p, li { font-size: clamp(0.7rem, 1.1vw, 0.85rem); }
+
+  .slide {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+  .slide-content { max-height: 92vh; }
+
+  h1, h2, h3 { margin-bottom: var(--spacing-xs); }
+  ul, ol { gap: 0.1rem; }
+  .slide img { max-height: min(30vh, 200px); }
+}
+
+/* ============================================
+   Width Breakpoints (secondary)
+   ============================================ */
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .flex-row { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: var(--spacing-sm); }
+  .nav-arrows { display: none; }
+}
+
+    html[data-theme="ocean-deep"] {
+  --color-bg-primary: #F6F9FC; --color-bg-secondary: #E8F0F8; --color-bg-surface: #FFFFFF; --color-bg-elevated: #FFFFFF;
+  --color-text-primary: #112240; --color-text-secondary: #3A5478; --color-text-muted: #66809E; --color-text-inverse: #F6F9FC;
+  --color-accent: #0C7C8A; --color-accent-secondary: #E06854; --color-gold: #B9912B; --color-accent-hover: #096470; --color-accent-subtle: #D0F0F4;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+  --font-heading: 'Source Serif 4', Georgia, serif; --font-body: 'Instrument Sans', Arial, sans-serif; --font-mono: ui-monospace, Consolas, monospace;
+  --radius-sm: clamp(0.25rem, 0.5vw, 0.4rem); --radius-md: clamp(0.45rem, 0.8vw, 0.7rem); --radius-lg: clamp(0.65rem, 1.1vw, 1rem);
+  --preset-title-size: clamp(1.9rem, 4.2vw, 3.7rem); --preset-section-size: clamp(1.47rem, 3.15vw, 2.62rem); --preset-kicker-tracking: 0.13em; --preset-divider-width: 2px; --preset-stat-treatment: tabular-nums;
+}
+html[data-theme="ocean-deep"][data-mode="dark"] {
+  --color-bg-primary: #091728; --color-bg-secondary: #10233A; --color-bg-surface: #17324D; --color-bg-elevated: #20405F;
+  --color-text-primary: #E5F0F9; --color-text-secondary: #ABC5DC; --color-text-muted: #6E91B2; --color-text-inverse: #091728;
+  --color-accent: #38C4C9; --color-accent-secondary: #F08070; --color-gold: #D5B650; --color-accent-hover: #74E0E2; --color-accent-subtle: #123B45;
+}
+    body { background: var(--color-bg-primary); color: var(--color-text-primary); font-family: var(--font-body); }
+    .slide { background: var(--color-bg-primary); }
+    .eyebrow { color: var(--color-accent); font-family: var(--font-mono); font-size: clamp(0.68rem, 1vw, 0.9rem); letter-spacing: .14em; text-transform: uppercase; }
+    .hero-title { max-width: 15ch; font-size: clamp(2.8rem, 7vw, 6.8rem); line-height: .92; letter-spacing: -.05em; }
+    .hero-subtitle { max-width: 42ch; color: var(--color-text-secondary); font-size: clamp(1rem, 1.7vw, 1.4rem); }
+    .accent-rule { width: clamp(5rem, 12vw, 10rem); height: clamp(.2rem, .45vw, .4rem); background: var(--color-accent); }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); width: 100%; }
+    .proof-card { border-top: clamp(.15rem, .3vw, .25rem) solid var(--color-accent); padding: var(--spacing-md); background: var(--color-bg-surface); }
+    .proof-number { display: block; color: var(--color-accent); font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
+    .proof-label { color: var(--color-text-secondary); font-size: clamp(.75rem, 1.2vw, 1rem); }
+    .chart-wrap { position: relative; width: 100%; height: min(52vh, 400px); }
+    .sample-badge { align-self: flex-start; padding: var(--spacing-xs) var(--spacing-sm); border: 1px solid var(--color-accent); color: var(--color-accent); font-family: var(--font-mono); font-size: clamp(.62rem, .9vw, .8rem); }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); align-items: center; width: 100%; }
+    .flow-step { min-height: clamp(7rem, 18vh, 11rem); padding: var(--spacing-md); border: 1px solid var(--color-border); background: var(--color-bg-surface); display: flex; flex-direction: column; justify-content: space-between; }
+    .flow-step strong { color: var(--color-accent); font-family: var(--font-heading); font-size: clamp(1.1rem, 2vw, 1.7rem); }
+    .flow-step small { color: var(--color-text-secondary); }
+    .code-demo { width: 100%; background: #071018; border-left: clamp(.18rem, .4vw, .3rem) solid var(--color-accent); padding: var(--spacing-lg); font-family: var(--font-mono); font-size: clamp(.72rem, 1.25vw, 1rem); line-height: 1.7; color: #dce9ef; white-space: pre-wrap; }
+    .code-key { color: #ee7733; } .code-string { color: #42c6a4; } .code-call { color: #61a9dc; }
+    .closing-line { max-width: 18ch; font-size: clamp(2.5rem, 6vw, 5.8rem); line-height: .98; }
+    .shortcuts-panel { width: min(90vw, 42rem); background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--spacing-lg); }
+    .shortcuts-panel h3 { margin: 0 0 var(--spacing-md); color: var(--color-heading); font-size: clamp(1.1rem, 2vw, 1.5rem); }
+    .shortcuts-panel table { width: 100%; border-collapse: collapse; }
+    .shortcuts-panel td { padding: var(--spacing-xs) 0; }
+    .shortcuts-panel td:first-child { padding-right: var(--spacing-md); white-space: nowrap; }
+    .shortcuts-dismiss { margin: var(--spacing-md) 0 0; color: var(--color-text-muted); text-align: center; }
+    .shortcuts-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: var(--spacing-lg); background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+    .shortcuts-overlay.visible { opacity: 1; pointer-events: auto; }
+    @media (max-width: 760px) { .proof-grid, .flow { grid-template-columns: 1fr 1fr; } }
+    @media (max-height: 600px) { .flow-step { min-height: 5rem; } .proof-number { font-size: clamp(1.5rem, 3vw, 2.4rem); } }
+  </style>
+</head>
+<body>
+  <main class="slides-container" id="slides">
+    <section class="slide active" aria-hidden="false" id="slide-1">
+      <div class="slide-content gap-md">
+        <span class="eyebrow">Slide Sage</span><div class="accent-rule"></div>
+        <h1 class="hero-title">Technical stories with evidence.</h1>
+        <p class="hero-subtitle">One Agent Skill for metrics, architecture, and code, delivered as a browser-ready presentation.</p>
+      </div>
+    </section>
+
+    <section class="slide inactive" aria-hidden="true" inert id="slide-2">
+      <div class="slide-content gap-lg"><span class="eyebrow">The contract</span><h2>Every output earns the screen.</h2>
+        <div class="proof-grid">
+          <div class="proof-card"><span class="proof-number">100vh</span><span class="proof-label">One viewport. No internal scrolling.</span></div>
+          <div class="proof-card"><span class="proof-number">1 file</span><span class="proof-label">CSS, navigation, notes, and data travel together.</span></div>
+          <div class="proof-card"><span class="proof-number">3 tiers</span><span class="proof-label">CSS diagrams, SVG templates, then custom SVG.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide inactive" aria-hidden="true" inert id="slide-3">
+      <div class="slide-content gap-sm"><span class="eyebrow">Metrics</span><h2>Show the trend, keep the source visible.</h2><span class="sample-badge">SAMPLE DATA</span>
+        <div class="chart-wrap"><canvas id="qualityChart" role="img" aria-label="Sample chart showing slide quality checks improving from 58 to 96 percent across four releases"></canvas></div>
+        <div class="chart-render-fallback" id="qualityChartFallback">
+          <p>Sample quality checks passed</p>
+          <table><thead><tr><th scope="col">Release</th><th scope="col">Checks passed</th></tr></thead><tbody><tr><th scope="row">v1.0</th><td>58%</td></tr><tr><th scope="row">v1.2</th><td>72%</td></tr><tr><th scope="row">v1.6</th><td>86%</td></tr><tr><th scope="row">v2.0</th><td>96%</td></tr></tbody></table>
+        </div>
+        <table class="visually-hidden"><caption>Sample quality checks passed across four releases</caption><thead><tr><th scope="col">Release</th><th scope="col">Checks passed</th></tr></thead><tbody><tr><th scope="row">v1.0</th><td>58%</td></tr><tr><th scope="row">v1.2</th><td>72%</td></tr><tr><th scope="row">v1.6</th><td>86%</td></tr><tr><th scope="row">v2.0</th><td>96%</td></tr></tbody></table>
+        <noscript><p>JavaScript is unavailable. Sample quality checks passed rose from 58% in v1.0 to 96% in v2.0.</p></noscript>
+        <p class="caption">Sample values for demonstration. Replace before sharing.</p>
+      </div>
+    </section>
+
+    <section class="slide inactive" aria-hidden="true" inert id="slide-4">
+      <div class="slide-content gap-lg"><span class="eyebrow">Workflow</span><h2>From prompt to a checked deck.</h2>
+        <div class="flow"><div class="flow-step"><strong>01</strong><small>Read the audience and purpose</small></div><div class="flow-step"><strong>02</strong><small>Choose the evidence and visual form</small></div><div class="flow-step"><strong>03</strong><small>Generate a single HTML deck</small></div><div class="flow-step"><strong>04</strong><small>Validate fit, classes, and delivery</small></div></div>
+      </div>
+    </section>
+
+    <section class="slide inactive" aria-hidden="true" inert id="slide-5">
+      <div class="slide-content gap-md"><span class="eyebrow">Code</span><h2>The output stays understandable.</h2>
+        <pre class="code-demo"><span class="code-key">INPUT</span> audience + evidence
+<span class="code-key">CHOOSE</span> <span class="code-call">visual form</span> for each claim
+<span class="code-key">BUILD</span> <span class="code-string">single HTML deck</span>
+<span class="code-key">CHECK</span> viewport, classes, delivery
+<span class="code-key">OUTPUT</span> browser-ready presentation</pre>
+      </div>
+    </section>
+
+    <section class="slide inactive" aria-hidden="true" inert id="slide-6">
+      <div class="slide-content gap-md"><span class="eyebrow">Start here</span><h2 class="closing-line">Bring the facts. Slide Sage shapes the room.</h2><p class="hero-subtitle">npx skills add rhnfzl/slide-sage</p></div>
+    </section>
+
+  </main><script id="speaker-notes" type="application/json">[{"slide":1,"notes":"Open with the promise. Slide Sage keeps technical evidence legible without turning the deck into an app."},{"slide":2,"notes":"Explain the three non-negotiable constraints: viewport fit, portable output, and visual choices that carry meaning."},{"slide":3,"notes":"The visible SAMPLE DATA label is intentional. Never share invented chart values as factual evidence."},{"slide":4,"notes":"The flow describes the generation sequence, not a long-running service or hosted product."},{"slide":5,"notes":"Point out that the generated deck remains readable source, so teams can inspect what they present."},{"slide":6,"notes":"End with the install command and invite the audience to bring their next metrics review or architecture walkthrough."}]</script>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="slide-counter" id="slideCounter"></div>
+  <div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div>
+  <div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle" aria-hidden="true" inert><div class="shortcuts-panel" tabindex="-1"><div class="shortcuts-heading-row"><h3 id="shortcutsTitle">Keyboard Shortcuts</h3><button class="shortcuts-close" id="shortcutsClose" type="button" aria-label="Close keyboard shortcuts">&#215;</button></div><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>P</kbd></td><td>Open presenter view when included</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script>
+    class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.totalSlides = this.slides.length;
+    this.currentSlide = 0;
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+    this.swipeThreshold = 50;
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ready = false;
+    this.isPrinting = false;
+    this.lastFocusedElement = null;
+    this.shortcutsFocusFrame = null;
+
+    this.progressFill = document.getElementById('progressFill');
+    this.slideCounter = document.getElementById('slideCounter');
+    this.shortcutsOverlay = document.getElementById('shortcutsOverlay');
+    this.shortcutsPanel = this.shortcutsOverlay?.querySelector('.shortcuts-panel');
+    this.shortcutsClose = document.getElementById('shortcutsClose');
+    this.navPrev = document.getElementById('navPrev');
+    this.navNext = document.getElementById('navNext');
+
+    this.init();
+  }
+
+  init() {
+    this.bindKeyboard();
+    this.bindTouch();
+    this.bindNavButtons();
+    this.bindShortcutsDialog();
+    this.bindHashChange();
+    this.bindPrintPreparation();
+    this.readHashAndNavigate();
+    this.updateUI();
+    this.ready = true;
+
+    // Delay the first lifecycle event until chart scripts in this DOM-ready turn exist.
+    window.requestAnimationFrame(() => {
+      this.emitSlideChange(null);
+      this.markPrintReady();
+    });
+  }
+
+  bindKeyboard() {
+    document.addEventListener('keydown', (e) => {
+      if (this.isShortcutsVisible()) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else if (e.key === 'Tab') {
+          this.trapShortcutsFocus(e);
+        } else if (e.key === '?') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      // Ignore if user is typing in an input or textarea
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.tagName === 'SELECT' ||
+        e.target.isContentEditable
+      ) return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case ' ':
+          e.preventDefault();
+          if (e.shiftKey) {
+            this.prev();
+          } else {
+            this.next();
+          }
+          break;
+        case 'PageDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'PageUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case 'Home':
+          e.preventDefault();
+          this.goTo(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          this.goTo(this.totalSlides - 1);
+          break;
+        case '?':
+          e.preventDefault();
+          this.toggleShortcuts();
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          this.openPresenterMode();
+          break;
+        case 'Escape':
+          this.hideShortcuts();
+          break;
+      }
+    });
+  }
+
+  bindTouch() {
+    const container = document.getElementById('slides');
+
+    container.addEventListener('touchstart', (e) => {
+      this.touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      this.touchEndX = e.changedTouches[0].screenX;
+      this.handleSwipe();
+    }, { passive: true });
+  }
+
+  handleSwipe() {
+    const diff = this.touchStartX - this.touchEndX;
+    if (Math.abs(diff) < this.swipeThreshold) return;
+
+    if (diff > 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
+  }
+
+  bindNavButtons() {
+    if (this.navPrev) {
+      this.navPrev.addEventListener('click', () => this.prev());
+    }
+    if (this.navNext) {
+      this.navNext.addEventListener('click', () => this.next());
+    }
+  }
+
+  bindShortcutsDialog() {
+    if (!this.shortcutsOverlay) return;
+
+    this.shortcutsClose?.addEventListener('click', () => this.hideShortcuts());
+    this.shortcutsOverlay.addEventListener('click', (event) => {
+      if (event.target === this.shortcutsOverlay) this.hideShortcuts();
+    });
+  }
+
+  bindHashChange() {
+    window.addEventListener('hashchange', () => this.readHashAndNavigate());
+  }
+
+  bindPrintPreparation() {
+    window.addEventListener('beforeprint', () => {
+      this.isPrinting = true;
+      this.slides.forEach((slide) => {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      });
+      void this.markPrintReady();
+    });
+    window.addEventListener('afterprint', () => {
+      this.isPrinting = false;
+      this.updateUI();
+    });
+  }
+
+  async markPrintReady() {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
+    if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+      document.querySelectorAll('canvas').forEach((canvas) => {
+        const chart = Chart.getChart(canvas);
+        if (!chart) return;
+        chart.stop();
+        chart.options.animation = false;
+        chart.update('none');
+      });
+    }
+
+    if (typeof echarts !== 'undefined' && typeof echarts.getInstanceByDom === 'function') {
+      document.querySelectorAll('[data-slide-sage-echarts]').forEach((element) => {
+        const chart = echarts.getInstanceByDom(element);
+        if (!chart) return;
+        chart.setOption({ animation: false }, false);
+        chart.resize();
+      });
+    }
+
+    document.documentElement.dataset.slideSagePrintReady = 'true';
+  }
+
+  readHashAndNavigate() {
+    const hash = window.location.hash;
+    const match = hash.match(/^#slide-(\d+)$/);
+    if (match) {
+      const index = parseInt(match[1], 10) - 1;
+      if (index >= 0 && index < this.totalSlides) {
+        this.goTo(index, false);
+      }
+    }
+  }
+
+  next() {
+    if (this.currentSlide < this.totalSlides - 1) {
+      this.goTo(this.currentSlide + 1);
+    }
+  }
+
+  prev() {
+    if (this.currentSlide > 0) {
+      this.goTo(this.currentSlide - 1);
+    }
+  }
+
+  goTo(index, updateHash = true) {
+    if (index < 0 || index >= this.totalSlides) return;
+    if (index === this.currentSlide) return;
+
+    const previousSlide = this.slides[this.currentSlide];
+    const nextSlide = this.slides[index];
+    const shouldMoveFocus = previousSlide.contains(document.activeElement);
+
+    previousSlide.classList.remove('active');
+    previousSlide.classList.add('inactive');
+
+    nextSlide.classList.remove('inactive');
+    nextSlide.classList.add('active');
+
+    if (this.reducedMotion) {
+      previousSlide.style.transition = 'none';
+      nextSlide.style.transition = 'none';
+    }
+
+    this.currentSlide = index;
+
+    if (updateHash) {
+      history.replaceState(null, '', `#slide-${index + 1}`);
+    }
+
+    this.updateUI();
+    if (shouldMoveFocus) this.moveFocusToIncomingSlide(nextSlide);
+
+    if (this.ready) {
+      this.emitSlideChange(previousSlide);
+    }
+  }
+
+  emitSlideChange(previousSlide) {
+    document.dispatchEvent(new CustomEvent('slidechange', {
+      detail: {
+        slide: this.slides[this.currentSlide],
+        index: this.currentSlide,
+        previousSlide,
+        reducedMotion: this.reducedMotion
+      }
+    }));
+  }
+
+  updateUI() {
+    // Update progress bar
+    if (this.progressFill) {
+      const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+      this.progressFill.style.width = `${progress}%`;
+    }
+
+    // Update slide counter
+    if (this.slideCounter) {
+      this.slideCounter.textContent = `${this.currentSlide + 1} / ${this.totalSlides}`;
+    }
+
+    // Update nav button states
+    if (this.navPrev) {
+      this.navPrev.disabled = this.currentSlide === 0;
+    }
+    if (this.navNext) {
+      this.navNext.disabled = this.currentSlide === this.totalSlides - 1;
+    }
+
+    // Ensure only the active slide is visible and exposed to assistive technology.
+    this.slides.forEach((slide, i) => {
+      const isActive = i === this.currentSlide;
+      if (isActive) {
+        slide.classList.add('active');
+        slide.classList.remove('inactive');
+      } else {
+        slide.classList.remove('active');
+        slide.classList.add('inactive');
+      }
+
+      if (this.isPrinting || isActive) {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      } else {
+        slide.setAttribute('inert', '');
+        slide.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  moveFocusToIncomingSlide(nextSlide) {
+    const target = nextSlide.querySelector(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    ) || nextSlide;
+    if (target === nextSlide && !nextSlide.hasAttribute('tabindex')) {
+      nextSlide.setAttribute('tabindex', '-1');
+    }
+    target.focus({ preventScroll: true });
+  }
+
+  isShortcutsVisible() {
+    return Boolean(this.shortcutsOverlay?.classList.contains('visible'));
+  }
+
+  shortcutsFocusableElements() {
+    if (!this.shortcutsOverlay) return [];
+    return [...this.shortcutsOverlay.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => !element.hasAttribute('hidden'));
+  }
+
+  trapShortcutsFocus(event) {
+    const focusable = this.shortcutsFocusableElements();
+    if (focusable.length === 0) {
+      event.preventDefault();
+      this.shortcutsPanel?.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  restoreShortcutsFocus() {
+    const target = this.lastFocusedElement;
+    this.lastFocusedElement = null;
+    if (target?.isConnected && target !== document.body && typeof target.focus === 'function') {
+      target.focus({ preventScroll: true });
+      return;
+    }
+    const fallback = (!this.navNext?.disabled && this.navNext) ||
+      (!this.navPrev?.disabled && this.navPrev) ||
+      this.slides[this.currentSlide];
+    if (fallback === this.slides[this.currentSlide] && !fallback.hasAttribute('tabindex')) {
+      fallback.setAttribute('tabindex', '-1');
+    }
+    fallback?.focus({ preventScroll: true });
+  }
+
+  toggleShortcuts() {
+    if (this.isShortcutsVisible()) {
+      this.hideShortcuts();
+    } else {
+      this.showShortcuts();
+    }
+  }
+
+  showShortcuts() {
+    if (!this.shortcutsOverlay) return;
+    this.lastFocusedElement = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+      ? document.activeElement
+      : null;
+    this.shortcutsOverlay.removeAttribute('inert');
+    this.shortcutsOverlay.classList.add('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'false');
+    this.shortcutsFocusFrame = window.requestAnimationFrame(() => {
+      this.shortcutsFocusFrame = null;
+      if (this.isShortcutsVisible()) (this.shortcutsClose || this.shortcutsPanel)?.focus();
+    });
+  }
+
+  hideShortcuts() {
+    if (!this.shortcutsOverlay || !this.isShortcutsVisible()) return;
+    if (this.shortcutsFocusFrame !== null) {
+      window.cancelAnimationFrame(this.shortcutsFocusFrame);
+      this.shortcutsFocusFrame = null;
+    }
+    this.shortcutsOverlay.setAttribute('inert', '');
+    this.shortcutsOverlay.classList.remove('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
+    this.restoreShortcutsFocus();
+  }
+
+  openPresenterMode() {
+    if (typeof window.openSlideSagePresenter === 'function') {
+      window.openSlideSagePresenter(this);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new SlidePresentation();
+  const canvas = document.getElementById('qualityChart');
+  const fallback = document.getElementById('qualityChartFallback');
+  const theme = getComputedStyle(document.documentElement);
+  const accent = theme.getPropertyValue('--color-accent').trim();
+  const highlight = theme.getPropertyValue('--chart-highlight').trim();
+  const muted = theme.getPropertyValue('--color-text-secondary').trim();
+  const border = theme.getPropertyValue('--color-border').trim();
+  let chart;
+  try {
+    chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: ['v1.0', 'v1.2', 'v1.6', 'v2.0'],
+        datasets: [{ label: 'Checks passed', data: [58, 72, 86, 96], borderColor: accent, backgroundColor: `color-mix(in srgb, ${accent} 16%, transparent)`, fill: true, tension: 0.32, pointBackgroundColor: highlight, pointRadius: 5 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { min: 40, max: 100, ticks: { color: muted }, grid: { color: border }, title: { display: true, text: 'Quality checks passed (%)', color: muted } },
+          x: { ticks: { color: muted }, grid: { display: false } }
+        }
+      }
+    });
+    fallback.hidden = true;
+  } catch (error) {
+    console.error('Quality chart could not render. The data table remains visible.', error);
+  }
+
+  document.addEventListener('slidechange', ({ detail }) => {
+    if (!chart || !detail.slide.contains(canvas)) return;
+    chart.stop();
+    if (detail.reducedMotion) {
+      chart.options.animation = false;
+      chart.update('none');
+      return;
+    }
+    chart.options.animation = { duration: 800, easing: 'easeOutQuart' };
+    chart.reset();
+    chart.update();
+  });
+});
+  </script>
+</body>
+</html>

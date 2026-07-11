@@ -1,686 +1,371 @@
 # Presenter Mode Reference
 
-## Default: HTML Comment Notes
+## One notes contract
 
-Speaker notes are embedded as HTML comments inside each slide. They are invisible during the presentation and extracted by the presenter mode JavaScript.
-
-### Format
+Presenter mode is optional. When it is included, every deck uses one readable JSON block after the slide markup:
 
 ```html
-<div class="slide" id="slide-1">
-  <div class="slide-content">
-    <h1>Welcome</h1>
-  </div>
-  <!-- NOTES:
-  - Greet the audience
-  - Mention the agenda
-  - 2 minutes for this slide
-  -->
-</div>
+<script id="speaker-notes" type="application/json">
+[
+  {"slide": 1, "notes": "Welcome the audience and state the decision this deck supports."},
+  {"slide": 2, "notes": "Explain the source before interpreting the chart."}
+]
+</script>
 ```
 
-```html
-<div class="slide" id="slide-2">
-  <div class="slide-content">
-    <h2>Architecture Overview</h2>
-    <p>Our system uses a microservices architecture.</p>
-  </div>
-  <!-- NOTES:
-  Key points:
-  - 12 microservices in production
-  - Each service owns its database
-  - Communication via async message queue
-  - Mention the migration from monolith took 8 months
-  -->
-</div>
-```
-
-Notes are **invisible** in the presentation view. Only the presenter window displays them.
-
----
-
-## Note Extraction JavaScript
+Serialize the data safely before writing it into HTML:
 
 ```javascript
-function extractNotes() {
-  const slides = document.querySelectorAll('.slide');
-  const notes = [];
-  slides.forEach(slide => {
-    const html = slide.innerHTML;
-    const match = html.match(/<!--\s*NOTES:([\s\S]*?)-->/);
-    notes.push(match ? match[1].trim() : '');
-  });
-  return notes;
-}
+const notesJson = JSON.stringify(notes).replace(/</g, '\\u003c');
 ```
 
-This returns an array of strings, one per slide. Slides without `<!-- NOTES: -->` comments get an empty string.
+The `\\u003c` escape prevents note text such as `</script>` from ending the JSON block. Notes stay readable in the HTML source and the presenter window. Do not put passwords, private links, customer data, or other secrets in a deck that will be shared.
 
----
+## Installation
 
-## Full Presenter Mode
-
-### Activation
-
-Press **'P'** to open the presenter window. The main presentation window continues to display slides fullscreen while the presenter window shows the dual-panel control view.
-
-### Architecture
-
-Uses the **BroadcastChannel API** for synchronization between the main window and presenter window. BroadcastChannel works on `file://` protocol (unlike postMessage which requires specific origin targeting), making it ideal for local HTML presentations.
-
----
-
-### Main Window Integration
-
-Add these methods to the `SlidePresentation` class (~30 lines):
+The canonical `SlidePresentation` class already maps `P` to `openPresenterMode()` and calls `window.openSlideSagePresenter(this)` when the function is present. Add the following script after the canonical runtime only when the user requests presenter mode.
 
 ```javascript
-// Add to SlidePresentation class
-
-initPresenter() {
-  this.presenterChannel = new BroadcastChannel('slide-sage-presenter');
-  this.presenterChannel.onmessage = (e) => {
-    if (e.data.type === 'navigate') {
-      this.goToSlide(e.data.slide);
-    }
-  };
-}
-
-openPresenterView() {
-  const notes = extractNotes();
-  const presenterHTML = generatePresenterHTML(this.slides.length, notes);
-  const presenterWindow = window.open('', 'slide-sage-presenter', 'width=1000,height=700');
-  presenterWindow.document.write(presenterHTML);
-  presenterWindow.document.close();
-
-  // Send initial state
-  this.presenterChannel.postMessage({
-    type: 'init',
-    currentSlide: this.currentSlide,
-    totalSlides: this.slides.length
-  });
-}
-
-// Modify the existing navigate method to broadcast state
-navigate(index) {
-  // ... existing navigation code ...
-  this.currentSlide = index;
-
-  if (this.presenterChannel) {
-    this.presenterChannel.postMessage({
-      type: 'update',
-      slide: this.currentSlide,
-      totalSlides: this.slides.length
-    });
+function readSpeakerNotes(totalSlides) {
+  const source = document.getElementById('speaker-notes')?.textContent || '[]';
+  try {
+    const parsed = JSON.parse(source);
+    if (!Array.isArray(parsed)) return Array(totalSlides).fill('');
+    const bySlide = new Map(
+      parsed
+        .filter((entry) => Number.isInteger(entry?.slide) && typeof entry?.notes === 'string')
+        .map((entry) => [entry.slide, entry.notes])
+    );
+    return Array.from({ length: totalSlides }, (_, index) => bySlide.get(index + 1) || '');
+  } catch (error) {
+    console.warn('Speaker notes JSON is invalid. Presenter mode will use empty notes.', error);
+    return Array(totalSlides).fill('');
   }
 }
-```
 
-### Keyboard Binding
-
-Add to the existing keydown handler:
-
-```javascript
-// Inside the keydown event listener
-if (e.key === 'p' || e.key === 'P') {
-  e.preventDefault();
-  this.openPresenterView();
+function sourceStyleMarkup() {
+  return [...document.querySelectorAll('style, link[rel="stylesheet"]')]
+    .map((node) => node.outerHTML)
+    .join('\n');
 }
-```
 
----
-
-### Presenter Window HTML Generator
-
-Complete `generatePresenterHTML` function that returns a self-contained HTML document:
-
-```javascript
-function generatePresenterHTML(totalSlides, notes) {
-  const notesJSON = JSON.stringify(notes);
-
-  return `<!DOCTYPE html>
+function createPresenterDocument(styles) {
+  return `<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Slide Sage - Presenter View</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #1a1a2e;
-    color: #e0e0e8;
-    height: 100vh;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 60% 40%;
-    grid-template-rows: 55% 45%;
-    gap: 2px;
-  }
-
-  /* === Quadrant: Current Slide (top-left) === */
-  .current-slide {
-    grid-column: 1;
-    grid-row: 1;
-    background: #16162a;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 6px;
-    margin: 8px 4px 4px 8px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .current-slide .panel-label {
-    padding: 6px 12px;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #61afef;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    flex-shrink: 0;
-  }
-
-  .current-slide .preview-area {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    font-size: 1.8rem;
-    color: #abb2bf;
-    font-weight: 600;
-  }
-
-  /* === Quadrant: Next Slide (top-right) === */
-  .next-slide {
-    grid-column: 2;
-    grid-row: 1;
-    background: #16162a;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 6px;
-    margin: 8px 8px 4px 4px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .next-slide .panel-label {
-    padding: 6px 12px;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #98c379;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    flex-shrink: 0;
-  }
-
-  .next-slide .preview-area {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    font-size: 1.4rem;
-    color: rgba(171, 178, 191, 0.6);
-    font-weight: 500;
-  }
-
-  /* === Quadrant: Speaker Notes (bottom-left) === */
-  .notes-panel {
-    grid-column: 1;
-    grid-row: 2;
-    background: #16162a;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 6px;
-    margin: 4px 4px 8px 8px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .notes-panel .panel-label {
-    padding: 6px 12px;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #c678dd;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    flex-shrink: 0;
-  }
-
-  .notes-content {
-    flex: 1;
-    padding: 12px 16px;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #d4d4dc;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .notes-content::-webkit-scrollbar {
-    width: 6px;
-  }
-  .notes-content::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .notes-content::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.15);
-    border-radius: 3px;
-  }
-
-  .no-notes {
-    color: rgba(255,255,255,0.25);
-    font-style: italic;
-  }
-
-  /* === Quadrant: Controls (bottom-right) === */
-  .controls-panel {
-    grid-column: 2;
-    grid-row: 2;
-    background: #16162a;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 6px;
-    margin: 4px 8px 8px 4px;
-    display: flex;
-    flex-direction: column;
-    padding: 12px 16px;
-    gap: 14px;
-    overflow: hidden;
-  }
-
-  /* Timer */
-  .timer-section {
-    text-align: center;
-  }
-
-  .timer-display {
-    font-size: 2.4rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    color: #e5c07b;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-  }
-
-  .timer-buttons {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-  }
-
-  .timer-buttons button {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #d4d4dc;
-    padding: 4px 14px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .timer-buttons button:hover {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-  }
-
-  .timer-buttons button.active {
-    background: rgba(97, 175, 239, 0.2);
-    border-color: #61afef;
-    color: #61afef;
-  }
-
-  /* Slide Counter */
-  .slide-counter {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #abb2bf;
-  }
-
-  .slide-counter .current {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #61afef;
-  }
-
-  .slide-counter .separator {
-    margin: 0 4px;
-    color: rgba(255,255,255,0.3);
-  }
-
-  .slide-counter .total {
-    font-size: 1.3rem;
-    color: rgba(255,255,255,0.5);
-  }
-
-  /* Navigation */
-  .nav-buttons {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-
-  .nav-buttons button {
-    background: rgba(97, 175, 239, 0.15);
-    border: 1px solid rgba(97, 175, 239, 0.3);
-    color: #61afef;
-    padding: 8px 24px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    flex: 1;
-    max-width: 140px;
-  }
-
-  .nav-buttons button:hover {
-    background: rgba(97, 175, 239, 0.25);
-    color: #fff;
-  }
-
-  .nav-buttons button:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-
-  /* Clock */
-  .clock {
-    text-align: center;
-    font-size: 1rem;
-    color: rgba(255,255,255,0.4);
-    margin-top: auto;
-  }
-
-  /* Progress bar */
-  .progress-bar {
-    width: 100%;
-    height: 3px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #61afef, #c678dd);
-    transition: width 0.3s ease;
-    border-radius: 2px;
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presenter view</title>
+  ${styles}
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; padding: 1rem; background: #101820; color: #edf4f8; font-family: ui-sans-serif, system-ui, sans-serif; }
+    .presenter-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr); gap: 1rem; min-height: calc(100vh - 2rem); }
+    .presenter-panel { min-width: 0; padding: 1rem; border: 1px solid #375268; border-radius: 0.75rem; background: #182632; }
+    .presenter-panel h1 { margin: 0 0 0.75rem; font-size: clamp(0.9rem, 1.5vw, 1.15rem); }
+    .preview-frame { width: 100%; overflow: hidden; border-radius: 0.4rem; background: #101820; }
+    .preview-frame .slide { position: relative !important; top: 0 !important; left: 0 !important; opacity: 1 !important; z-index: 1 !important; pointer-events: none !important; transform-origin: top left; }
+    .preview-frame img { max-width: 100%; }
+    .preview-empty { display: grid; min-height: 12rem; place-items: center; color: #b8cad5; }
+    .notes { min-height: 10rem; white-space: pre-wrap; line-height: 1.5; }
+    .controls { display: grid; gap: 0.75rem; align-content: start; }
+    .timer { font-variant-numeric: tabular-nums; font-size: clamp(1.6rem, 4vw, 3rem); }
+    button { padding: 0.55rem 0.75rem; border: 1px solid #4a718d; border-radius: 0.4rem; background: #203442; color: inherit; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #BBAA33; outline-offset: 2px; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    @media (max-width: 850px) { .presenter-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
+  <main class="presenter-grid">
+    <section class="presenter-panel"><h1>Current slide</h1><div class="preview-frame" id="currentPreview"></div></section>
+    <section class="presenter-panel"><h1>Next slide</h1><div class="preview-frame" id="nextPreview"></div></section>
+    <section class="presenter-panel"><h1>Speaker notes</h1><div class="notes" id="notes" role="status" aria-live="polite" aria-atomic="true">No notes for this slide.</div></section>
+    <section class="presenter-panel controls">
+      <h1>Controls</h1>
+      <div class="timer" id="timer">00:00:00</div>
+      <div class="button-row"><button id="startTimer" type="button">Start timer</button><button id="pauseTimer" type="button">Pause timer</button><button id="resetTimer" type="button">Reset timer</button></div>
+      <div class="button-row"><button id="previousSlide" type="button">Previous</button><button id="nextSlide" type="button">Next</button></div>
+      <div id="counter" role="status" aria-live="polite" aria-atomic="true"></div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      let connection = null;
+      let currentState = null;
+      let elapsedMs = 0;
+      let timerStartedAt = null;
+      let timerInterval = null;
+      let previewSequence = 0;
 
-<!-- Top-left: Current Slide -->
-<div class="current-slide">
-  <div class="panel-label">Current Slide</div>
-  <div class="preview-area" id="current-preview">Slide 1</div>
-</div>
+      const singleIdReferenceAttributes = new Set([
+        'aria-activedescendant', 'aria-details', 'aria-errormessage', 'for', 'form', 'list'
+      ]);
+      const listIdReferenceAttributes = new Set([
+        'aria-controls', 'aria-describedby', 'aria-flowto', 'aria-labelledby', 'aria-owns', 'headers'
+      ]);
+      const urlIdReferenceAttributes = new Set([
+        'clip-path', 'cursor', 'fill', 'filter', 'marker-end', 'marker-mid', 'marker-start', 'mask', 'stroke'
+      ]);
 
-<!-- Top-right: Next Slide -->
-<div class="next-slide">
-  <div class="panel-label">Next Slide</div>
-  <div class="preview-area" id="next-preview">Slide 2</div>
-</div>
+      const timer = document.getElementById('timer');
+      const formatTime = (milliseconds) => {
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':');
+      };
+      const drawTimer = () => { timer.textContent = formatTime(elapsedMs); };
+      const tickTimer = () => {
+        if (timerStartedAt === null) return;
+        elapsedMs = Date.now() - timerStartedAt;
+        drawTimer();
+      };
+      const startTimer = () => {
+        if (timerInterval !== null) return;
+        timerStartedAt = Date.now() - elapsedMs;
+        timerInterval = window.setInterval(tickTimer, 250);
+        tickTimer();
+      };
+      const pauseTimer = () => {
+        if (timerInterval === null) return;
+        tickTimer();
+        window.clearInterval(timerInterval);
+        timerInterval = null;
+        timerStartedAt = null;
+      };
+      const resetTimer = () => {
+        pauseTimer();
+        elapsedMs = 0;
+        drawTimer();
+      };
 
-<!-- Bottom-left: Speaker Notes -->
-<div class="notes-panel">
-  <div class="panel-label">Speaker Notes</div>
-  <div class="notes-content" id="notes-content">
-    <span class="no-notes">No notes for this slide.</span>
-  </div>
-</div>
-
-<!-- Bottom-right: Controls -->
-<div class="controls-panel">
-  <div class="timer-section">
-    <div class="timer-display" id="timer">00:00:00</div>
-    <div class="timer-buttons">
-      <button id="btn-start" onclick="startTimer()">Start</button>
-      <button id="btn-pause" onclick="pauseTimer()">Pause</button>
-      <button id="btn-reset" onclick="resetTimer()">Reset</button>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-  </div>
-
-  <div class="slide-counter">
-    <span class="current" id="counter-current">1</span>
-    <span class="separator">of</span>
-    <span class="total" id="counter-total">${totalSlides}</span>
-  </div>
-
-  <div class="nav-buttons">
-    <button id="btn-prev" onclick="navigatePrev()">Previous</button>
-    <button id="btn-next" onclick="navigateNext()">Next</button>
-  </div>
-
-  <div class="clock" id="clock">--:--:--</div>
-</div>
-
-<script>
-  // === State ===
-  const totalSlides = ${totalSlides};
-  const notes = ${notesJSON};
-  let currentSlide = 0;
-
-  // === BroadcastChannel Sync ===
-  const channel = new BroadcastChannel('slide-sage-presenter');
-
-  channel.onmessage = (e) => {
-    if (e.data.type === 'update' || e.data.type === 'init' || e.data.type === 'navigate') {
-      const slideIndex = e.data.slide !== undefined ? e.data.slide : e.data.currentSlide;
-      if (slideIndex !== undefined) {
-        currentSlide = slideIndex;
-        updatePresenterView(currentSlide);
+      function copyCanvasSnapshots(source, clone) {
+        source.querySelectorAll('canvas').forEach((canvas, index) => {
+          const copy = clone.querySelectorAll('canvas')[index];
+          if (!copy) return;
+          try {
+            const image = document.createElement('img');
+            image.src = canvas.toDataURL('image/png');
+            image.alt = canvas.getAttribute('aria-label') || 'Chart preview';
+            copy.replaceWith(image);
+          } catch (error) {
+            console.warn('Chart preview could not be captured.', error);
+          }
+        });
       }
-    }
-  };
 
-  function navigateFromPresenter(slideIndex) {
-    if (slideIndex < 0 || slideIndex >= totalSlides) return;
-    currentSlide = slideIndex;
-    channel.postMessage({ type: 'navigate', slide: slideIndex });
-    updatePresenterView(slideIndex);
-  }
+      function rewriteUrlReferences(value, idMap) {
+        return value.replace(/url\\(\\s*#([A-Za-z_][\\w:.-]*)\\s*\\)/g, (match, id) => {
+          const replacement = idMap.get(id);
+          return replacement ? 'url(#' + replacement + ')' : match;
+        });
+      }
 
-  function navigatePrev() {
-    if (currentSlide > 0) navigateFromPresenter(currentSlide - 1);
-  }
+      function rewriteHashReferences(value, idMap) {
+        return value.replace(/(^|[^\\w-])#([A-Za-z_][\\w:.-]*)/g, (match, prefix, id) => {
+          const replacement = idMap.get(id);
+          return replacement ? prefix + '#' + replacement : match;
+        });
+      }
 
-  function navigateNext() {
-    if (currentSlide < totalSlides - 1) navigateFromPresenter(currentSlide + 1);
-  }
+      function namespaceCloneIds(clone) {
+        const namespace = 'presenter-preview-' + (++previewSequence);
+        const idMap = new Map();
+        const elements = [clone, ...clone.querySelectorAll('*')];
 
-  // === Update View ===
-  function updatePresenterView(slideIndex) {
-    // Current slide indicator
-    document.getElementById('current-preview').textContent = 'Slide ' + (slideIndex + 1);
+        elements.forEach((element) => {
+          if (!element.id) return;
+          const replacement = namespace + '-' + element.id;
+          idMap.set(element.id, replacement);
+          element.id = replacement;
+        });
+        return { idMap, namespace };
+      }
 
-    // Next slide indicator
-    const nextEl = document.getElementById('next-preview');
-    if (slideIndex + 1 < totalSlides) {
-      nextEl.textContent = 'Slide ' + (slideIndex + 2);
-      nextEl.style.opacity = '1';
-    } else {
-      nextEl.textContent = 'End of presentation';
-      nextEl.style.opacity = '0.4';
-    }
+      function rewriteCloneReferences(clone, idMap) {
+        [clone, ...clone.querySelectorAll('*')].forEach((element) => {
+          if (element.tagName === 'STYLE') {
+            const styleText = element.textContent || '';
+            const replacement = rewriteHashReferences(rewriteUrlReferences(styleText, idMap), idMap);
+            if (replacement !== styleText) element.textContent = replacement;
+          }
+          [...element.attributes].forEach((attribute) => {
+            const name = attribute.name.toLowerCase();
+            const value = attribute.value;
+            let replacement = value;
+            if (listIdReferenceAttributes.has(name)) {
+              replacement = value.split(/\\s+/).map((id) => idMap.get(id) || id).join(' ');
+            } else if (singleIdReferenceAttributes.has(name)) {
+              replacement = idMap.get(value) || value;
+            } else if ((name === 'href' || name === 'xlink:href') && value.startsWith('#')) {
+              replacement = '#' + (idMap.get(value.slice(1)) || value.slice(1));
+            } else if (name === 'style') {
+              replacement = rewriteHashReferences(value, idMap);
+            }
+            if (urlIdReferenceAttributes.has(name) || name === 'style') {
+              replacement = rewriteUrlReferences(replacement, idMap);
+            }
+            if (replacement !== value) element.setAttribute(attribute.name, replacement);
+          });
+        });
+      }
 
-    // Notes
-    const notesEl = document.getElementById('notes-content');
-    if (notes[slideIndex] && notes[slideIndex].length > 0) {
-      notesEl.textContent = notes[slideIndex];
-      notesEl.classList.remove('no-notes');
-    } else {
-      notesEl.innerHTML = '<span class="no-notes">No notes for this slide.</span>';
-    }
+      function copyGlobalIdStyles(sourceSlide, clone, idMap, namespace) {
+        if (!idMap.size) return;
+        const copiedRules = [];
+        for (const styleSheet of sourceSlide.ownerDocument.styleSheets) {
+          if (styleSheet.ownerNode && sourceSlide.contains(styleSheet.ownerNode)) continue;
+          try {
+            for (const rule of styleSheet.cssRules) {
+              const original = rule.cssText;
+              const rewritten = rewriteHashReferences(rewriteUrlReferences(original, idMap), idMap);
+              if (rewritten !== original) copiedRules.push(rewritten);
+            }
+          } catch (error) {
+            // Cross-origin stylesheet text is not available. Its unchanged copy remains in the presenter head.
+          }
+        }
+        if (!copiedRules.length) return;
+        const style = document.createElement('style');
+        const scope = '[data-presenter-preview-scope="' + namespace + '"]';
+        style.setAttribute('data-presenter-preview-id-styles', '');
+        style.textContent = '@scope (' + scope + ') {' + copiedRules.join('\\n') + '}';
+        clone.prepend(style);
+      }
 
-    // Counter
-    document.getElementById('counter-current').textContent = slideIndex + 1;
+      function scopeCloneStyles(clone, namespace) {
+        const scope = '[data-presenter-preview-scope="' + namespace + '"]';
+        clone.querySelectorAll('style').forEach((style) => {
+          style.textContent = '@scope (' + scope + ') {' + style.textContent + '}';
+        });
+      }
 
-    // Progress
-    const pct = totalSlides > 1 ? ((slideIndex) / (totalSlides - 1)) * 100 : 100;
-    document.getElementById('progress-fill').style.width = pct + '%';
+      function renderPreview(frame, sourceSlide) {
+        frame.replaceChildren();
+        if (!sourceSlide) {
+          frame.innerHTML = '<div class="preview-empty">End of presentation</div>';
+          return;
+        }
+        const clone = sourceSlide.cloneNode(true);
+        const { idMap, namespace } = namespaceCloneIds(clone);
+        rewriteCloneReferences(clone, idMap);
+        clone.classList.remove('inactive');
+        clone.classList.add('active');
+        clone.setAttribute('inert', '');
+        clone.setAttribute('aria-hidden', 'true');
+        frame.setAttribute('data-presenter-preview-scope', namespace);
+        scopeCloneStyles(clone, namespace);
+        copyCanvasSnapshots(sourceSlide, clone);
+        copyGlobalIdStyles(sourceSlide, clone, idMap, namespace);
+        frame.append(clone);
+        const bounds = sourceSlide.getBoundingClientRect();
+        const scale = frame.clientWidth / Math.max(bounds.width, 1);
+        clone.style.width = bounds.width + 'px';
+        clone.style.height = bounds.height + 'px';
+        clone.style.transform = 'scale(' + scale + ')';
+        frame.style.height = Math.max(1, bounds.height * scale) + 'px';
+      }
 
-    // Nav button states
-    document.getElementById('btn-prev').disabled = (slideIndex === 0);
-    document.getElementById('btn-next').disabled = (slideIndex === totalSlides - 1);
-  }
+      function renderPreviews() {
+        if (!currentState) return;
+        renderPreview(document.getElementById('currentPreview'), currentState.slides[currentState.index]);
+        renderPreview(document.getElementById('nextPreview'), currentState.slides[currentState.index + 1]);
+      }
 
-  // === Timer ===
-  let timerStart = null;
-  let timerRunning = false;
-  let elapsed = 0;
+      function render(state) {
+        currentState = state;
+        renderPreviews();
+        document.getElementById('notes').textContent = state.notes[state.index] || 'No notes for this slide.';
+        document.getElementById('counter').textContent = 'Slide ' + (state.index + 1) + ' of ' + state.slides.length;
+        document.getElementById('previousSlide').disabled = state.index === 0;
+        document.getElementById('nextSlide').disabled = state.index >= state.slides.length - 1;
+      }
 
-  function startTimer() {
-    timerStart = Date.now() - elapsed;
-    timerRunning = true;
-    document.getElementById('btn-start').classList.add('active');
-    document.getElementById('btn-pause').classList.remove('active');
-    tick();
-  }
+      document.getElementById('startTimer').addEventListener('click', startTimer);
+      document.getElementById('pauseTimer').addEventListener('click', pauseTimer);
+      document.getElementById('resetTimer').addEventListener('click', resetTimer);
+      document.getElementById('previousSlide').addEventListener('click', () => connection?.goTo(currentState.index - 1));
+      document.getElementById('nextSlide').addEventListener('click', () => connection?.goTo(currentState.index + 1));
+      window.addEventListener('resize', renderPreviews);
+      document.addEventListener('keydown', (event) => {
+        if (event.target instanceof Element && event.target.matches('button, input, select, textarea, a[href]')) return;
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+          event.preventDefault();
+          connection?.goTo(currentState.index - 1);
+        } else if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+          event.preventDefault();
+          connection?.goTo(currentState.index + 1);
+        }
+      });
+      window.addEventListener('beforeunload', () => {
+        if (timerInterval !== null) window.clearInterval(timerInterval);
+      });
 
-  function pauseTimer() {
-    timerRunning = false;
-    elapsed = Date.now() - timerStart;
-    document.getElementById('btn-start').classList.remove('active');
-    document.getElementById('btn-pause').classList.add('active');
-  }
-
-  function resetTimer() {
-    timerRunning = false;
-    elapsed = 0;
-    timerStart = null;
-    updateTimerDisplay(0);
-    document.getElementById('btn-start').classList.remove('active');
-    document.getElementById('btn-pause').classList.remove('active');
-  }
-
-  function tick() {
-    if (!timerRunning) return;
-    elapsed = Date.now() - timerStart;
-    updateTimerDisplay(elapsed);
-    requestAnimationFrame(tick);
-  }
-
-  function updateTimerDisplay(ms) {
-    const s = Math.floor(ms / 1000);
-    const m = Math.floor(s / 60);
-    const h = Math.floor(m / 60);
-    document.getElementById('timer').textContent =
-      String(h).padStart(2, '0') + ':' +
-      String(m % 60).padStart(2, '0') + ':' +
-      String(s % 60).padStart(2, '0');
-  }
-
-  // === Clock ===
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').textContent =
-      now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  // === Keyboard shortcuts in presenter window ===
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-      e.preventDefault();
-      navigateNext();
-    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-      e.preventDefault();
-      navigatePrev();
-    } else if (e.key === 't' || e.key === 'T') {
-      if (timerRunning) pauseTimer(); else startTimer();
-    } else if (e.key === 'r' || e.key === 'R') {
-      resetTimer();
-    }
-  });
-
-  // === Initial render ===
-  updatePresenterView(currentSlide);
-</script>
+      window.slideSagePresenter = {
+        connect(nextConnection) { connection = nextConnection; },
+        render
+      };
+      window.opener?.__slideSagePresenterReady?.();
+    })();
+  <\/script>
 </body>
 </html>`;
 }
-```
 
----
+function installPresenterMode() {
+  let presentation = null;
+  let popup = null;
 
-## Summary of Key Bindings
+  const sendState = () => {
+    if (!presentation || !popup || popup.closed) return;
+    popup.slideSagePresenter?.render({
+      index: presentation.currentSlide,
+      slides: presentation.slides,
+      notes: readSpeakerNotes(presentation.totalSlides)
+    });
+  };
 
-### Main Presentation Window
-| Key | Action |
-|-----|--------|
-| `P` | Open presenter view |
-| Arrow keys / Space | Navigate slides (existing) |
+  window.openSlideSagePresenter = (instance) => {
+    presentation = instance;
+    if (popup && !popup.closed) {
+      popup.focus();
+      sendState();
+      return;
+    }
 
-### Presenter Window
-| Key | Action |
-|-----|--------|
-| Left Arrow / PageUp | Previous slide |
-| Right Arrow / Space / PageDown | Next slide |
-| `T` | Toggle timer (start/pause) |
-| `R` | Reset timer |
+    popup = window.open('', 'slide-sage-presenter', 'popup,width=1280,height=800');
+    if (!popup) {
+      console.warn('Presenter window was blocked by the browser. Allow popups and press P again.');
+      return;
+    }
+    const connectPresenter = () => {
+      const presenter = popup?.slideSagePresenter;
+      if (!presenter || !presentation) return false;
+      presenter.connect({ goTo: (index) => presentation.goTo(index) });
+      sendState();
+      delete window.__slideSagePresenterReady;
+      return true;
+    };
+    window.__slideSagePresenterReady = connectPresenter;
+    popup.document.open();
+    popup.document.write(createPresenterDocument(sourceStyleMarkup()));
+    popup.document.close();
+    if (popup.document.readyState === 'complete') connectPresenter();
+  };
 
----
-
-## BroadcastChannel Message Protocol
-
-### Message Types
-
-| Type | Direction | Payload | Purpose |
-|------|-----------|---------|---------|
-| `init` | Main -> Presenter | `{ currentSlide, totalSlides }` | Initial state when presenter opens |
-| `update` | Main -> Presenter | `{ slide, totalSlides }` | Slide changed in main window |
-| `navigate` | Either direction | `{ slide }` | Navigation request |
-
-### Channel Name
-
-```
-'slide-sage-presenter'
-```
-
-Constant across all presentations. Only one presenter session should be active at a time.
-
----
-
-## Integration Checklist
-
-1. Add `extractNotes()` function to the presentation script
-2. Add `generatePresenterHTML()` function to the presentation script
-3. Add `initPresenter()`, `openPresenterView()` methods to SlidePresentation class
-4. Modify `navigate()` to broadcast via BroadcastChannel
-5. Add `'P'` key binding to open presenter view
-6. Call `initPresenter()` in the constructor
-
----
-
-## Fallback: No BroadcastChannel
-
-For very old browsers that lack BroadcastChannel support (pre-2016), a localStorage-based fallback:
-
-```javascript
-// Fallback using localStorage events
-function sendViaStorage(data) {
-  localStorage.setItem('slide-sage-presenter', JSON.stringify({
-    ...data,
-    timestamp: Date.now()
-  }));
+  document.addEventListener('slidechange', sendState);
 }
 
-window.addEventListener('storage', (e) => {
-  if (e.key === 'slide-sage-presenter') {
-    const data = JSON.parse(e.newValue);
-    handleMessage(data);
-  }
-});
+document.addEventListener('DOMContentLoaded', installPresenterMode);
 ```
 
-**Note**: localStorage events only fire in *other* windows/tabs (not the one that set the value), which matches the presenter mode use case. However, BroadcastChannel is preferred and supported in all modern browsers.
+The presenter calls the canonical `goTo(index)` method. It does not rely on deprecated `navigate()` or nonexistent `goToSlide()` methods. Current and next previews are real cloned slide markup, and canvas charts are replaced with an image snapshot so a clone does not appear blank. Preview clones are inert and hidden from assistive technology. Their IDs, ARIA references, SVG references, and applicable source CSS rules are namespaced for each preview.
+
+## Verification
+
+1. Open a deck with a JSON notes block and press `P`.
+2. Navigate in either window. Confirm the other view updates, including next-slide preview and notes.
+3. Start, pause, reset, and restart the timer. It uses one guarded `setInterval` and calculates elapsed time from `Date.now()`.
+4. Open the shared HTML source and verify that notes are expected to be readable before sharing it.

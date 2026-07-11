@@ -10,8 +10,8 @@
       font-size: 13px; font-weight: 700; fill: var(--diagram-text, #ccc);
       writing-mode: vertical-rl; text-orientation: mixed;
     }
-    .ct-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #fff; }
-    .ct-db-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: #fff; }
+    .ct-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
+    .ct-db-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: var(--diagram-label, #FFFFFF); }
     .ct-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
   </style>
 
@@ -27,11 +27,11 @@
   <!-- Zone 1: Internet / CDN -->
   <g id="zone-1-group">
     <rect class="ct-band" x="80" y="20" width="700" height="90" rx="8"
-          fill="var(--diagram-primary, #4A90D9)" />
+          fill="var(--diagram-primary, #0077BB)" />
     <text id="zone-1-name" x="55" y="70" text-anchor="middle"
           class="ct-zone-name" style="writing-mode:tb; text-orientation:mixed;">Internet</text>
     <rect class="ct-box" x="310" y="38" width="180" height="50" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#ct-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#ct-shadow)" />
     <text id="app-1-label" x="400" y="69" text-anchor="middle" class="ct-label">CDN / Edge</text>
   </g>
 
@@ -41,11 +41,11 @@
   <!-- Zone 2: Load Balancer -->
   <g id="zone-2-group">
     <rect class="ct-band" x="80" y="130" width="700" height="90" rx="8"
-          fill="var(--diagram-secondary, #50C878)" />
+          fill="var(--diagram-secondary, #009988)" />
     <text id="zone-2-name" x="55" y="180" text-anchor="middle"
           class="ct-zone-name" style="writing-mode:tb; text-orientation:mixed;">Load Balancer</text>
     <rect class="ct-box" x="310" y="148" width="180" height="50" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#ct-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#ct-shadow)" />
     <text id="app-2-label" x="400" y="179" text-anchor="middle" class="ct-label">ALB / NLB</text>
   </g>
 
@@ -56,28 +56,28 @@
   <!-- Zone 3: Application Tier -->
   <g id="zone-3-group">
     <rect class="ct-band" x="80" y="240" width="700" height="100" rx="8"
-          fill="var(--diagram-amber, #F5A623)" />
+          fill="var(--diagram-amber, #EE7733)" />
     <text id="zone-3-name" x="55" y="295" text-anchor="middle"
           class="ct-zone-name" style="writing-mode:tb; text-orientation:mixed;">Application</text>
 
     <!-- App Server 1 -->
     <g id="app-server-1-group">
       <rect class="ct-box" x="180" y="262" width="180" height="50" rx="8" ry="8"
-            fill="var(--diagram-amber, #F5A623)" filter="url(#ct-shadow)" />
+            fill="var(--diagram-amber, #EE7733)" filter="url(#ct-shadow)" />
       <text id="app-3-label" x="270" y="293" text-anchor="middle" class="ct-label">App Server 1</text>
     </g>
 
     <!-- App Server 2 -->
     <g id="app-server-2-group">
       <rect class="ct-box" x="430" y="262" width="180" height="50" rx="8" ry="8"
-            fill="var(--diagram-amber, #F5A623)" filter="url(#ct-shadow)" />
+            fill="var(--diagram-amber, #EE7733)" filter="url(#ct-shadow)" />
       <text id="app-4-label" x="520" y="293" text-anchor="middle" class="ct-label">App Server 2</text>
     </g>
 
     <!-- App Server 3 (hidden) -->
     <g id="app-3-group" style="display:none;">
       <rect class="ct-box" x="660" y="262" width="180" height="50" rx="8" ry="8"
-            fill="var(--diagram-amber, #F5A623)" filter="url(#ct-shadow)" />
+            fill="var(--diagram-amber, #EE7733)" filter="url(#ct-shadow)" />
       <text id="app-5-label" x="750" y="293" text-anchor="middle" class="ct-label">App Server 3</text>
     </g>
   </g>
@@ -89,23 +89,25 @@
   <!-- Zone 4: Data Tier -->
   <g id="zone-4-group">
     <rect class="ct-band" x="80" y="360" width="700" height="110" rx="8"
-          fill="var(--diagram-purple, #9B59B6)" />
+          fill="var(--diagram-purple, #3344AA)" />
     <text id="zone-4-name" x="55" y="420" text-anchor="middle"
           class="ct-zone-name" style="writing-mode:tb; text-orientation:mixed;">Data Tier</text>
 
     <!-- DB Cylinder 1 -->
     <g id="db-1-group">
-      <ellipse cx="400" cy="388" rx="55" ry="12" fill="var(--diagram-purple, #9B59B6)" />
-      <rect x="345" y="388" width="110" height="40" fill="var(--diagram-purple, #9B59B6)" />
-      <ellipse cx="400" cy="428" rx="55" ry="12" fill="#7d3f99" />
+      <ellipse cx="400" cy="388" rx="55" ry="12" fill="var(--diagram-purple, #3344AA)" />
+      <rect x="345" y="388" width="110" height="40" fill="var(--diagram-purple, #3344AA)" />
+      <ellipse cx="400" cy="428" rx="55" ry="12" fill="var(--diagram-purple, #3344AA)" />
+      <ellipse cx="400" cy="428" rx="55" ry="12" fill="var(--diagram-shadow, #000000)" fill-opacity="0.20" />
       <text id="db-1-label" x="400" y="414" text-anchor="middle" class="ct-db-label">Primary DB</text>
     </g>
 
     <!-- DB Cylinder 2 (hidden) -->
     <g id="db-2-group" style="display:none;">
-      <ellipse cx="600" cy="388" rx="55" ry="12" fill="var(--diagram-secondary, #50C878)" />
-      <rect x="545" y="388" width="110" height="40" fill="var(--diagram-secondary, #50C878)" />
-      <ellipse cx="600" cy="428" rx="55" ry="12" fill="#3db066" />
+      <ellipse cx="600" cy="388" rx="55" ry="12" fill="var(--diagram-secondary, #009988)" />
+      <rect x="545" y="388" width="110" height="40" fill="var(--diagram-secondary, #009988)" />
+      <ellipse cx="600" cy="428" rx="55" ry="12" fill="var(--diagram-secondary, #009988)" />
+      <ellipse cx="600" cy="428" rx="55" ry="12" fill="var(--diagram-shadow, #000000)" fill-opacity="0.20" />
       <text id="db-2-label" x="600" y="414" text-anchor="middle" class="ct-db-label">Read Replica</text>
     </g>
   </g>

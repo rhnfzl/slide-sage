@@ -6,62 +6,62 @@
 
 ```html
 <!-- Core -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js" integrity="sha384-Cn/s7dpCMIb2rgIjtCYcpcv3LPJjUciybJ5G/sGMK025lFiqdJ4pRgUEgIcolGuJ" crossorigin="anonymous"></script>
 
 <!-- Theme: Tomorrow Night -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css" integrity="sha384-wFjoQjtV1y5jVHbt0p35Ui8aV8GVpEZkyF99OXWqP/eNJDU93D3Ugxkoyh6Y2I4A" crossorigin="anonymous">
 ```
 
 ### Language Grammars (load after core)
 
 ```html
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-javascript.min.js" integrity="sha384-D44bgYYKvaiDh4cOGlj1dbSDpSctn2FSUj118HZGmZEShZcO2v//Q5vvhNy206pp" crossorigin="anonymous"></script>
 
 <!-- TypeScript -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-typescript.min.js" integrity="sha384-PeOqKNW/piETaCg8rqKFy+Pm6KEk7e36/5YZE5XO/OaFdO+/Aw3O8qZ9qDPKVUgx" crossorigin="anonymous"></script>
 
 <!-- Python -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js" integrity="sha384-WJdEkJKrbsqw0evQ4GB6mlsKe5cGTxBOw4KAEIa52ZLB7DDpliGkwdme/HMa5n1m" crossorigin="anonymous"></script>
 
 <!-- HTML / Markup (included in core, but explicit load available) -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-markup.min.js" integrity="sha384-HkMr0bZB9kBW4iVtXn6nd35kO/L/dQtkkUBkL9swzTEDMdIe5ExJChVDSnC79aNA" crossorigin="anonymous"></script>
 
 <!-- CSS -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-css.min.js" integrity="sha384-0mV13Neu0xhJFylI+HV43C+XiR13bGSeL7D0/7e6hK7sJgvyvK6HVjeQwmvXTstY" crossorigin="anonymous"></script>
 
 <!-- JSON -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-json.min.js" integrity="sha384-RhrmFFMb0ZCHImjFMpR/UE3VEtIVTCtNrtKQqXCzqXZNJala02N3UbVhi+qzw3CY" crossorigin="anonymous"></script>
 
 <!-- Bash / Shell -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-bash.min.js" integrity="sha384-9WmlN8ABpoFSSHvBGGjhvB3E/D8UkNB9HpLJjBQFC2VSQsM1odiQDv4NbEo+7l15" crossorigin="anonymous"></script>
 
 <!-- SQL -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-sql.min.js" integrity="sha384-/MKWdycCDliku23mP5sYXbZNuXrzgmQO/jsVxwPFn99dVOaXRyKsqDjarqpueGAp" crossorigin="anonymous"></script>
 
 <!-- YAML -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-yaml.min.js" integrity="sha384-AKAiycghK0jDCjD+aavMHzDkLzRR7Yzcwh3+xL/295cvyVMe+cxQfyQC8xxGGcI8" crossorigin="anonymous"></script>
 
 <!-- Java -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-java.min.js" integrity="sha384-DioAMZB4yk91W6LuFit5wJDh8c5Ov09f/MBvja94y0PodMqTpTZeBeejqpRUru7D" crossorigin="anonymous"></script>
 
 <!-- Go -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-go.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-go.min.js" integrity="sha384-YxCco6ByOY5rJ3jD18514fa8w5so07zigIyV6tZa3CWSE5vYrbDSuFkZ5zOknnZ6" crossorigin="anonymous"></script>
 
 <!-- Rust -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-rust.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-rust.min.js" integrity="sha384-JyDgFjMbyrE/TGiEUSXW3CLjQOySrsoiUNAlXTFdIsr/XUfaB7E+eYlR+tGQ9bCO" crossorigin="anonymous"></script>
 
 <!-- C -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-c.min.js" integrity="sha384-gaD4ncierlmWk42Z3BmTp37/z+Dqt8V4Wf74UjTvFeo+M+SgnEI6Ysd98pWhksQv" crossorigin="anonymous"></script>
 
 <!-- C++ (depends on C) -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-cpp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-cpp.min.js" integrity="sha384-NiOrAquf32LSG3Vuig99LKS03EZPUuM8a51NOp+XXsqx08hUVo3wbNWALY7K/2J8" crossorigin="anonymous"></script>
 
 <!-- Ruby -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-ruby.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-ruby.min.js" integrity="sha384-xVcnao4LK2LGPWtbEMXzbqrmtM8Ycfrz6nH7gthLCLwCrQGhNFScUV7UGjDotjVu" crossorigin="anonymous"></script>
 
 <!-- PHP -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-php.min.js" integrity="sha384-+grZ1BKjM0uVvu5qwWIjfNJct1eZpnnIv7QAo1Qva9uEWA584H7dSk7sZSgwbvT7" crossorigin="anonymous"></script>
 ```
 
 **Note**: C++ (`prism-cpp`) depends on C (`prism-c`). Load C first.
@@ -89,12 +89,12 @@ def hello():
 /* === Slide-Sage Dark Code Theme === */
 
 pre.code-block {
-  background: #1e1e2e;
-  color: #abb2bf;
+  background: color-mix(in srgb, var(--color-bg-primary) 82%, #000000);
+  color: var(--color-text-primary);
 }
 
 pre.code-block code {
-  color: #abb2bf;
+  color: inherit;
   text-shadow: none;
 }
 
@@ -211,124 +211,126 @@ pre.code-block ::selection {
 
 ## Light Theme CSS
 
+Named light presets already set `data-mode="light"` on `<html>`. Do not add a separate `.light-theme` class.
+
 ```css
 /* === Slide-Sage Light Code Theme === */
 
-pre.code-block.light-theme {
+html[data-mode="light"] pre.code-block {
   background: #fafafa;
   color: #383a42;
 }
 
-pre.code-block.light-theme code {
+html[data-mode="light"] pre.code-block code {
   color: #383a42;
   text-shadow: none;
 }
 
 /* Comments */
-.light-theme .token.comment,
-.light-theme .token.prolog,
-.light-theme .token.doctype,
-.light-theme .token.cdata {
+html[data-mode="light"] .token.comment,
+html[data-mode="light"] .token.prolog,
+html[data-mode="light"] .token.doctype,
+html[data-mode="light"] .token.cdata {
   color: #a0a1a7;
   font-style: italic;
 }
 
 /* Punctuation */
-.light-theme .token.punctuation {
+html[data-mode="light"] .token.punctuation {
   color: #383a42;
 }
 
 /* Namespaces */
-.light-theme .token.namespace {
+html[data-mode="light"] .token.namespace {
   opacity: 0.8;
 }
 
 /* Keywords */
-.light-theme .token.keyword,
-.light-theme .token.tag,
-.light-theme .token.boolean,
-.light-theme .token.constant,
-.light-theme .token.deleted {
+html[data-mode="light"] .token.keyword,
+html[data-mode="light"] .token.tag,
+html[data-mode="light"] .token.boolean,
+html[data-mode="light"] .token.constant,
+html[data-mode="light"] .token.deleted {
   color: #a626a4;
 }
 
 /* Strings */
-.light-theme .token.string,
-.light-theme .token.char,
-.light-theme .token.attr-value,
-.light-theme .token.inserted {
+html[data-mode="light"] .token.string,
+html[data-mode="light"] .token.char,
+html[data-mode="light"] .token.attr-value,
+html[data-mode="light"] .token.inserted {
   color: #50a14f;
 }
 
 /* Template strings */
-.light-theme .token.template-string,
-.light-theme .token.template-punctuation {
+html[data-mode="light"] .token.template-string,
+html[data-mode="light"] .token.template-punctuation {
   color: #50a14f;
 }
 
 /* Functions */
-.light-theme .token.function,
-.light-theme .token.class-name {
+html[data-mode="light"] .token.function,
+html[data-mode="light"] .token.class-name {
   color: #4078f2;
 }
 
 /* Numbers */
-.light-theme .token.number {
+html[data-mode="light"] .token.number {
   color: #986801;
 }
 
 /* Operators */
-.light-theme .token.operator,
-.light-theme .token.entity,
-.light-theme .token.url {
+html[data-mode="light"] .token.operator,
+html[data-mode="light"] .token.entity,
+html[data-mode="light"] .token.url {
   color: #0184bc;
 }
 
 /* Variables */
-.light-theme .token.variable,
-.light-theme .token.property {
+html[data-mode="light"] .token.variable,
+html[data-mode="light"] .token.property {
   color: #e45649;
 }
 
 /* Selectors, Symbols, Important */
-.light-theme .token.selector,
-.light-theme .token.symbol,
-.light-theme .token.important {
+html[data-mode="light"] .token.selector,
+html[data-mode="light"] .token.symbol,
+html[data-mode="light"] .token.important {
   color: #a626a4;
 }
 
 /* Attribute names */
-.light-theme .token.attr-name {
+html[data-mode="light"] .token.attr-name {
   color: #986801;
 }
 
 /* Regex */
-.light-theme .token.regex {
+html[data-mode="light"] .token.regex {
   color: #0184bc;
 }
 
 /* Built-in */
-.light-theme .token.builtin {
+html[data-mode="light"] .token.builtin {
   color: #c18401;
 }
 
 /* Annotations / Decorators */
-.light-theme .token.annotation,
-.light-theme .token.decorator {
+html[data-mode="light"] .token.annotation,
+html[data-mode="light"] .token.decorator {
   color: #986801;
 }
 
 /* Bold / Italic tokens */
-.light-theme .token.bold {
+html[data-mode="light"] .token.bold {
   font-weight: bold;
 }
-.light-theme .token.italic {
+html[data-mode="light"] .token.italic {
   font-style: italic;
 }
 
 /* Selection */
-pre.code-block.light-theme::selection,
-pre.code-block.light-theme ::selection {
+html[data-mode="light"] pre.code-block::selection,
+html[data-mode="light"] pre.code-block ::selection {
   background: rgba(64, 120, 242, 0.2);
 }
 ```
@@ -377,7 +379,7 @@ app.listen(3000, () => {
   white-space: pre;
   word-wrap: normal;
   word-break: normal;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
 }
 
 .code-block code {
@@ -406,8 +408,8 @@ Fallback stack: `'Fira Code', 'JetBrains Mono', 'Source Code Pro', 'Cascadia Cod
 ### CDN
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha384-nUkTNLI8COlMCRJ0FHIdX76If83145OTCLUx4gQyfnO0gGeO/sD9czGEUBxtkcUv" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha384-6QJu8apxMmB9TiPVWzYKF5pRgKcz7snO0/QU+MrWmgBLECQjoa6erxX2VQ5t41Jd" crossorigin="anonymous"></script>
 ```
 
 ### Usage
@@ -432,22 +434,13 @@ pre.code-block.line-numbers {
 }
 
 .line-numbers .line-numbers-rows {
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--color-border);
   padding-right: 0.8em;
 }
 
 .line-numbers .line-numbers-rows > span::before {
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--color-text-muted);
   font-size: 0.85em;
-}
-
-/* Light theme variant */
-.light-theme.line-numbers .line-numbers-rows {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.light-theme .line-numbers-rows > span::before {
-  color: rgba(0, 0, 0, 0.25);
 }
 ```
 
@@ -458,8 +451,8 @@ pre.code-block.line-numbers {
 ### CDN
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-highlight/prism-line-highlight.min.css">
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-highlight/prism-line-highlight.min.css" integrity="sha384-bCq+nBO5hUxeJTxGcpLbGAP5hqUhRUl9xclGVWMifyWonUxPS1+fO1JzOplEJsLP" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha384-aA5pbfEm+kZPOE/CKuBywvgtAzs4ZrQPlTwexPyFEwQ96E9rTPN1B0ObNmCn9tgH" crossorigin="anonymous"></script>
 ```
 
 ### Usage
@@ -489,16 +482,10 @@ pre[data-line] {
 }
 
 .line-highlight {
-  background: rgba(97, 175, 239, 0.12);
-  border-left: 3px solid #61afef;
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  border-left: 3px solid var(--color-accent);
   margin-left: -1.5rem;
   padding-left: calc(1.5rem - 3px);
-}
-
-/* Light theme */
-.light-theme .line-highlight {
-  background: rgba(64, 120, 242, 0.1);
-  border-left-color: #4078f2;
 }
 ```
 
@@ -529,9 +516,9 @@ document.querySelectorAll('.code-block').forEach(block => {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+  color: var(--color-text-secondary);
   border-radius: 4px;
   padding: 4px 10px;
   font-size: 0.75rem;
@@ -542,20 +529,8 @@ document.querySelectorAll('.code-block').forEach(block => {
 }
 
 .copy-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-/* Light theme */
-.light-theme .copy-btn {
-  background: rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.light-theme .copy-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: rgba(0, 0, 0, 0.8);
+  background: color-mix(in srgb, var(--color-text) 20%, transparent);
+  color: var(--color-text);
 }
 ```
 
@@ -578,14 +553,6 @@ For showing code changes with added/removed lines:
   opacity: 0.7;
 }
 
-/* Light theme */
-.light-theme .line-added {
-  background: rgba(80, 200, 120, 0.12);
-}
-
-.light-theme .line-removed {
-  background: rgba(224, 108, 117, 0.12);
-}
 ```
 
 ### Usage in HTML
@@ -607,16 +574,9 @@ Code block backgrounds should complement the slide background. Use CSS custom pr
 
 ```css
 .code-block {
-  background: var(--code-bg, #1e1e2e);
-  color: var(--code-fg, #abb2bf);
-  border: 1px solid var(--code-border, rgba(255, 255, 255, 0.06));
-}
-
-/* Auto-detect: if slide has a light background, switch code theme */
-.slide[data-theme="light"] .code-block {
-  background: var(--code-bg-light, #fafafa);
-  color: var(--code-fg-light, #383a42);
-  border-color: var(--code-border-light, rgba(0, 0, 0, 0.1));
+  background: var(--code-bg, color-mix(in srgb, var(--color-bg-primary) 82%, #000000));
+  color: var(--code-fg, var(--color-text-primary));
+  border: 1px solid var(--code-border, var(--color-border));
 }
 ```
 
@@ -627,25 +587,25 @@ Code block backgrounds should complement the slide background. Use CSS custom pr
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 
 <!-- 2. Prism theme (base, will be overridden by inline CSS) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css" integrity="sha384-wFjoQjtV1y5jVHbt0p35Ui8aV8GVpEZkyF99OXWqP/eNJDU93D3Ugxkoyh6Y2I4A" crossorigin="anonymous">
 
 <!-- 3. Optional plugin CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-highlight/prism-line-highlight.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha384-nUkTNLI8COlMCRJ0FHIdX76If83145OTCLUx4gQyfnO0gGeO/sD9czGEUBxtkcUv" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-highlight/prism-line-highlight.min.css" integrity="sha384-bCq+nBO5hUxeJTxGcpLbGAP5hqUhRUl9xclGVWMifyWonUxPS1+fO1JzOplEJsLP" crossorigin="anonymous">
 
 <!-- 4. Inline theme overrides (dark/light from above) -->
 <style>/* ... custom theme CSS ... */</style>
 
 <!-- 5. Prism core (at end of body) -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js" integrity="sha384-Cn/s7dpCMIb2rgIjtCYcpcv3LPJjUciybJ5G/sGMK025lFiqdJ4pRgUEgIcolGuJ" crossorigin="anonymous"></script>
 
 <!-- 6. Language grammars (only those needed) -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js" integrity="sha384-WJdEkJKrbsqw0evQ4GB6mlsKe5cGTxBOw4KAEIa52ZLB7DDpliGkwdme/HMa5n1m" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-javascript.min.js" integrity="sha384-D44bgYYKvaiDh4cOGlj1dbSDpSctn2FSUj118HZGmZEShZcO2v//Q5vvhNy206pp" crossorigin="anonymous"></script>
 
 <!-- 7. Optional plugins -->
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha384-6QJu8apxMmB9TiPVWzYKF5pRgKcz7snO0/QU+MrWmgBLECQjoa6erxX2VQ5t41Jd" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha384-aA5pbfEm+kZPOE/CKuBywvgtAzs4ZrQPlTwexPyFEwQ96E9rTPN1B0ObNmCn9tgH" crossorigin="anonymous"></script>
 
 <!-- 8. Copy button script -->
 <script>/* ... copy button JS from above ... */</script>
@@ -687,13 +647,13 @@ For short code references within slide text (e.g., function names, variable name
 <p>Set <code class="inline-code">previous_response_id: 'auto'</code> for caching.</p>
 ```
 
-**Never** place a multi-line code block below content cards or comparison layouts — if code is needed alongside a comparison, put it on the next slide.
+**Never** place a multi-line code block below content cards or comparison layouts - if code is needed alongside a comparison, put it on the next slide.
 
 ---
 
 ## Manual Syntax Classes (Domain-Specific Pseudo-Code)
 
-For content Prism.js cannot tokenize — HTTP endpoints, file trees, data flow diagrams, config snippets — use manual CSS helper classes. These complement Prism.js (Tier 1) as a lighter-weight Tier 2 approach.
+For content Prism.js cannot tokenize - HTTP endpoints, file trees, data flow diagrams, config snippets - use manual CSS helper classes. These complement Prism.js (Tier 1) as a lighter-weight Tier 2 approach.
 
 ### Dark Theme CSS
 
@@ -713,15 +673,15 @@ For content Prism.js cannot tokenize — HTTP endpoints, file trees, data flow d
 ### Light Theme CSS
 
 ```css
-.light-theme .syn-kw     { color: #a626a4; }
-.light-theme .syn-fn     { color: #4078f2; }
-.light-theme .syn-str    { color: #50a14f; }
-.light-theme .syn-num    { color: #986801; }
-.light-theme .syn-cm     { color: #a0a1a7; font-style: italic; }
-.light-theme .syn-method { color: #c18401; }
-.light-theme .syn-verb   { color: #50a14f; font-weight: 600; }
-.light-theme .syn-path   { color: #986801; }
-.light-theme .syn-param  { color: #0184bc; }
+html[data-mode="light"] .syn-kw     { color: #a626a4; }
+html[data-mode="light"] .syn-fn     { color: #4078f2; }
+html[data-mode="light"] .syn-str    { color: #50a14f; }
+html[data-mode="light"] .syn-num    { color: #986801; }
+html[data-mode="light"] .syn-cm     { color: #a0a1a7; font-style: italic; }
+html[data-mode="light"] .syn-method { color: #c18401; }
+html[data-mode="light"] .syn-verb   { color: #50a14f; font-weight: 600; }
+html[data-mode="light"] .syn-path   { color: #986801; }
+html[data-mode="light"] .syn-param  { color: #0184bc; }
 ```
 
 ### Usage Examples

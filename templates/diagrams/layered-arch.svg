@@ -12,7 +12,7 @@
     }
     .item-label {
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: 13px; font-weight: 600; fill: #fff;
+      font-size: 13px; font-weight: 600; fill: var(--diagram-label, #FFFFFF);
     }
     .la-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
   </style>
@@ -30,21 +30,21 @@
   <g id="layer-1-group">
     <!-- Background band -->
     <rect class="layer-band" x="90" y="30" width="690" height="120" rx="8"
-          fill="var(--diagram-primary, #4A90D9)" />
+          fill="var(--diagram-primary, #0077BB)" />
     <!-- Layer name (left side) -->
     <text id="layer-1-name" x="60" y="95" text-anchor="middle"
           class="layer-name-text" style="writing-mode:tb; text-orientation:mixed;">Presentation</text>
     <!-- Items -->
     <rect class="layer-item" x="150" y="55" width="200" height="55" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#la-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#la-shadow)" />
     <text id="layer-1-item-1" x="250" y="88" text-anchor="middle" class="item-label">React SPA</text>
 
     <rect class="layer-item" x="410" y="55" width="200" height="55" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#la-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#la-shadow)" />
     <text id="layer-1-item-2" x="510" y="88" text-anchor="middle" class="item-label">Admin Dashboard</text>
 
     <rect class="layer-item" x="670" y="55" height="55" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#la-shadow)" style="display:none;" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#la-shadow)" style="display:none;" />
     <text id="layer-1-item-3" x="670" y="88" text-anchor="middle" class="item-label" style="display:none;"></text>
   </g>
 
@@ -55,20 +55,20 @@
   <!-- Layer 2: Business Logic -->
   <g id="layer-2-group">
     <rect class="layer-band" x="90" y="180" width="690" height="120" rx="8"
-          fill="var(--diagram-secondary, #50C878)" />
+          fill="var(--diagram-secondary, #009988)" />
     <text id="layer-2-name" x="60" y="245" text-anchor="middle"
           class="layer-name-text" style="writing-mode:tb; text-orientation:mixed;">Business Logic</text>
 
     <rect class="layer-item" x="120" y="205" width="170" height="55" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#la-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#la-shadow)" />
     <text id="layer-2-item-1" x="205" y="238" text-anchor="middle" class="item-label">Auth Service</text>
 
     <rect class="layer-item" x="320" y="205" width="170" height="55" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#la-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#la-shadow)" />
     <text id="layer-2-item-2" x="405" y="238" text-anchor="middle" class="item-label">Order Engine</text>
 
     <rect class="layer-item" x="520" y="205" width="170" height="55" rx="8" ry="8"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#la-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#la-shadow)" />
     <text id="layer-2-item-3" x="605" y="238" text-anchor="middle" class="item-label">Analytics</text>
   </g>
 
@@ -80,20 +80,20 @@
   <!-- Layer 3: Data Layer -->
   <g id="layer-3-group">
     <rect class="layer-band" x="90" y="330" width="690" height="120" rx="8"
-          fill="var(--diagram-amber, #F5A623)" />
+          fill="var(--diagram-amber, #EE7733)" />
     <text id="layer-3-name" x="60" y="395" text-anchor="middle"
           class="layer-name-text" style="writing-mode:tb; text-orientation:mixed;">Data Layer</text>
 
     <rect class="layer-item" x="120" y="355" width="170" height="55" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#la-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#la-shadow)" />
     <text id="layer-3-item-1" x="205" y="388" text-anchor="middle" class="item-label">PostgreSQL</text>
 
     <rect class="layer-item" x="320" y="355" width="170" height="55" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#la-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#la-shadow)" />
     <text id="layer-3-item-2" x="405" y="388" text-anchor="middle" class="item-label">Redis Cache</text>
 
     <rect class="layer-item" x="520" y="355" width="170" height="55" rx="8" ry="8"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#la-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#la-shadow)" />
     <text id="layer-3-item-3" x="605" y="388" text-anchor="middle" class="item-label">S3 Storage</text>
   </g>
 </svg>

@@ -99,7 +99,7 @@
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     border-radius: var(--radius, 12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   }
 
   .feature-matrix {
@@ -120,30 +120,30 @@
     text-align: center;
     font-weight: 600;
     font-size: clamp(0.8rem, 1.4vw, 1.05rem);
-    background: rgba(255, 255, 255, 0.04);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-text, #cdd6f4);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
+    border-bottom: 2px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    color: var(--color-text);
     white-space: nowrap;
   }
 
   .feature-matrix thead th.feature-label {
     text-align: left;
-    color: rgba(255, 255, 255, 0.5);
+    color: color-mix(in srgb, var(--color-text) 50%, transparent);
     font-weight: 500;
   }
 
   /* Highlight column header */
   .feature-matrix thead th.highlight-header {
-    background: color-mix(in srgb, var(--color-accent, #61afef) 15%, transparent);
-    color: var(--color-accent, #61afef);
+    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+    color: var(--color-accent);
     position: relative;
   }
 
   /* Recommended badge */
   .badge {
     display: inline-block;
-    background: var(--color-accent, #61afef);
-    color: #fff;
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
     font-size: 0.6em;
     font-weight: 700;
     text-transform: uppercase;
@@ -156,17 +156,17 @@
 
   /* Body rows */
   .feature-matrix tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 5%, transparent);
     transition: background 0.15s;
   }
 
   /* Alternating row colors */
   .feature-matrix tbody tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.02);
+    background: color-mix(in srgb, var(--color-text) 2%, transparent);
   }
 
   .feature-matrix tbody tr:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
   }
 
   /* Cells */
@@ -179,13 +179,13 @@
   .feature-matrix td.feature-name {
     text-align: left;
     font-weight: 500;
-    color: var(--color-text, #cdd6f4);
+    color: var(--color-text);
   }
 
   /* Highlight column cells */
   .highlight-col,
   .feature-matrix td:nth-child(3) { /* matches the 3rd col = highlight */
-    background: color-mix(in srgb, var(--color-accent, #61afef) 5%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 5%, transparent);
   }
 
   /* === Check / Cross / Partial Icons === */
@@ -193,7 +193,7 @@
   /* Checkmark (yes) */
   td[data-check="yes"]::before {
     content: "\2713";
-    color: #50c878;
+    color: var(--chart-positive);
     font-size: 1.3em;
     font-weight: 700;
   }
@@ -201,15 +201,15 @@
   /* Cross (no) */
   td[data-check="no"]::before {
     content: "\2717"; /* ballot x */
-    color: rgba(255, 255, 255, 0.2);
+    color: color-mix(in srgb, var(--color-text) 20%, transparent);
     font-size: 1.2em;
     font-weight: 400;
   }
 
   /* Partial (limited/some) */
   td[data-check="partial"]::before {
-    content: "\25D2"; /* circle with lower half black — represents partial */
-    color: #e5c07b;
+    content: "\25D2"; /* circle with lower half black - represents partial */
+    color: var(--chart-highlight);
     font-size: 1.2em;
   }
 
@@ -227,54 +227,5 @@
     .badge {
       display: none; /* hide badge on very small screens */
     }
-  }
-
-  /* === Light Theme Variant === */
-  [data-theme="light"] .matrix-wrapper {
-    border-color: rgba(0, 0, 0, 0.1);
-  }
-
-  [data-theme="light"] .feature-matrix thead th {
-    background: rgba(0, 0, 0, 0.03);
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-    color: var(--color-text, #383a42);
-  }
-
-  [data-theme="light"] .feature-matrix thead th.feature-label {
-    color: rgba(0, 0, 0, 0.45);
-  }
-
-  [data-theme="light"] .feature-matrix thead th.highlight-header {
-    background: color-mix(in srgb, var(--color-accent, #4078f2) 10%, transparent);
-    color: var(--color-accent, #4078f2);
-  }
-
-  [data-theme="light"] .feature-matrix tbody tr {
-    border-bottom-color: rgba(0, 0, 0, 0.05);
-  }
-
-  [data-theme="light"] .feature-matrix tbody tr:nth-child(even) {
-    background: rgba(0, 0, 0, 0.02);
-  }
-
-  [data-theme="light"] .feature-matrix tbody tr:hover {
-    background: rgba(0, 0, 0, 0.04);
-  }
-
-  [data-theme="light"] .feature-matrix td.feature-name {
-    color: var(--color-text, #383a42);
-  }
-
-  [data-theme="light"] .highlight-col,
-  [data-theme="light"] .feature-matrix td:nth-child(3) {
-    background: color-mix(in srgb, var(--color-accent, #4078f2) 4%, transparent);
-  }
-
-  [data-theme="light"] td[data-check="no"]::before {
-    color: rgba(0, 0, 0, 0.15);
-  }
-
-  [data-theme="light"] .badge {
-    background: var(--color-accent, #4078f2);
   }
 </style>

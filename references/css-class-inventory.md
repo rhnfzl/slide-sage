@@ -28,7 +28,17 @@ Authoritative list of every CSS class available in slide-sage presentations. Whe
 | `.nav-arrows` | Arrow navigation container | `<div>` |
 | `.nav-arrow` | Individual prev/next button | `<button>` |
 | `.nav-arrow:disabled` | Disabled state at start/end | modifier |
+| `.visually-hidden` | Screen-reader-only content, including chart data tables | any |
+| `.chart-render-fallback` | Visible chart data table until the chart initializes | `<div>` |
+| `.shortcuts-overlay` | Modal keyboard-shortcuts backdrop | `<div>` |
+| `.shortcuts-panel` | Keyboard-shortcuts dialog content | `<div>` |
+| `.shortcuts-heading-row` | Dialog title and close-button row | `<div>` |
+| `.shortcuts-close` | Keyboard-shortcuts close control | `<button>` |
+| `.shortcuts-dismiss` | Dialog dismissal guidance | `<p>` |
 | `.caption` | Small caption text (0.7-0.9rem, opacity: 0.7) | `<small>`, `<figcaption>` |
+| `.eyebrow`, `.kicker` | Preset-aware mono label with preset tracking | `<span>` |
+| `.accent-rule`, `.presentation-divider` | Preset-aware accent divider | `<div>` |
+| `.stat-value`, `.metric-value` | Preset-aware numeric treatment | `<span>`, `<strong>` |
 
 ## Viewport System Classes (From viewport-system.md)
 
@@ -137,9 +147,9 @@ For domain-specific pseudo-code that Prism.js cannot tokenize (HTTP endpoints, f
 
 ### Rules for Custom Classes
 
-1. **Define before use** — The class must exist in `<style>` before any HTML references it
-2. **Use theme variables** — `var(--color-accent)` not `#89b4fa`, `var(--spacing-md)` not `1.25rem`
-3. **Use `clamp()` for sizing** — Never fixed px/rem for font-size or spacing
-4. **Use modifier pattern for variants** — `.card.highlight` not `.card-highlight` and `.highlighted-card`
+1. **Define before use** - The class must exist in `<style>` before any HTML references it
+2. **Use theme variables** - `var(--color-accent)` not `#3366cc`, `var(--spacing-md)` not `1.25rem`
+3. **Use `clamp()` for sizing** - Never fixed px/rem for font-size or spacing
+4. **Use modifier pattern for variants** - `.card.highlight` not `.card-highlight` and `.highlighted-card`
 
 **Never use a class without defining it. Never use inline styles for something that appears on 2+ elements.**

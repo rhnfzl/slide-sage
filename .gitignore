@@ -25,9 +25,15 @@ venv/
 
 # Agent instructions (local only)
 CLAUDE.md
-AGENTS.md
 SPECS.md
+.claude/
+.agent-harness/
+.agents/
+skills-lock.json
 
 # Output
 *.html
 !templates/**/*.html
+!examples/**/*.html
+!evals/fixtures/**/*.html
+!index.html

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-theme="ocean-deep" data-mode="dark" data-source="evals/fixtures/incremental-enhancement.html">
+<head><meta charset="utf-8"><title>Northstar API review with cache</title><style>
+  :root { --bg: #071421; --surface: #0d2336; --text: #e8f4ff; --muted: #9fc0d7; --accent: #39b7d4; --border: #25506d; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: Georgia, serif; }
+  .slides-container { height: 100vh; overflow: hidden; }
+  .slide { height: 100vh; overflow: hidden; padding: clamp(2rem, 7vw, 7rem); display: grid; place-items: center; }
+  .slide.active { display: grid; }
+  .slide.inactive { display: none; }
+  .slide h1, .slide h2 { margin: 0 0 1rem; }
+  .slide p { color: var(--muted); }
+  .client-server-diagram { padding: 1rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  canvas { max-width: 100%; background: var(--surface); }
+  .progress-bar { position: fixed; right: 0; bottom: 0; left: 0; height: .25rem; background: var(--border); }
+  .progress-fill { width: 20%; height: 100%; background: var(--accent); }
+  .slide-counter { position: fixed; right: 1rem; bottom: .75rem; color: var(--muted); }
+  .nav-arrows { position: fixed; right: 1rem; bottom: 2.5rem; display: flex; gap: .5rem; }
+  .nav-arrows button { border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+</style><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script></head>
+<body>
+  <main class="slides-container" id="slides">
+    <section class="slide active" aria-hidden="false" id="slide-1"><span>Northstar platform</span><h1>API reliability review</h1></section>
+    <section class="slide inactive" aria-hidden="true" inert id="slide-2"><h2>Latency has become the constraint.</h2><p>240 ms average request latency</p></section>
+    <section class="slide inactive" aria-hidden="true" inert id="slide-3"><h2>Before and after</h2><canvas aria-label="Latency falls by 60% with Redis"></canvas><p>60% lower average latency</p></section>
+    <section class="slide inactive" aria-hidden="true" inert id="slide-4"><h2>Redis cache</h2><div class="client-server-diagram">Client to API to Redis cache, 15-minute TTL</div></section>
+    <section class="slide inactive" aria-hidden="true" inert id="slide-5"><h2>Capacity</h2><p>100K requests per second</p></section>
+  </main>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="slide-counter" id="slideCounter"></div>
+  <div class="nav-arrows"><button id="navPrev" type="button">Previous</button><button id="navNext" type="button">Next</button></div>
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.currentSlide = 0;
+        document.getElementById('navPrev').addEventListener('click', () => this.goTo(this.currentSlide - 1));
+        document.getElementById('navNext').addEventListener('click', () => this.goTo(this.currentSlide + 1));
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') this.goTo(this.currentSlide - 1);
+          if (event.key === 'ArrowRight') this.goTo(this.currentSlide + 1);
+        });
+        this.updateUI();
+      }
+      goTo(index) {
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach((slide, current) => {
+          const active = current === this.currentSlide;
+          slide.classList.toggle('active', active);
+          slide.classList.toggle('inactive', !active);
+          slide.setAttribute('aria-hidden', String(!active));
+          if (active) slide.removeAttribute('inert'); else slide.setAttribute('inert', '');
+        });
+        this.updateUI();
+      }
+      updateUI() {
+        document.getElementById('progressFill').style.width = `${((this.currentSlide + 1) / this.slides.length) * 100}%`;
+        document.getElementById('slideCounter').textContent = `${this.currentSlide + 1} / ${this.slides.length}`;
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+  </script>
+</body>
+</html>

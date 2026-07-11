@@ -4,7 +4,7 @@
   <style>
     .fn-stage { transition: filter 0.2s ease; cursor: pointer; }
     .fn-stage:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
-    .fn-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: #fff; }
+    .fn-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: var(--diagram-label, #FFFFFF); }
     .fn-value { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 500; fill: var(--diagram-text, #e0e0e0); }
     .fn-conv { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: var(--diagram-text, #ccc); }
     .fn-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2; }
@@ -22,7 +22,7 @@
   <!-- Stage 1 (top, widest) -->
   <g id="stage-1-group">
     <polygon class="fn-stage" points="20,10 580,10 540,70 60,70"
-             fill="var(--diagram-primary, #4A90D9)" filter="url(#fn-shadow)" />
+             fill="var(--diagram-primary, #0077BB)" filter="url(#fn-shadow)" />
     <text id="stage-1-label" x="300" y="48" text-anchor="middle" class="fn-label">Awareness</text>
     <text id="stage-1-value" x="560" y="48" text-anchor="end" class="fn-value">10,000</text>
   </g>
@@ -33,7 +33,7 @@
   <!-- Stage 2 -->
   <g id="stage-2-group">
     <polygon class="fn-stage" points="60,80 540,80 490,140 110,140"
-             fill="var(--diagram-secondary, #50C878)" filter="url(#fn-shadow)" />
+             fill="var(--diagram-secondary, #009988)" filter="url(#fn-shadow)" />
     <text id="stage-2-label" x="300" y="118" text-anchor="middle" class="fn-label">Interest</text>
     <text id="stage-2-value" x="510" y="118" text-anchor="end" class="fn-value">8,500</text>
   </g>
@@ -44,7 +44,7 @@
   <!-- Stage 3 -->
   <g id="stage-3-group">
     <polygon class="fn-stage" points="110,150 490,150 430,210 170,210"
-             fill="var(--diagram-amber, #F5A623)" filter="url(#fn-shadow)" />
+             fill="var(--diagram-amber, #EE7733)" filter="url(#fn-shadow)" />
     <text id="stage-3-label" x="300" y="188" text-anchor="middle" class="fn-label">Consideration</text>
     <text id="stage-3-value" x="450" y="188" text-anchor="end" class="fn-value">5,100</text>
   </g>
@@ -55,7 +55,7 @@
   <!-- Stage 4 -->
   <g id="stage-4-group">
     <polygon class="fn-stage" points="170,220 430,220 380,280 220,280"
-             fill="var(--diagram-purple, #9B59B6)" filter="url(#fn-shadow)" />
+             fill="var(--diagram-purple, #3344AA)" filter="url(#fn-shadow)" />
     <text id="stage-4-label" x="300" y="258" text-anchor="middle" class="fn-label">Intent</text>
     <text id="stage-4-value" x="400" y="258" text-anchor="end" class="fn-value">2,040</text>
   </g>
@@ -63,10 +63,10 @@
   <!-- Conversion rate 4->5 -->
   <text id="conv-4" x="400" y="292" text-anchor="end" class="fn-conv">25%</text>
 
-  <!-- Stage 5 (bottom, narrowest — hidden by default) -->
+  <!-- Stage 5 (bottom, narrowest - hidden by default) -->
   <g id="stage-5-group" style="display:none;">
     <polygon class="fn-stage" points="220,290 380,290 350,350 250,350"
-             fill="var(--diagram-red, #DC5A5A)" filter="url(#fn-shadow)" />
+             fill="var(--diagram-red, #CC3311)" filter="url(#fn-shadow)" />
     <text id="stage-5-label" x="300" y="328" text-anchor="middle" class="fn-label">Purchase</text>
     <text id="stage-5-value" x="370" y="328" text-anchor="end" class="fn-value">510</text>
   </g>

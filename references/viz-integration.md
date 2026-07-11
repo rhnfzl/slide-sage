@@ -24,22 +24,39 @@
 
 ### Responsive Container Pattern
 
-Always wrap canvas in a constrained container. Never set width/height on the canvas element directly.
+Always wrap canvas in a constrained container. Never set width/height on the canvas element directly. Every chart needs a canvas label, a screen-reader data table, and a visible fallback that stays available until chart creation succeeds.
 
 ```html
-<div style="position:relative; max-height:min(55vh,420px); width:100%; margin:0 auto;">
-  <canvas id="myChart"></canvas>
+<div class="chart-container" style="position:relative; max-height:min(55vh,420px); width:100%; margin:0 auto;">
+  <canvas id="myChart" role="img" aria-label="Quarterly revenue: Q1 12, Q2 19, Q3 8, Q4 15 million dollars"></canvas>
 </div>
+<div class="chart-render-fallback" id="myChartFallback">
+  <p>Quarterly revenue, millions of dollars</p>
+  <table>
+    <thead><tr><th scope="col">Quarter</th><th scope="col">Revenue</th></tr></thead>
+    <tbody><tr><th scope="row">Q1</th><td>12</td></tr><tr><th scope="row">Q2</th><td>19</td></tr><tr><th scope="row">Q3</th><td>8</td></tr><tr><th scope="row">Q4</th><td>15</td></tr></tbody>
+  </table>
+</div>
+<table class="visually-hidden">
+  <caption>Quarterly revenue, millions of dollars</caption>
+  <thead><tr><th scope="col">Quarter</th><th scope="col">Revenue</th></tr></thead>
+  <tbody><tr><th scope="row">Q1</th><td>12</td></tr><tr><th scope="row">Q2</th><td>19</td></tr><tr><th scope="row">Q3</th><td>8</td></tr><tr><th scope="row">Q4</th><td>15</td></tr></tbody>
+</table>
+<noscript>
+  <p>JavaScript is unavailable. Quarterly revenue: Q1 12, Q2 19, Q3 8, Q4 15 million dollars.</p>
+</noscript>
 ```
+
+After a successful `new Chart()` call, set `document.getElementById('myChartFallback').hidden = true`. If the library, canvas, or configuration fails, leave that fallback visible. Use the same labeled-data pattern for ECharts and D3 containers, not only `<canvas>` charts.
 
 ### Dark Mode Integration
 
-CSS custom properties don't work in Chart.js config -- you must compute values at runtime.
+Canvas charts need concrete values, so read the selected presentation tokens at runtime.
 
 ```javascript
-const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-Chart.defaults.color = isDark ? '#e0e0e0' : '#333';
-Chart.defaults.borderColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+const theme = getComputedStyle(document.documentElement);
+Chart.defaults.color = theme.getPropertyValue('--color-text-secondary').trim() || '#4A6178';
+Chart.defaults.borderColor = theme.getPropertyValue('--color-border').trim() || 'rgba(74, 97, 120, 0.18)';
 ```
 
 Place this **before** any `new Chart()` calls.
@@ -47,31 +64,80 @@ Place this **before** any `new Chart()` calls.
 ### Colorblind-Safe Palette
 
 ```javascript
-const COLORS = {
-  blue:   '#4A90D9',
-  orange: '#E8833A',
-  green:  '#50C878',
-  red:    '#DC5A5A',
-  purple: '#9B59B6',
-  amber:  '#F5A623',
-  teal:   '#26A69A',
-  pink:   '#E91E8C'
-};
-const PALETTE = Object.values(COLORS);
+const PALETTE = ['#0077BB', '#CC3311', '#009988', '#EE7733',
+  '#3344AA', '#EE3377', '#BBAA33', '#888888'];
 ```
 
 ### Animation Config
 
-Respect the presentation's animation intensity level:
+Respect the presentation's shared animation level:
 
 ```javascript
-// animationIntensity: 'none' | 'subtle' | 'moderate' | 'full'
-function chartAnimation(intensity) {
-  if (intensity === 'none') return false;
-  const duration = { subtle: 400, moderate: 800, full: 1200 }[intensity] || 800;
+// animLevel: 'minimal' | 'balanced' | 'dramatic'
+function chartAnimation(level = document.documentElement.dataset.animLevel || 'balanced', reducedMotion = false) {
+  if (reducedMotion || level === 'minimal') return false;
+  const duration = { balanced: 800, dramatic: 1200 }[level] || 800;
   return { duration, easing: 'easeOutQuart' };
 }
 ```
+
+### Slide-Enter Lifecycle
+
+Create every chart with `animation: false`. The canonical `SlidePresentation` class emits a `slidechange` event after the active slide changes, including the first slide after the current DOM-ready turn. Attach the listener while creating each chart so an inactive chart stays still until the audience reaches it.
+
+```javascript
+function replayChartOnSlideEnter(chart, reducedMotion) {
+  chart.stop();
+  const animation = chartAnimation(undefined, reducedMotion);
+  if (!animation) {
+    chart.options.animation = false;
+    chart.update('none');
+    return;
+  }
+
+  chart.options.animation = animation;
+  chart.reset();
+  chart.update();
+}
+
+const canvas = document.getElementById('barChart');
+const fallback = document.getElementById('barChartFallback');
+let chart;
+try {
+  chart = new Chart(canvas, {
+    type: 'bar',
+    data: chartData,
+    options: { responsive: true, maintainAspectRatio: false, animation: false }
+  });
+  fallback.hidden = true;
+} catch (error) {
+  console.error('Chart could not render. The data table remains available.', error);
+}
+
+document.addEventListener('slidechange', ({ detail }) => {
+  if (chart && detail.slide.contains(canvas)) {
+    replayChartOnSlideEnter(chart, detail.reducedMotion);
+  }
+});
+```
+
+For a multi-chart slide, keep each instance in an array and replay only the charts whose canvases are inside `detail.slide`. For CountUp, write the final value directly when `detail.reducedMotion` is true; otherwise reset and start it from this same event. Do not use scroll spying for slide-entry counters.
+
+### Print gutter for a right-hand scale
+
+For a Chart.js configuration with a right-side `y1` axis, reserve a right gutter in the chart layout. This keeps the scale labels inside the canvas in Chromium PDF output:
+
+```javascript
+options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  layout: { padding: { right: 80 } },
+  scales: { y: { position: 'left' }, y1: { position: 'right' } }
+}
+```
+
+Use this only when the chart has a right-hand scale. A single-axis chart should use its natural layout.
 
 ---
 
@@ -89,7 +155,7 @@ new Chart(document.getElementById('barChart'), {
     datasets: [{
       label: 'Revenue ($M)',
       data: [12, 19, 8, 15],
-      backgroundColor: ['#4A90D9', '#E8833A', '#50C878', '#DC5A5A'],
+      backgroundColor: ['#0077BB', '#EE7733', '#009988', '#CC3311'],
       borderRadius: 6,
       borderSkipped: false
     }]
@@ -97,7 +163,7 @@ new Chart(document.getElementById('barChart'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 800, easing: 'easeOutQuart' },
+    animation: false,
     plugins: {
       legend: { display: false },
       title: { display: true, text: 'Quarterly Revenue', font: { size: 16, weight: '600' } }
@@ -125,13 +191,13 @@ new Chart(document.getElementById('lineChart'), {
     datasets: [{
       label: 'Users',
       data: [120, 190, 300, 250, 420, 380],
-      borderColor: '#4A90D9',
-      backgroundColor: 'rgba(74,144,217,0.1)',
+      borderColor: '#0077BB',
+      backgroundColor: 'rgba(0,119,187,0.1)',
       fill: true,
       tension: 0.35,
       pointRadius: 4,
       pointHoverRadius: 7,
-      pointBackgroundColor: '#4A90D9',
+      pointBackgroundColor: '#0077BB',
       pointBorderColor: '#fff',
       pointBorderWidth: 2
     }]
@@ -139,7 +205,7 @@ new Chart(document.getElementById('lineChart'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 800, easing: 'easeOutQuart' },
+    animation: false,
     plugins: {
       legend: { position: 'top', labels: { usePointStyle: true } }
     },
@@ -165,7 +231,7 @@ new Chart(document.getElementById('doughnutChart'), {
     labels: ['Frontend', 'Backend', 'DevOps', 'QA'],
     datasets: [{
       data: [35, 30, 20, 15],
-      backgroundColor: ['#4A90D9', '#E8833A', '#50C878', '#9B59B6'],
+      backgroundColor: ['#0077BB', '#EE7733', '#009988', '#3344AA'],
       borderWidth: 2,
       borderColor: 'transparent',
       hoverOffset: 8
@@ -175,7 +241,7 @@ new Chart(document.getElementById('doughnutChart'), {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '55%', // Remove for pie chart
-    animation: { duration: 800, easing: 'easeOutQuart' },
+    animation: false,
     plugins: {
       legend: { position: 'right', labels: { usePointStyle: true, padding: 16 } }
     }
@@ -200,7 +266,7 @@ new Chart(document.getElementById('scatterChart'), {
         { x: 10, y: 20 }, { x: 15, y: 10 }, { x: 25, y: 30 },
         { x: 30, y: 25 }, { x: 45, y: 40 }, { x: 55, y: 35 }
       ],
-      backgroundColor: 'rgba(74,144,217,0.6)',
+      backgroundColor: 'rgba(0,119,187,0.6)',
       pointRadius: 6,
       pointHoverRadius: 9
     }]
@@ -208,7 +274,7 @@ new Chart(document.getElementById('scatterChart'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 800, easing: 'easeOutQuart' },
+    animation: false,
     scales: {
       x: { title: { display: true, text: 'Latency (ms)' }, grid: { color: 'rgba(128,128,128,0.15)' } },
       y: { title: { display: true, text: 'Throughput (req/s)' }, grid: { color: 'rgba(128,128,128,0.15)' } }
@@ -232,17 +298,17 @@ new Chart(document.getElementById('radarChart'), {
     datasets: [{
       label: 'Current',
       data: [65, 80, 70, 90, 75],
-      borderColor: '#4A90D9',
-      backgroundColor: 'rgba(74,144,217,0.15)',
-      pointBackgroundColor: '#4A90D9',
+      borderColor: '#0077BB',
+      backgroundColor: 'rgba(0,119,187,0.15)',
+      pointBackgroundColor: '#0077BB',
       pointBorderColor: '#fff',
       pointBorderWidth: 2
     }, {
       label: 'Target',
       data: [85, 90, 85, 95, 90],
-      borderColor: '#50C878',
-      backgroundColor: 'rgba(80,200,120,0.1)',
-      pointBackgroundColor: '#50C878',
+      borderColor: '#009988',
+      backgroundColor: 'rgba(0,153,136,0.1)',
+      pointBackgroundColor: '#009988',
       pointBorderColor: '#fff',
       pointBorderWidth: 2
     }]
@@ -250,7 +316,7 @@ new Chart(document.getElementById('radarChart'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 800, easing: 'easeOutQuart' },
+    animation: false,
     scales: {
       r: {
         beginAtZero: true,
@@ -284,17 +350,17 @@ new Chart(document.getElementById('chartLeft'), {
   type: 'bar',
   data: {
     labels: ['A', 'B', 'C'],
-    datasets: [{ label: 'Series 1', data: [10, 20, 30], backgroundColor: '#4A90D9', borderRadius: 6 }]
+    datasets: [{ label: 'Series 1', data: [10, 20, 30], backgroundColor: '#0077BB', borderRadius: 6 }]
   },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false } } }
 });
 new Chart(document.getElementById('chartRight'), {
   type: 'line',
   data: {
     labels: ['A', 'B', 'C'],
-    datasets: [{ label: 'Series 2', data: [30, 15, 25], borderColor: '#E8833A', tension: 0.3, pointRadius: 4 }]
+    datasets: [{ label: 'Series 2', data: [30, 15, 25], borderColor: '#EE7733', tension: 0.3, pointRadius: 4 }]
   },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false } } }
 });
 </script>
 ```
@@ -312,15 +378,21 @@ new Chart(document.getElementById('chartRight'), {
 ### Responsive Resize Handler
 
 ```javascript
-const chart = echarts.init(document.getElementById('echartDiv'));
-chart.setOption(option);
+const container = document.getElementById('echartDiv');
+container.setAttribute('role', 'img');
+container.setAttribute('aria-label', 'Describe the chart values and comparison in plain language.');
+container.dataset.slideSageEcharts = '';
+const chart = echarts.init(container);
+chart.setOption({ ...option, animation: false });
 window.addEventListener('resize', () => chart.resize());
 ```
+
+Place the same visible fallback table, visually-hidden data table, and `<noscript>` summary shown in the Chart.js pattern after every ECharts container. Mark each container with `data-slide-sage-echarts` so the canonical print hook can settle it before PDF export.
 
 ### Heatmap
 
 ```html
-<div id="heatmapChart" style="width:100%; height:min(55vh,420px);"></div>
+<div id="heatmapChart" data-slide-sage-echarts role="img" aria-label="Weekday resource heatmap, with CPU, memory, disk, and network values from zero to one hundred." style="width:100%; height:min(55vh,420px);"></div>
 <script>
 const chart = echarts.init(document.getElementById('heatmapChart'));
 const hours = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
@@ -333,12 +405,13 @@ const data = [
   [4,0,50],[4,1,35],[4,2,60],[4,3,40]
 ];
 chart.setOption({
+  animation: false,
   tooltip: { position: 'top' },
   grid: { left: 80, right: 20, top: 20, bottom: 40 },
   xAxis: { type: 'category', data: metrics, splitArea: { show: true } },
   yAxis: { type: 'category', data: hours, splitArea: { show: true } },
   visualMap: { min: 0, max: 100, calculable: true, orient: 'horizontal', left: 'center', bottom: 0,
-    inRange: { color: ['#50C878', '#F5A623', '#DC5A5A'] }
+    inRange: { color: ['#009988', '#EE7733', '#CC3311'] }
   },
   series: [{ type: 'heatmap', data, label: { show: true }, emphasis: { itemStyle: { shadowBlur: 10 } } }]
 });
@@ -349,10 +422,11 @@ window.addEventListener('resize', () => chart.resize());
 ### Sankey Diagram
 
 ```html
-<div id="sankeyChart" style="width:100%; height:min(55vh,420px);"></div>
+<div id="sankeyChart" data-slide-sage-echarts role="img" aria-label="Sankey flow from sources through processes to outputs." style="width:100%; height:min(55vh,420px);"></div>
 <script>
 const chart = echarts.init(document.getElementById('sankeyChart'));
 chart.setOption({
+  animation: false,
   tooltip: { trigger: 'item' },
   series: [{
     type: 'sankey',
@@ -383,10 +457,11 @@ window.addEventListener('resize', () => chart.resize());
 ### Treemap
 
 ```html
-<div id="treemapChart" style="width:100%; height:min(55vh,420px);"></div>
+<div id="treemapChart" data-slide-sage-echarts role="img" aria-label="Treemap of frontend, backend, DevOps, and quality assurance investment." style="width:100%; height:min(55vh,420px);"></div>
 <script>
 const chart = echarts.init(document.getElementById('treemapChart'));
 chart.setOption({
+  animation: false,
   tooltip: { formatter: '{b}: {c}' },
   series: [{
     type: 'treemap',
@@ -394,18 +469,18 @@ chart.setOption({
     breadcrumb: { show: false },
     label: { show: true, formatter: '{b}\n{c}', fontSize: 13 },
     data: [
-      { name: 'Frontend', value: 35, itemStyle: { color: '#4A90D9' },
+      { name: 'Frontend', value: 35, itemStyle: { color: '#0077BB' },
         children: [
           { name: 'React', value: 20 }, { name: 'Vue', value: 10 }, { name: 'Angular', value: 5 }
         ]
       },
-      { name: 'Backend', value: 30, itemStyle: { color: '#50C878' },
+      { name: 'Backend', value: 30, itemStyle: { color: '#009988' },
         children: [
           { name: 'Node.js', value: 15 }, { name: 'Python', value: 10 }, { name: 'Go', value: 5 }
         ]
       },
-      { name: 'DevOps', value: 20, itemStyle: { color: '#E8833A' } },
-      { name: 'QA', value: 15, itemStyle: { color: '#9B59B6' } }
+      { name: 'DevOps', value: 20, itemStyle: { color: '#EE7733' } },
+      { name: 'QA', value: 15, itemStyle: { color: '#3344AA' } }
     ]
   }]
 });
@@ -456,7 +531,7 @@ const y = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).nice().range(
 svg.selectAll('rect').data(data).join('rect')
   .attr('x', d => x(d.label)).attr('y', d => y(d.value))
   .attr('width', x.bandwidth()).attr('height', d => y(0) - y(d.value))
-  .attr('rx', 4).attr('fill', '#4A90D9');
+  .attr('rx', 4).attr('fill', '#0077BB');
 
 svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x));
 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(5));
@@ -526,7 +601,7 @@ const chartData = {
   datasets: [{
     label: 'Revenue ($M)',
     data: [12, 19, 8, 15],
-    backgroundColor: '#4A90D9'
+    backgroundColor: '#0077BB'
   }]
 };
 ```

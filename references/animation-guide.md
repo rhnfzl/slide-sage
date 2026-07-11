@@ -108,7 +108,7 @@ const minimalChartOptions = {
 ### Numbers
 
 ```css
-/* Static display — no counting effect */
+/* Static display - no counting effect */
 .anim-minimal .stat-number {
   /* Number is just rendered as-is in the HTML */
 }
@@ -205,7 +205,7 @@ Professional polish without excess. Smooth entrances that guide the eye.
 ### Chart Animation
 
 ```js
-// Chart.js config for balanced mode
+// Apply this on slidechange after the chart was initialized with animation: false.
 const balancedChartOptions = {
   animation: {
     duration: 800,
@@ -393,7 +393,8 @@ High-energy presentations. Conference keynotes, pitch decks, storytelling.
 ### Chart Animation (Sequential Draw)
 
 ```js
-// Chart.js config for dramatic mode — sequential dataset reveal
+// Apply this on slidechange after the chart was initialized with animation: false.
+// It creates a sequential dataset reveal for dramatic mode.
 const dramaticChartOptions = {
   animation: {
     duration: 1200,
@@ -414,11 +415,12 @@ const dramaticChartOptions = {
   }
 };
 
-// For bar/line charts: animate each dataset one after another
-function createDramaticChart(ctx, config) {
+// For bar/line charts, prepare each dataset just before reset() and update().
+function prepareDramaticChartForEntry(chart) {
   // Override per-dataset animation
-  if (config.data && config.data.datasets) {
-    config.data.datasets.forEach((ds, i) => {
+  if (chart.data && chart.data.datasets) {
+    chart.options.animation = dramaticChartOptions.animation;
+    chart.data.datasets.forEach((ds, i) => {
       ds.animation = {
         delay: i * 500,
         duration: 1000,
@@ -426,7 +428,7 @@ function createDramaticChart(ctx, config) {
       };
     });
   }
-  return new Chart(ctx, config);
+  return chart;
 }
 ```
 
@@ -438,7 +440,7 @@ function createDramaticChart(ctx, config) {
 ```
 
 ```js
-// Dramatic CountUp — longer duration, scroll effect
+// Dramatic CountUp - longer duration, started by slide entry
 function initDramaticCountUp(elementId, endValue, options = {}) {
   const defaults = {
     duration: 2.5,
@@ -446,8 +448,6 @@ function initDramaticCountUp(elementId, endValue, options = {}) {
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    enableScrollSpy: true,       // Trigger when scrolled into view
-    scrollSpyOnce: true,
   };
   const merged = { ...defaults, ...options };
   const counter = new countUp.CountUp(elementId, endValue, merged);
@@ -664,9 +664,9 @@ function initTypedTitle(elementSelector, strings, options = {}) {
 ### Slide Engine Hook
 
 ```js
-// Call this when transitioning between slides
-function onSlideEnter(slideEl) {
-  const level = document.documentElement.dataset.animLevel || 'minimal';
+// The canonical SlidePresentation class emits this event after each entry.
+function onSlideEnter(slideEl, { reducedMotion = false } = {}) {
+  const level = reducedMotion ? 'minimal' : (document.documentElement.dataset.animLevel || 'balanced');
 
   // Reset all animate-in elements
   const items = slideEl.querySelectorAll('.animate-in');
@@ -689,8 +689,10 @@ function onSlideEnter(slideEl) {
       // Just display the number
       el.textContent = value.toLocaleString();
     } else if (level === 'dramatic') {
+      el.textContent = '0';
       initDramaticCountUp(el.id, value, opts);
     } else {
+      el.textContent = '0';
       initCountUp(el.id, value, opts);
     }
   });
@@ -704,6 +706,10 @@ function onSlideEnter(slideEl) {
     });
   }
 }
+
+document.addEventListener('slidechange', ({ detail }) => {
+  onSlideEnter(detail.slide, detail);
+});
 ```
 
 ### Animation Level Switcher UI
@@ -735,8 +741,8 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
 ```js
 // Returns the right Chart.js animation config for the current level
-function getChartAnimationConfig() {
-  const level = document.documentElement.dataset.animLevel || 'minimal';
+function getChartAnimationConfig(reducedMotion = false) {
+  const level = reducedMotion ? 'minimal' : (document.documentElement.dataset.animLevel || 'balanced');
 
   switch (level) {
     case 'minimal':
@@ -781,23 +787,23 @@ function getChartAnimationConfig() {
   }
 }
 
-// Usage with Chart.js:
-// new Chart(ctx, { ...config, options: { ...config.options, ...getChartAnimationConfig() } });
+// Create charts with animation: false. Apply this configuration from the
+// slidechange listener immediately before chart.reset() and chart.update().
 ```
 
 ### CDN Reference Summary
 
 ```html
-<!-- CountUp.js — number animation (balanced + dramatic) -->
+<!-- CountUp.js - number animation (balanced + dramatic) -->
 <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js"></script>
 
-<!-- Typed.js — typing effect (dramatic only) -->
+<!-- Typed.js - typing effect (dramatic only) -->
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js"></script>
 
-<!-- q5.js — particle effects (dramatic only) -->
+<!-- q5.js - particle effects (dramatic only) -->
 <script src="https://cdn.jsdelivr.net/npm/q5@2.1.2/q5.min.js"></script>
 
-<!-- Chart.js — data visualization (all levels) -->
+<!-- Chart.js - data visualization (all levels) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 ```
 

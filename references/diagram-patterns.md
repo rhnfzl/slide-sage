@@ -72,8 +72,8 @@ Replaces inline SVG architecture stacks. Uses `.arch-stack` with rows and groups
 
 ```html
 <div class="arch-stack">
-  <div class="arch-row full muted">CLIENT LAYER &mdash; React Frontend</div>
-  <div class="arch-row full muted">TM BACKEND &mdash; Django (Auth, Credentials, History)</div>
+  <div class="arch-row full muted">CLIENT LAYER  -  React Frontend</div>
+  <div class="arch-row full muted">TM BACKEND  -  Django (Auth, Credentials, History)</div>
   <div class="arch-row full"><span class="badge">01</span> API &amp; Streaming Layer (FastAPI, SSE)</div>
   <div class="arch-row full"><span class="badge badge-gold">02</span> Agent Orchestration (Pydantic AI)</div>
   <div class="arch-row-group">
@@ -178,15 +178,15 @@ For side-by-side comparisons with accent borders.
 
 | Diagram Type | Use CSS/HTML | Use SVG Template | Use Inline SVG |
 |---|---|---|---|
-| Sequence/message flow | Yes (`.sequence-flow`) | — | — |
-| Architecture stack | Yes (`.arch-stack`) | — | — |
-| Pyramid/hierarchy | Yes (`.pyramid`) | `pyramid-roadmap.svg` | — |
-| Process pipeline | Yes (`.process-flow`) | `data-pipeline.svg` | — |
-| Comparison/split | Yes (`.grid-2` + `.card`) | — | — |
-| Microservices | — | `microservices.svg` | — |
-| Network topology | — | `network-zones.svg` | Complex custom |
-| Custom shapes | — | — | Yes |
-| Hub and spoke | — | `hub-and-spoke.svg` | — |
+| Sequence/message flow | Yes (`.sequence-flow`) | - | - |
+| Architecture stack | Yes (`.arch-stack`) | - | - |
+| Pyramid/hierarchy | Yes (`.pyramid`) | `pyramid-roadmap.svg` | - |
+| Process pipeline | Yes (`.process-flow`) | `data-pipeline.svg` | - |
+| Comparison/split | Yes (`.grid-2` + `.card`) | - | - |
+| Microservices | - | `microservices.svg` | - |
+| Network topology | - | `network-zones.svg` | Complex custom |
+| Custom shapes | - | - | Yes |
+| Hub and spoke | - | `hub-and-spoke.svg` | - |
 
 ---
 
@@ -200,7 +200,7 @@ Slide-sage presentations are self-contained HTML files viewed locally via `file:
 | SVG diagrams | **Fails silently** in Chrome/Safari | Inline the SVG directly into HTML |
 | SVG logos | **Fails silently** | Inline or convert to PNG first |
 
-**Why:** Chrome and Safari block `<img src="local.svg">` on `file://` protocol due to same-origin security policies. The image renders as a broken icon with no console error — a silent failure that's easy to miss.
+**Why:** Chrome and Safari block `<img src="local.svg">` on `file://` protocol due to same-origin security policies. The image renders as a broken icon with no console error - a silent failure that's easy to miss.
 
 **Correct patterns:**
 
@@ -222,7 +222,7 @@ Slide-sage presentations are self-contained HTML files viewed locally via `file:
         type="image/svg+xml" style="width:100%;"></object>
 ```
 
-This warning does NOT apply to CSS/HTML diagrams (Tier 0) or SVG templates loaded via `<object>` (Tier 1) — only to `<img src="*.svg">`.
+This warning does NOT apply to CSS/HTML diagrams (Tier 0) or SVG templates loaded via `<object>` (Tier 1) - only to `<img src="*.svg">`.
 
 ---
 
@@ -243,8 +243,8 @@ const diagram = {
   type: 'microservices',
   gateway: 'API Gateway',
   services: [
-    { name: 'Auth Service', db: 'PostgreSQL', color: 'var(--diagram-blue)' },
-    { name: 'Order Service', db: 'MongoDB', color: 'var(--diagram-green)' },
+    { name: 'Auth Service', db: 'PostgreSQL', color: 'var(--diagram-primary)' },
+    { name: 'Order Service', db: 'MongoDB', color: 'var(--diagram-secondary)' },
     { name: 'Payment Service', db: 'Redis', color: 'var(--diagram-amber)' }
   ]
 };
@@ -737,18 +737,18 @@ function renderDiagram(svgId, data) {
 |----------|------|------|---------------|--------------|----------|
 | Microservices | microservices.svg | Architecture | 3 services | +2 | Service mesh, API-first |
 | Data Pipeline | data-pipeline.svg | Architecture | 4 nodes | +2 | ETL, data flow |
-| Client-Server | client-server.svg | Architecture | 2 clients + 1 server | — | Simple request/response |
-| Layered Architecture | layered-arch.svg | Architecture | 3 layers x 3 items | — | N-tier, clean arch |
+| Client-Server | client-server.svg | Architecture | 2 clients + 1 server | - | Simple request/response |
+| Layered Architecture | layered-arch.svg | Architecture | 3 layers x 3 items | - | N-tier, clean arch |
 | CI/CD Pipeline | cicd-pipeline.svg | DevOps | 5 stages | +1 | Build/deploy pipelines |
 | Hub and Spoke | hub-and-spoke.svg | Platform | 6 spokes | +2 | Central platform |
 | Cloud Three-Tier | cloud-three-tier.svg | Cloud | 4 zones | +1 app, +1 db | Cloud architecture |
 | Kubernetes Cluster | kubernetes-cluster.svg | DevOps | 4 CP + 2x2 pods | +1 pod each | K8s deployments |
 | Event Pub/Sub | event-driven-pubsub.svg | Backend | 3 pub + 3 sub | +1 each | Event-driven systems |
-| ML Pipeline | ml-pipeline.svg | ML/AI | 3 stages | — | ML system design |
+| ML Pipeline | ml-pipeline.svg | ML/AI | 3 stages | - | ML system design |
 | C4 Context | c4-context.svg | Architecture | 1 person + 2 ext | +1 each | System context |
 | Network Zones | network-zones.svg | Security | 3 zones x 2 svc | +1 each | Security architecture |
-| API Gateway | api-gateway-auth.svg | Backend | 3 backend svc | — | API routing + auth |
-| Pyramid/Roadmap | pyramid-roadmap.svg | General | 5 levels | — | Maturity stages |
+| API Gateway | api-gateway-auth.svg | Backend | 3 backend svc | - | API routing + auth |
+| Pyramid/Roadmap | pyramid-roadmap.svg | General | 5 levels | - | Maturity stages |
 | Funnel | funnel.svg | General | 4 stages | +1 | Conversion flows |
 | Nested Scopes | nested-scopes.svg | General | 3 scopes | +1 | Containment hierarchy |
 | Tree Hierarchy | tree-hierarchy.svg | General | 2 branches x 2 leaves | +1 branch | Org charts, taxonomies |
@@ -767,8 +767,8 @@ document.getElementById('arch-diagram').addEventListener('load', function() {
     type: 'microservices',
     gateway: 'API Gateway',
     services: [
-      { name: 'User Service', db: 'PostgreSQL', color: 'var(--diagram-blue)' },
-      { name: 'Order Service', db: 'DynamoDB', color: 'var(--diagram-green)' }
+      { name: 'User Service', db: 'PostgreSQL', color: 'var(--diagram-primary)' },
+      { name: 'Order Service', db: 'DynamoDB', color: 'var(--diagram-secondary)' }
     ]
   });
 });
@@ -798,7 +798,7 @@ function sketchify(svgElement) {
   svgElement.querySelectorAll('rect[data-sketch]').forEach(rect => {
     const x = +rect.getAttribute('x'), y = +rect.getAttribute('y');
     const w = +rect.getAttribute('width'), h = +rect.getAttribute('height');
-    const fill = rect.getAttribute('fill') || '#4A90D9';
+    const fill = rect.getAttribute('fill') || 'var(--diagram-primary, #0077BB)';
     const roughRect = rc.rectangle(x, y, w, h, {
       fill, fillStyle: 'hachure', roughness: 1.5, strokeWidth: 1.5, stroke: '#333'
     });
@@ -821,7 +821,7 @@ Add `data-sketch` attribute to SVG elements you want to convert.
 
 ## Tier 3: Inline SVG (Fully Custom)
 
-For diagrams that need precise positioning, custom shapes, or interactive elements. **Always inline SVGs** directly in the HTML — never use `<img src="file.svg">` (see file:// Protocol Warning above).
+For diagrams that need precise positioning, custom shapes, or interactive elements. **Always inline SVGs** directly in the HTML - never use `<img src="file.svg">` (see file:// Protocol Warning above).
 
 ### Responsive viewBox Pattern
 
@@ -902,6 +902,8 @@ Use the same CSS custom properties as the surrounding slides for diagram colors:
 
 ### Arrowhead Marker Definition
 
+Use this generic marker only when every directional line uses the same default arrow color. When a diagram uses more than one stroke color, define one marker per color as required by Rule 3.
+
 Include once in `<defs>`:
 
 ```xml
@@ -919,7 +921,7 @@ Include once in `<defs>`:
 
 ## SVG Diagram Construction Rules (HARD RULES)
 
-These rules prevent the most common SVG diagram bugs in presentations. Every rule was learned from real rendering failures — follow them exactly.
+These rules prevent the most common SVG diagram bugs in presentations. Every rule was learned from real rendering failures - follow them exactly.
 
 ### Rule 1: Always Center Text Inside Boxes (NON-NEGOTIABLE)
 
@@ -934,7 +936,7 @@ These rules prevent the most common SVG diagram bugs in presentations. Every rul
 
 **Formula:** `text_x = rect_x + (rect_width / 2)`
 
-This applies to ALL text inside ALL rect boxes — titles, subtitles, descriptions, code labels. No exceptions.
+This applies to ALL text inside ALL rect boxes - titles, subtitles, descriptions, code labels. No exceptions.
 
 **Multi-line text inside a box:**
 ```xml
@@ -947,7 +949,7 @@ This applies to ALL text inside ALL rect boxes — titles, subtitles, descriptio
 
 ### Rule 2: viewBox Must Encompass All Elements + Margin
 
-SVG silently clips anything outside the viewBox. There is no overflow, no error, no warning — content just disappears.
+SVG silently clips anything outside the viewBox. There is no overflow, no error, no warning - content just disappears.
 
 **Before finalizing any SVG:**
 1. Find the lowest `y + height` of any `<rect>` or the highest `y` of any `<text>`
@@ -955,13 +957,13 @@ SVG silently clips anything outside the viewBox. There is no overflow, no error,
 3. Set viewBox height = max_y + **15px margin**
 4. Set viewBox width = max_x + **15px margin**
 
-**Common failure:** A box at `y="76" height="30"` in a `viewBox="0 0 700 100"` — bottom 6px is clipped.
+**Common failure:** A box at `y="76" height="30"` in a `viewBox="0 0 700 100"` - bottom 6px is clipped.
 
 **Fix:** `viewBox="0 0 700 120"` (or use negative origin `viewBox="0 -5 800 130"` if elements go above y=0).
 
 ### Rule 3: One Arrow Marker Per Color
 
-Each arrow color needs its own `<marker>` definition in `<defs>`. You cannot reuse a green marker for a red arrow — the arrowhead will render green regardless of the line's `stroke` color.
+Each arrow color needs its own `<marker>` definition in `<defs>`. You cannot reuse a green marker for a red arrow - the arrowhead will render green regardless of the line's `stroke` color.
 
 ```xml
 <defs>
@@ -980,7 +982,7 @@ Each arrow color needs its own `<marker>` definition in `<defs>`. You cannot reu
 </defs>
 ```
 
-**Every `<line>` with `marker-end` must reference the marker matching its stroke color.** Dashed lines (e.g., error/fallback paths) need arrowheads too — don't omit `marker-end` just because the line is dashed.
+**Every `<line>` with `marker-end` must reference the marker matching its stroke color.** Dashed lines (e.g., error/fallback paths) need arrowheads too - don't omit `marker-end` just because the line is dashed.
 
 ### Rule 4: Arrow and Line Color Contrast
 
@@ -988,7 +990,7 @@ Each arrow color needs its own `<marker>` definition in `<defs>`. You cannot reu
 
 | Color | Visible on dark? | Use instead |
 |-------|-------------------|-------------|
-| `#1e293b` | **NO** — nearly same as background | `#64748b` (muted gray) |
+| `#1e293b` | **NO** - nearly same as background | `#64748b` (muted gray) |
 | `#0f172a` | **NO** | `#475569` or `#64748b` |
 | `#334155` | Barely | `#64748b` minimum |
 
@@ -1024,7 +1026,7 @@ When a wide SVG box has two content columns:
 
 **Warning:** Mathematical symmetry doesn't always look visually symmetric because text widths differ. If the result looks misaligned, adjust by 10-15px toward the wider-text column. The screen is the source of truth.
 
-### Rule 7: Roadmap / Stage Diagrams — Badges vs Titles
+### Rule 7: Roadmap / Stage Diagrams - Badges vs Titles
 
 When stages have both a badge (step number/phase label) and a title:
 
@@ -1055,15 +1057,15 @@ For state machine / flow diagrams with loops and terminal states:
          stroke-width="1.5" marker-end="url(#arr-yellow)"/>
    ```
 2. **Terminal states** (cancelled, expired, rejected) branch downward from the main flow
-3. **Every branch needs an arrowhead** — including dashed error/timeout paths
+3. **Every branch needs an arrowhead** - including dashed error/timeout paths
 4. **Label transitions** on or near the arrow with the trigger event
 
-### Rule 9: Multi-Row Diagrams — Row Centering
+### Rule 9: Multi-Row Diagrams - Row Centering
 
 When a diagram has multiple horizontal rows of boxes (e.g., main flow on top, schedule flow below):
 
 1. **Add a visual separator** between rows: a text label like "-- OR --" or "Path 2: Schedule-driven"
-2. **Center each row independently** — don't assume row 1 alignment applies to row 2
+2. **Center each row independently** - don't assume row 1 alignment applies to row 2
 3. **Label each row** with its purpose (e.g., "Path 1: Event-driven" / "Path 2: Schedule-driven")
 
 ### Rule 10: Nested Box Diagrams (Memory Hierarchies, Scopes)
@@ -1101,21 +1103,21 @@ If text appears clipped at the bottom of a box, increase the rect height AND the
 
 > **Note:** This is a general content rule, not SVG-specific. Full guidance with examples in `references/style-guide.md` → "Presentation Title Rule".
 
-The title must represent the **entire scope** of the presentation, not just one subsystem. If the presentation has N major sections and the title only describes one of them, the title is too narrow — pick the umbrella term that covers all sections.
+The title must represent the **entire scope** of the presentation, not just one subsystem. If the presentation has N major sections and the title only describes one of them, the title is too narrow - pick the umbrella term that covers all sections.
 
 ### Rule 14: Dashed Lines Need Minimum Visible Length
 
-A `stroke-dasharray="4 3"` line that's only 13px long shows barely one dash — it looks like a rendering glitch, not a connection.
+A `stroke-dasharray="4 3"` line that's only 13px long shows barely one dash - it looks like a rendering glitch, not a connection.
 
 - **Minimum line length:** 25px between source element and target element
 - If the gap between two boxes is too small, shift the target box to create at least 25px of space
 - Also increase the viewBox dimensions to accommodate the shifted element
 
 ```xml
-<!-- BAD: 13px dashed line — barely visible -->
+<!-- BAD: 13px dashed line - barely visible -->
 <line x1="375" y1="85" x2="375" y2="98" stroke="#ef4444" stroke-dasharray="3"/>
 
-<!-- GOOD: 25px dashed line — dash pattern clearly visible -->
+<!-- GOOD: 25px dashed line - dash pattern clearly visible -->
 <line x1="375" y1="85" x2="375" y2="110" stroke="#ef4444" stroke-dasharray="4 3"
       marker-end="url(#arr-red)"/>
 ```
@@ -1124,13 +1126,13 @@ A `stroke-dasharray="4 3"` line that's only 13px long shows barely one dash — 
 
 Rule 3 says arrowheads must match the line color. This rule goes further: **every line that represents directional flow MUST have `marker-end`**. No exceptions.
 
-Lines without arrowheads look like static borders or decorative separators — not flow connections. This applies to:
+Lines without arrowheads look like static borders or decorative separators - not flow connections. This applies to:
 - Converging lines (multiple sources merging into one target)
 - Branching lines (one source splitting to multiple targets)
 - Connecting lines between diagram sections
 
 ```xml
-<!-- BAD: no arrowhead — looks like a static border -->
+<!-- BAD: no arrowhead - looks like a static border -->
 <line x1="150" y1="200" x2="150" y2="240" stroke="#00ff88" stroke-width="1.5"/>
 
 <!-- GOOD: arrowhead shows this is a directional flow -->
@@ -1168,24 +1170,24 @@ When an arrow between two boxes carries a text label (e.g., "HTTP", "Streamable 
 3. If the gap is smaller than `label_width + 40px`, widen the viewBox and shift the downstream box
 
 ```xml
-<!-- BAD: 55px gap for "Streamable HTTP" (14 chars x 7px = 98px) — truncated -->
+<!-- BAD: 55px gap for "Streamable HTTP" (14 chars x 7px = 98px) - truncated -->
 <rect x="285" ... width="230"/>  <!-- ends at 515 -->
 <rect x="570" .../>              <!-- gap = 55px -->
 
-<!-- GOOD: 95px gap — label fits comfortably -->
+<!-- GOOD: 145px gap - label fits with the required padding -->
 <rect x="290" ... width="220"/>  <!-- ends at 510 -->
-<rect x="605" .../>              <!-- gap = 95px -->
-<text x="557" y="82" text-anchor="middle">Streamable HTTP</text>
+<rect x="655" .../>              <!-- gap = 145px -->
+<text x="582" y="82" text-anchor="middle">Streamable HTTP</text>
 ```
 
 ### Rule 18: Center Rows of Equally-Spaced Boxes
 
-When multiple boxes share a horizontal row, center the group within the viewBox — don't just start at a small x offset.
+When multiple boxes share a horizontal row, center the group within the viewBox - don't just start at a small x offset.
 
 **Formula:** `start_x = (viewBox_width - total_row_width) / 2` where `total_row_width = N x box_width + (N-1) x gap`
 
 ```xml
-<!-- BAD: 3 boxes starting at x=40 in an 800px viewBox — left-skewed -->
+<!-- BAD: 3 boxes starting at x=40 in an 800px viewBox - left-skewed -->
 <rect x="40" ... width="150"/>
 <rect x="220" ... width="150"/>
 <rect x="400" ... width="180"/>
@@ -1207,11 +1209,11 @@ When a diagram has distinct row groups, add a visual separator between them:
 For left-aligned list items in SVG (not centered via `text-anchor`), prefix each item with a bullet character `&#x2022;` to provide visual structure.
 
 ```xml
-<!-- Without bullets — looks like floating text -->
+<!-- Without bullets - looks like floating text -->
 <text x="160" y="320">Pydantic AI agents</text>
 <text x="160" y="340">MCP tools (166+)</text>
 
-<!-- With bullets — clearly a list -->
+<!-- With bullets - clearly a list -->
 <text x="160" y="320">&#x2022; Pydantic AI agents</text>
 <text x="160" y="340">&#x2022; MCP tools (166+)</text>
 ```
@@ -1225,14 +1227,15 @@ Keep all bullets at the same x position within a column. If using two columns wi
 ```xml
 <!-- Rounded rectangle (service box) -->
 <rect x="100" y="50" width="160" height="60" rx="8" ry="8"
-      fill="var(--diagram-primary, #4A90D9)" stroke="none" />
-<text x="180" y="85" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">Service</text>
+      fill="var(--diagram-primary, #0077BB)" stroke="none" />
+<text x="180" y="85" text-anchor="middle" fill="var(--diagram-label, #FFFFFF)" font-size="14" font-weight="600">Service</text>
 
 <!-- Database cylinder -->
-<ellipse cx="180" cy="240" rx="50" ry="12" fill="var(--diagram-secondary, #50C878)" />
-<rect x="130" y="240" width="100" height="40" fill="var(--diagram-secondary, #50C878)" />
-<ellipse cx="180" cy="280" rx="50" ry="12" fill="var(--diagram-secondary-dark, #3db066)" />
-<text x="180" y="265" text-anchor="middle" fill="#fff" font-size="12">PostgreSQL</text>
+<ellipse cx="180" cy="240" rx="50" ry="12" fill="var(--diagram-secondary, #009988)" />
+<rect x="130" y="240" width="100" height="40" fill="var(--diagram-secondary, #009988)" />
+<ellipse cx="180" cy="280" rx="50" ry="12" fill="var(--diagram-secondary, #009988)" />
+<ellipse cx="180" cy="280" rx="50" ry="12" fill="var(--diagram-shadow, #000000)" fill-opacity="0.20" />
+<text x="180" y="265" text-anchor="middle" fill="var(--diagram-label, #FFFFFF)" font-size="12">PostgreSQL</text>
 
 <!-- Arrow connector -->
 <line x1="180" y1="110" x2="180" y2="228" stroke="var(--diagram-arrow, #888)"
@@ -1285,14 +1288,16 @@ Define in the presentation's `<style>` block so diagrams inherit the theme:
 
 ```css
 :root {
-  --diagram-primary: #4A90D9;
-  --diagram-secondary: #50C878;
-  --diagram-amber: #F5A623;
-  --diagram-red: #DC5A5A;
-  --diagram-purple: #9B59B6;
+  --diagram-primary: #0077BB;
+  --diagram-secondary: #009988;
+  --diagram-amber: #EE7733;
+  --diagram-red: #CC3311;
+  --diagram-purple: #3344AA;
   --diagram-arrow: #888;
   --diagram-bg: #2a2a2a;
   --diagram-text: #e0e0e0;
+  --diagram-label: #FFFFFF;
+  --diagram-shadow: #000000;
 }
 
 /* Light mode overrides */
@@ -1328,8 +1333,8 @@ Place `<use>` elements inside your SVG to reference icons from the sprite:
 
 ```xml
 <!-- Inside a diagram SVG -->
-<use href="#icon-database" x="155" y="62" width="20" height="20" style="color: #fff;"/>
-<use href="#icon-shield" x="415" y="62" width="20" height="20" style="color: #fff;"/>
+<use href="#icon-database" x="155" y="62" width="20" height="20" style="color: var(--diagram-label, #FFFFFF);"/>
+<use href="#icon-shield" x="415" y="62" width="20" height="20" style="color: var(--diagram-label, #FFFFFF);"/>
 ```
 
 ### Using Icons in HTML Slide Content

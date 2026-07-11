@@ -6,10 +6,10 @@
   <style>
     .c4-interactive { transition: filter 0.2s ease; cursor: pointer; }
     .c4-interactive:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
-    .c4-name { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: #fff; }
-    .c4-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 400; fill: rgba(255,255,255,0.8); }
-    .c4-person-name { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; fill: #fff; }
-    .c4-person-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 400; fill: rgba(255,255,255,0.75); }
+    .c4-name { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: var(--diagram-label, #FFFFFF); }
+    .c4-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 400; fill: color-mix(in srgb, var(--diagram-label, #FFFFFF) 80%, transparent); }
+    .c4-person-name { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; fill: var(--diagram-label, #FFFFFF); }
+    .c4-person-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 400; fill: color-mix(in srgb, var(--diagram-label, #FFFFFF) 75%, transparent); }
     .c4-ext-name { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: var(--diagram-text, #e0e0e0); }
     .c4-ext-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 400; fill: var(--diagram-text, #bbb); }
     .c4-arrow-label { font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-weight: 500; fill: var(--diagram-text, #ccc); }
@@ -29,9 +29,9 @@
   <g id="person-1-group" class="c4-interactive">
     <!-- Body -->
     <rect x="70" y="100" width="80" height="45" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#c4-shadow)" />
     <!-- Head -->
-    <circle cx="110" cy="78" r="18" fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <circle cx="110" cy="78" r="18" fill="var(--diagram-primary, #0077BB)" filter="url(#c4-shadow)" />
     <!-- Labels below figure -->
     <text id="person-1-label" x="110" y="168" text-anchor="middle" class="c4-person-name">End User</text>
     <text id="person-1-desc" x="110" y="180" text-anchor="middle" class="c4-person-desc">Uses the system via browser</text>
@@ -41,9 +41,9 @@
   <g id="person-2-group" style="display:none;" class="c4-interactive">
     <!-- Body -->
     <rect x="490" y="100" width="80" height="45" rx="8" ry="8"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#c4-shadow)" />
     <!-- Head -->
-    <circle cx="530" cy="78" r="18" fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+    <circle cx="530" cy="78" r="18" fill="var(--diagram-primary, #0077BB)" filter="url(#c4-shadow)" />
     <!-- Labels below figure -->
     <text id="person-2-label" x="530" y="168" text-anchor="middle" class="c4-person-name">Admin</text>
     <text id="person-2-desc" x="530" y="180" text-anchor="middle" class="c4-person-desc">Manages configuration</text>
@@ -52,7 +52,7 @@
   <!-- ==================== CENTRAL SYSTEM ==================== -->
   <g id="system-group" class="c4-interactive">
     <rect x="250" y="210" width="200" height="90" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#c4-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#c4-shadow)" />
     <text id="system-label" x="350" y="248" text-anchor="middle" class="c4-name">Your System</text>
     <text id="system-desc" x="350" y="268" text-anchor="middle" class="c4-desc">Core application providing</text>
     <text x="350" y="280" text-anchor="middle" class="c4-desc">business functionality</text>

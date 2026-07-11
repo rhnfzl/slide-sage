@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ember" data-mode="dark">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Engineering delivery review</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Manrope:wght@400;600;700;800&amp;display=swap">
+  <style>
+/* viewport-base.css - inlined into every slide-sage presentation */
+
+/* ============================================
+   Reset
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: max(2px, 0.15em) solid var(--color-gold, #BBAA33);
+  outline-offset: 3px;
+}
+
+/* ============================================
+   CSS Custom Properties
+   ============================================ */
+:root {
+  /* Theme vocabulary - presets override the rich values below. */
+  --color-bg-primary: #101820;
+  --color-bg-secondary: #182632;
+  --color-bg-surface: #203442;
+  --color-bg-elevated: #294354;
+  --color-text-primary: #edf4f8;
+  --color-text-secondary: #b8cad5;
+  --color-text-muted: #8299aa;
+  --color-text-inverse: #101820;
+  --color-accent: #0077BB;
+  --color-accent-secondary: #009988;
+  --color-gold: #BBAA33;
+  --color-accent-hover: #4A9ACE;
+  --color-accent-subtle: #17384a;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+
+  /* Bridge rich preset values to the shared presentation components. */
+  --color-bg: var(--color-bg-primary);
+  --color-text: var(--color-text-primary);
+  --color-heading: var(--color-text-primary);
+  --color-surface: var(--color-bg-surface);
+
+  /* Colorblind-safe categorical defaults. */
+  --cat-1: #0077BB;
+  --cat-2: #CC3311;
+  --cat-3: #009988;
+  --cat-4: #EE7733;
+  --cat-5: #3344AA;
+  --cat-6: #EE3377;
+  --cat-7: #BBAA33;
+  --cat-8: #888888;
+  --chart-positive: #2A9D5C;
+  --chart-negative: #CC3311;
+  --chart-neutral: #888888;
+  --chart-highlight: #EE7733;
+
+  /* Typography */
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* Spacing scale */
+  --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --spacing-md: clamp(0.75rem, 1.5vw, 1.25rem);
+  --spacing-lg: clamp(1rem, 2.5vw, 2rem);
+  --spacing-xl: clamp(1.5rem, 3.5vw, 3rem);
+
+  /* Shape & Motion */
+  --radius-sm: clamp(0.2rem, 0.4vw, 0.35rem);
+  --radius-md: clamp(0.35rem, 0.7vw, 0.6rem);
+  --radius-lg: clamp(0.5rem, 1vw, 0.85rem);
+  --radius: var(--radius-lg);
+  --preset-title-size: clamp(1.8rem, 4vw, 3.5rem);
+  --preset-section-size: clamp(1.4rem, 3vw, 2.5rem);
+  --preset-kicker-tracking: 0.12em;
+  --preset-divider-width: 1px;
+  --preset-stat-treatment: tabular-nums;
+  --transition-speed: 0.3s;
+}
+
+/* ============================================
+   Slides Container
+   ============================================ */
+.slides-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+}
+
+/* ============================================
+   Individual Slide
+   ============================================ */
+.slide {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(1.5rem, 4vh, 3rem) clamp(1.5rem, 5vw, 4rem);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.slide.inactive {
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.chart-render-fallback {
+  width: 100%;
+  max-width: min(94vw, 56rem);
+  margin: var(--spacing-sm) auto 0;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.chart-render-fallback[hidden] {
+  display: none;
+}
+
+.chart-render-fallback table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.chart-render-fallback th,
+.chart-render-fallback td {
+  padding: var(--spacing-xs);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ============================================
+   Slide Content Wrapper
+   ============================================ */
+.slide-content {
+  max-width: min(90%, 1100px);
+  max-height: 85vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+h1 {
+  font-family: var(--font-heading);
+  font-size: var(--preset-title-size);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-size: var(--preset-section-size);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-sm);
+}
+
+p {
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-sm);
+}
+
+li {
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+}
+
+ul, ol {
+  padding-left: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+small, .caption, figcaption {
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
+.eyebrow,
+.kicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: var(--preset-kicker-tracking);
+  text-transform: uppercase;
+}
+
+.accent-rule,
+.presentation-divider {
+  width: clamp(4rem, 10vw, 9rem);
+  height: var(--preset-divider-width);
+  background: var(--color-accent);
+}
+
+.stat-value,
+.metric-value {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-variant-numeric: var(--preset-stat-treatment);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.2vw, 0.95rem);
+  line-height: 1.5;
+  background: color-mix(in srgb, var(--color-bg) 74%, black);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  overflow: hidden;
+  max-height: 55vh;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.code-block {
+  width: 100%;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--spacing-md);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* ============================================
+   Images
+   ============================================ */
+.slide img {
+  max-height: min(50vh, 400px);
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.text-center { text-align: center; }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+/* ============================================
+   Navigation: Progress Bar
+   ============================================ */
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  width: 0%;
+  transition: width var(--transition-speed) ease;
+}
+
+/* ============================================
+   Navigation: Slide Counter
+   ============================================ */
+.slide-counter {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+  color: var(--color-text);
+  opacity: 0.4;
+  z-index: 100;
+  user-select: none;
+}
+
+/* ============================================
+   Navigation: Arrow Buttons
+   ============================================ */
+.nav-arrows {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.slides-container:hover ~ .nav-arrows,
+.nav-arrows:hover,
+.nav-arrows:focus-within {
+  opacity: 1;
+}
+
+.nav-arrow {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.nav-arrow:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.nav-arrow:disabled:hover {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* ============================================
+   Keyboard Shortcuts Dialog
+   ============================================ */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: color-mix(in srgb, var(--color-bg-primary) 78%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.shortcuts-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.shortcuts-panel {
+  width: min(92vw, 34rem);
+  max-height: min(86vh, 38rem);
+  overflow: auto;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+}
+
+.shortcuts-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.shortcuts-heading-row h3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: clamp(1.75rem, 3vw, 2.25rem);
+  height: clamp(1.75rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1;
+}
+
+.shortcuts-close:hover {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.shortcuts-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-panel td {
+  padding: var(--spacing-xs) 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+}
+
+.shortcuts-panel td:first-child {
+  padding-right: var(--spacing-md);
+  white-space: nowrap;
+}
+
+.shortcuts-panel kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  font-family: var(--font-mono);
+}
+
+.shortcuts-dismiss {
+  margin-top: var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  text-align: center;
+}
+
+/* ============================================
+   Visual Polish: Background Grid
+   ============================================ */
+.bg-grid::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Visual Polish: Glow Effects
+   ============================================ */
+.glow {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent); }
+  50% { box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent); }
+}
+
+/* ============================================
+   Visual Polish: Card Accents
+   ============================================ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+}
+
+.card-accent {
+  border-left: 3px solid var(--color-accent);
+}
+
+.card-top-accent {
+  border-top: 3px solid var(--color-accent);
+}
+
+.card-gold {
+  border-left: 3px solid var(--color-gold);
+}
+
+/* ============================================
+   Visual Polish: Staggered Reveal
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .reveal:nth-child(2) { transition-delay: 0.1s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.15s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.2s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.25s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.3s; }
+.slide.active .reveal:nth-child(7) { transition-delay: 0.35s; }
+.slide.active .reveal:nth-child(8) { transition-delay: 0.4s; }
+
+/* ============================================
+   Visual Polish: Badges
+   ============================================ */
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
+  vertical-align: middle;
+}
+
+.badge-gold {
+  background: color-mix(in srgb, var(--color-gold) 15%, transparent);
+  color: var(--color-gold);
+}
+
+.badge-blue {
+  background: color-mix(in srgb, var(--cat-1) 15%, transparent);
+  color: var(--cat-1);
+}
+
+.badge-orange {
+  background: color-mix(in srgb, var(--cat-4) 15%, transparent);
+  color: var(--cat-4);
+}
+
+/* ============================================
+   Visual Polish: Inline Code
+   ============================================ */
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  padding: 0.2em 0.45em;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+/* ============================================
+   Visual Polish: Section Label
+   ============================================ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ============================================
+   CSS Diagrams: Sequence Flow
+   ============================================ */
+.sequence-flow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.seq-participants {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.seq-actor {
+  flex: 1;
+  text-align: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(0.6rem, 1vw, 0.8rem);
+}
+
+.seq-actor.accent {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.seq-step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-left: 2px solid var(--color-border);
+  margin-left: var(--spacing-md);
+}
+
+.seq-step .seq-arrow {
+  color: var(--color-accent);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.seq-step .seq-label {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+}
+
+.seq-step .seq-from,
+.seq-step .seq-to {
+  font-weight: 600;
+  min-width: 4em;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+}
+
+.seq-step.dashed {
+  border-left-style: dashed;
+}
+
+.seq-step.response {
+  border-left-color: var(--color-accent-secondary);
+}
+
+.seq-step.response .seq-arrow {
+  color: var(--color-accent-secondary);
+}
+
+/* ============================================
+   CSS Diagrams: Architecture Stack
+   ============================================ */
+.arch-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+}
+
+.arch-row.full {
+  width: 100%;
+}
+
+.arch-row-group {
+  display: flex;
+  gap: 4px;
+}
+
+.arch-row-group .arch-row {
+  flex: 1;
+}
+
+.arch-row.muted {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* ============================================
+   CSS Diagrams: Pyramid
+   ============================================ */
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.pyramid-layer {
+  width: var(--width, 80%);
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  transition: width 0.3s ease;
+}
+
+.pyramid-layer:first-child {
+  border-radius: 6px 6px 4px 4px;
+}
+
+.pyramid-layer:last-child {
+  border-radius: 4px 4px 6px 6px;
+}
+
+/* ============================================
+   CSS Diagrams: Process Flow (Horizontal)
+   ============================================ */
+.process-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.process-step {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+}
+
+.process-arrow {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Typography Enhancements
+   ============================================ */
+.tight-heading {
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  html,
+  body,
+  .slides-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .slide {
+    position: relative;
+    page-break-after: always;
+    height: 100vh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .slide:last-child {
+    page-break-after: avoid;
+  }
+
+  .slide.inactive {
+    display: flex !important;
+    opacity: 1 !important;
+    position: relative !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  .progress-bar,
+  .slide-counter,
+  .nav-arrows,
+  .shortcuts-overlay {
+    display: none !important;
+  }
+
+  @page {
+    margin: 1cm;
+    size: landscape;
+  }
+
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Height Breakpoints
+   ============================================ */
+@media (max-height: 700px) {
+  h1 { font-size: clamp(1.5rem, 3.5vw, 2.8rem); }
+  h2 { font-size: clamp(1.2rem, 2.5vw, 2rem); }
+  h3 { font-size: clamp(1rem, 2vw, 1.5rem); }
+  p, li { font-size: clamp(0.8rem, 1.3vw, 1.05rem); }
+
+  .slide { padding: var(--spacing-sm) var(--spacing-md); }
+  .slide-content { max-height: 88vh; }
+
+  :root {
+    --spacing-md: clamp(0.5rem, 1.2vw, 1rem);
+    --spacing-lg: clamp(0.75rem, 2vw, 1.5rem);
+    --spacing-xl: clamp(1rem, 2.5vw, 2rem);
+  }
+}
+
+@media (max-height: 600px) {
+  h1 { font-size: clamp(1.3rem, 3vw, 2.2rem); }
+  h2 { font-size: clamp(1.1rem, 2.2vw, 1.7rem); }
+  h3 { font-size: clamp(0.95rem, 1.8vw, 1.3rem); }
+  p, li { font-size: clamp(0.75rem, 1.2vw, 0.95rem); }
+  small, .caption { font-size: clamp(0.65rem, 1vw, 0.8rem); }
+
+  .slide { padding: var(--spacing-xs) var(--spacing-sm); }
+  .slide-content { max-height: 90vh; }
+  .slide img { max-height: min(40vh, 300px); }
+}
+
+@media (max-height: 500px) {
+  h1 { font-size: clamp(1.1rem, 2.5vw, 1.8rem); }
+  h2 { font-size: clamp(0.95rem, 2vw, 1.4rem); }
+  h3 { font-size: clamp(0.85rem, 1.6vw, 1.1rem); }
+  p, li { font-size: clamp(0.7rem, 1.1vw, 0.85rem); }
+
+  .slide {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+  .slide-content { max-height: 92vh; }
+
+  h1, h2, h3 { margin-bottom: var(--spacing-xs); }
+  ul, ol { gap: 0.1rem; }
+  .slide img { max-height: min(30vh, 200px); }
+}
+
+/* ============================================
+   Width Breakpoints (secondary)
+   ============================================ */
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .flex-row { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: var(--spacing-sm); }
+  .nav-arrows { display: none; }
+}
+
+html[data-theme="ember"] {
+  --color-bg-primary: #FBF8F4; --color-bg-secondary: #F4EDE4; --color-bg-surface: #FFFFFF; --color-bg-elevated: #FFFFFF;
+  --color-text-primary: #2C2218; --color-text-secondary: #6B5740; --color-text-muted: #927C65; --color-text-inverse: #FBF8F4;
+  --color-accent: #CC6B20; --color-accent-secondary: #009988; --color-gold: #B47D0A; --color-accent-hover: #A95112; --color-accent-subtle: #FDE4CA;
+  --color-border: color-mix(in srgb, var(--color-text-primary) 15%, transparent);
+  --font-heading: 'Manrope', Arial, sans-serif; --font-body: 'Manrope', Arial, sans-serif; --font-mono: 'DM Mono', ui-monospace, monospace;
+  --radius-sm: clamp(0.2rem, 0.4vw, 0.35rem); --radius-md: clamp(0.35rem, 0.65vw, 0.55rem); --radius-lg: clamp(0.45rem, 0.8vw, 0.7rem);
+  --preset-title-size: clamp(1.98rem, 4.4vw, 3.85rem); --preset-section-size: clamp(1.54rem, 3.3vw, 2.75rem); --preset-kicker-tracking: 0.18em; --preset-divider-width: 3px; --preset-stat-treatment: tabular-nums;
+}
+html[data-theme="ember"][data-mode="dark"] {
+  --color-bg-primary: #1A1410; --color-bg-secondary: #241C15; --color-bg-surface: #2E231A; --color-bg-elevated: #3A2C20;
+  --color-text-primary: #F5E9D8; --color-text-secondary: #D0B99C; --color-text-muted: #927B63; --color-text-inverse: #1A1410;
+  --color-accent: #E89838; --color-accent-secondary: #43B7A7; --color-gold: #D4A01A; --color-accent-hover: #F4B967; --color-accent-subtle: #3F2A17;
+}body{background:var(--color-bg-primary);color:var(--color-text-primary);font-family:var(--font-body)}.slide{background:var(--color-bg-primary)}.kicker{font-family:var(--font-mono);font-size:clamp(.65rem,1vw,.85rem);color:var(--color-accent);letter-spacing:.14em;text-transform:uppercase}.review-title{font-size:clamp(3rem,8vw,7rem);line-height:.86;letter-spacing:-.06em;max-width:12ch}.review-sub{color:var(--color-text-secondary);max-width:44ch}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-md);width:100%}.metric{padding:var(--spacing-lg) var(--spacing-md);border:1px solid var(--color-border);background:var(--color-bg-surface)}.metric strong{display:block;font-size:clamp(2.2rem,5vw,5rem);font-family:var(--font-heading);color:var(--color-accent);line-height:.9}.metric span{color:var(--color-text-secondary);font-size:clamp(.72rem,1.1vw,.95rem)}.chart-wrap{height:min(52vh,400px);width:100%;position:relative}.source{font-family:var(--font-mono);font-size:clamp(.62rem,.9vw,.78rem);color:var(--color-text-muted)}.decision{display:grid;grid-template-columns:1fr 2fr;gap:var(--spacing-lg);width:100%;align-items:start}.decision-label{font-family:var(--font-heading);font-size:clamp(2.2rem,5vw,4.6rem);color:var(--color-accent);line-height:.92}.decision-copy{padding-left:var(--spacing-lg);border-left:1px solid var(--color-border)}.decision-copy li{margin-bottom:var(--spacing-sm)}.shortcuts-panel{width:min(90vw,42rem);background:var(--color-bg-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--spacing-lg)}.shortcuts-panel h3{margin:0 0 var(--spacing-md);color:var(--color-heading);font-size:clamp(1.1rem,2vw,1.5rem)}.shortcuts-panel table{width:100%;border-collapse:collapse}.shortcuts-panel td{padding:var(--spacing-xs) 0}.shortcuts-panel td:first-child{padding-right:var(--spacing-md);white-space:nowrap}.shortcuts-dismiss{margin:var(--spacing-md) 0 0;color:var(--color-text-muted);text-align:center}@media(max-width:760px){.metric-grid,.decision{grid-template-columns:1fr}.decision-copy{padding-left:0;border-left:0}}
+.shortcuts-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:var(--spacing-lg);background:color-mix(in srgb,var(--color-bg-primary) 78%,transparent);opacity:0;pointer-events:none;transition:opacity .2s ease}.shortcuts-overlay.visible{opacity:1;pointer-events:auto}</style></head><body><main class="slides-container" id="slides">
+<section class="slide active" aria-hidden="false"><div class="slide-content gap-md"><span class="kicker">Engineering review</span><h1 class="review-title">Faster, with fewer reversals.</h1><p class="review-sub">A monthly delivery review for engineering leadership. Values are demonstration data, labeled throughout.</p></div></section>
+
+<section class="slide inactive" aria-hidden="true" inert><div class="slide-content gap-lg"><span class="kicker">Current signal</span><h2>Three measures moved together.</h2><div class="metric-grid"><div class="metric"><strong>31</strong><span>deployments per week, up from 18</span></div><div class="metric"><strong>2.6d</strong><span>lead time, down from 4.2 days</span></div><div class="metric"><strong>7%</strong><span>change failure rate, down from 11%</span></div></div><p class="source">SAMPLE DATA, replace before sharing</p></div></section>
+
+<section class="slide inactive" aria-hidden="true" inert><div class="slide-content gap-sm"><span class="kicker">Trend</span><h2>Throughput rose while failure rate fell.</h2><div class="chart-wrap"><canvas id="deliveryChart" role="img" aria-label="Sample monthly deployment frequency rises from 18 to 31 per week while change failure rate falls from 11 to 7 percent"></canvas></div><div class="chart-render-fallback" id="deliveryChartFallback"><p>Sample delivery trend data</p><table><thead><tr><th scope="col">Month</th><th scope="col">Deployments per week</th><th scope="col">Failure rate</th></tr></thead><tbody><tr><th scope="row">Jan</th><td>18</td><td>11%</td></tr><tr><th scope="row">Feb</th><td>20</td><td>10.5%</td></tr><tr><th scope="row">Mar</th><td>23</td><td>9.8%</td></tr><tr><th scope="row">Apr</th><td>25</td><td>9.1%</td></tr><tr><th scope="row">May</th><td>28</td><td>8.2%</td></tr><tr><th scope="row">Jun</th><td>31</td><td>7%</td></tr></tbody></table></div><table class="visually-hidden"><caption>Sample monthly deployment frequency and change failure rate</caption><thead><tr><th scope="col">Month</th><th scope="col">Deployments per week</th><th scope="col">Failure rate</th></tr></thead><tbody><tr><th scope="row">Jan</th><td>18</td><td>11%</td></tr><tr><th scope="row">Feb</th><td>20</td><td>10.5%</td></tr><tr><th scope="row">Mar</th><td>23</td><td>9.8%</td></tr><tr><th scope="row">Apr</th><td>25</td><td>9.1%</td></tr><tr><th scope="row">May</th><td>28</td><td>8.2%</td></tr><tr><th scope="row">Jun</th><td>31</td><td>7%</td></tr></tbody></table><noscript><p>JavaScript is unavailable. The sample delivery data is: deployments per week rose from 18 in January to 31 in June, while failure rate fell from 11% to 7%.</p></noscript><p class="source">SAMPLE DATA, six-month engineering delivery series</p></div></section>
+
+<section class="slide inactive" aria-hidden="true" inert><div class="slide-content gap-lg"><span class="kicker">Decision</span><h2>Protect the mechanism, not just the metric.</h2><div class="decision"><div class="decision-label">Next 30 days</div><ul class="decision-copy"><li>Keep batch size under the current median.</li><li>Review rollback causes weekly, with owners.</li><li>Pause throughput targets if failure rate rises above 9%.</li></ul></div></div></section>
+
+</main><script id="speaker-notes" type="application/json">[{"slide":1,"notes":"Frame the review around the decision. These values are sample values, not a claim about a real team."},{"slide":2,"notes":"Read the measures together. Higher deployment frequency is only good when lead time and failure rate support it."},{"slide":3,"notes":"Explain the source and period before reading the chart. Replace every sample value before sharing outside a demo."},{"slide":4,"notes":"End with concrete guardrails. The audience should leave with a decision, not a decorative chart."}]</script><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div><div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div><div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle" aria-hidden="true" inert><div class="shortcuts-panel" tabindex="-1"><div class="shortcuts-heading-row"><h3 id="shortcutsTitle">Keyboard Shortcuts</h3><button class="shortcuts-close" id="shortcutsClose" type="button" aria-label="Close keyboard shortcuts">&#215;</button></div><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>P</kbd></td><td>Open presenter view when included</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script><script>
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.totalSlides = this.slides.length;
+    this.currentSlide = 0;
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+    this.swipeThreshold = 50;
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ready = false;
+    this.isPrinting = false;
+    this.lastFocusedElement = null;
+    this.shortcutsFocusFrame = null;
+
+    this.progressFill = document.getElementById('progressFill');
+    this.slideCounter = document.getElementById('slideCounter');
+    this.shortcutsOverlay = document.getElementById('shortcutsOverlay');
+    this.shortcutsPanel = this.shortcutsOverlay?.querySelector('.shortcuts-panel');
+    this.shortcutsClose = document.getElementById('shortcutsClose');
+    this.navPrev = document.getElementById('navPrev');
+    this.navNext = document.getElementById('navNext');
+
+    this.init();
+  }
+
+  init() {
+    this.bindKeyboard();
+    this.bindTouch();
+    this.bindNavButtons();
+    this.bindShortcutsDialog();
+    this.bindHashChange();
+    this.bindPrintPreparation();
+    this.readHashAndNavigate();
+    this.updateUI();
+    this.ready = true;
+
+    // Delay the first lifecycle event until chart scripts in this DOM-ready turn exist.
+    window.requestAnimationFrame(() => {
+      this.emitSlideChange(null);
+      this.markPrintReady();
+    });
+  }
+
+  bindKeyboard() {
+    document.addEventListener('keydown', (e) => {
+      if (this.isShortcutsVisible()) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else if (e.key === 'Tab') {
+          this.trapShortcutsFocus(e);
+        } else if (e.key === '?') {
+          e.preventDefault();
+          this.hideShortcuts();
+        } else {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      // Ignore if user is typing in an input or textarea
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.tagName === 'SELECT' ||
+        e.target.isContentEditable
+      ) return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case ' ':
+          e.preventDefault();
+          if (e.shiftKey) {
+            this.prev();
+          } else {
+            this.next();
+          }
+          break;
+        case 'PageDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'PageUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case 'Home':
+          e.preventDefault();
+          this.goTo(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          this.goTo(this.totalSlides - 1);
+          break;
+        case '?':
+          e.preventDefault();
+          this.toggleShortcuts();
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          this.openPresenterMode();
+          break;
+        case 'Escape':
+          this.hideShortcuts();
+          break;
+      }
+    });
+  }
+
+  bindTouch() {
+    const container = document.getElementById('slides');
+
+    container.addEventListener('touchstart', (e) => {
+      this.touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      this.touchEndX = e.changedTouches[0].screenX;
+      this.handleSwipe();
+    }, { passive: true });
+  }
+
+  handleSwipe() {
+    const diff = this.touchStartX - this.touchEndX;
+    if (Math.abs(diff) < this.swipeThreshold) return;
+
+    if (diff > 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
+  }
+
+  bindNavButtons() {
+    if (this.navPrev) {
+      this.navPrev.addEventListener('click', () => this.prev());
+    }
+    if (this.navNext) {
+      this.navNext.addEventListener('click', () => this.next());
+    }
+  }
+
+  bindShortcutsDialog() {
+    if (!this.shortcutsOverlay) return;
+
+    this.shortcutsClose?.addEventListener('click', () => this.hideShortcuts());
+    this.shortcutsOverlay.addEventListener('click', (event) => {
+      if (event.target === this.shortcutsOverlay) this.hideShortcuts();
+    });
+  }
+
+  bindHashChange() {
+    window.addEventListener('hashchange', () => this.readHashAndNavigate());
+  }
+
+  bindPrintPreparation() {
+    window.addEventListener('beforeprint', () => {
+      this.isPrinting = true;
+      this.slides.forEach((slide) => {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      });
+      void this.markPrintReady();
+    });
+    window.addEventListener('afterprint', () => {
+      this.isPrinting = false;
+      this.updateUI();
+    });
+  }
+
+  async markPrintReady() {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
+    if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+      document.querySelectorAll('canvas').forEach((canvas) => {
+        const chart = Chart.getChart(canvas);
+        if (!chart) return;
+        chart.stop();
+        chart.options.animation = false;
+        chart.update('none');
+      });
+    }
+
+    if (typeof echarts !== 'undefined' && typeof echarts.getInstanceByDom === 'function') {
+      document.querySelectorAll('[data-slide-sage-echarts]').forEach((element) => {
+        const chart = echarts.getInstanceByDom(element);
+        if (!chart) return;
+        chart.setOption({ animation: false }, false);
+        chart.resize();
+      });
+    }
+
+    document.documentElement.dataset.slideSagePrintReady = 'true';
+  }
+
+  readHashAndNavigate() {
+    const hash = window.location.hash;
+    const match = hash.match(/^#slide-(\d+)$/);
+    if (match) {
+      const index = parseInt(match[1], 10) - 1;
+      if (index >= 0 && index < this.totalSlides) {
+        this.goTo(index, false);
+      }
+    }
+  }
+
+  next() {
+    if (this.currentSlide < this.totalSlides - 1) {
+      this.goTo(this.currentSlide + 1);
+    }
+  }
+
+  prev() {
+    if (this.currentSlide > 0) {
+      this.goTo(this.currentSlide - 1);
+    }
+  }
+
+  goTo(index, updateHash = true) {
+    if (index < 0 || index >= this.totalSlides) return;
+    if (index === this.currentSlide) return;
+
+    const previousSlide = this.slides[this.currentSlide];
+    const nextSlide = this.slides[index];
+    const shouldMoveFocus = previousSlide.contains(document.activeElement);
+
+    previousSlide.classList.remove('active');
+    previousSlide.classList.add('inactive');
+
+    nextSlide.classList.remove('inactive');
+    nextSlide.classList.add('active');
+
+    if (this.reducedMotion) {
+      previousSlide.style.transition = 'none';
+      nextSlide.style.transition = 'none';
+    }
+
+    this.currentSlide = index;
+
+    if (updateHash) {
+      history.replaceState(null, '', `#slide-${index + 1}`);
+    }
+
+    this.updateUI();
+    if (shouldMoveFocus) this.moveFocusToIncomingSlide(nextSlide);
+
+    if (this.ready) {
+      this.emitSlideChange(previousSlide);
+    }
+  }
+
+  emitSlideChange(previousSlide) {
+    document.dispatchEvent(new CustomEvent('slidechange', {
+      detail: {
+        slide: this.slides[this.currentSlide],
+        index: this.currentSlide,
+        previousSlide,
+        reducedMotion: this.reducedMotion
+      }
+    }));
+  }
+
+  updateUI() {
+    // Update progress bar
+    if (this.progressFill) {
+      const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+      this.progressFill.style.width = `${progress}%`;
+    }
+
+    // Update slide counter
+    if (this.slideCounter) {
+      this.slideCounter.textContent = `${this.currentSlide + 1} / ${this.totalSlides}`;
+    }
+
+    // Update nav button states
+    if (this.navPrev) {
+      this.navPrev.disabled = this.currentSlide === 0;
+    }
+    if (this.navNext) {
+      this.navNext.disabled = this.currentSlide === this.totalSlides - 1;
+    }
+
+    // Ensure only the active slide is visible and exposed to assistive technology.
+    this.slides.forEach((slide, i) => {
+      const isActive = i === this.currentSlide;
+      if (isActive) {
+        slide.classList.add('active');
+        slide.classList.remove('inactive');
+      } else {
+        slide.classList.remove('active');
+        slide.classList.add('inactive');
+      }
+
+      if (this.isPrinting || isActive) {
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
+      } else {
+        slide.setAttribute('inert', '');
+        slide.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  moveFocusToIncomingSlide(nextSlide) {
+    const target = nextSlide.querySelector(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    ) || nextSlide;
+    if (target === nextSlide && !nextSlide.hasAttribute('tabindex')) {
+      nextSlide.setAttribute('tabindex', '-1');
+    }
+    target.focus({ preventScroll: true });
+  }
+
+  isShortcutsVisible() {
+    return Boolean(this.shortcutsOverlay?.classList.contains('visible'));
+  }
+
+  shortcutsFocusableElements() {
+    if (!this.shortcutsOverlay) return [];
+    return [...this.shortcutsOverlay.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => !element.hasAttribute('hidden'));
+  }
+
+  trapShortcutsFocus(event) {
+    const focusable = this.shortcutsFocusableElements();
+    if (focusable.length === 0) {
+      event.preventDefault();
+      this.shortcutsPanel?.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !this.shortcutsOverlay.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  restoreShortcutsFocus() {
+    const target = this.lastFocusedElement;
+    this.lastFocusedElement = null;
+    if (target?.isConnected && target !== document.body && typeof target.focus === 'function') {
+      target.focus({ preventScroll: true });
+      return;
+    }
+    const fallback = (!this.navNext?.disabled && this.navNext) ||
+      (!this.navPrev?.disabled && this.navPrev) ||
+      this.slides[this.currentSlide];
+    if (fallback === this.slides[this.currentSlide] && !fallback.hasAttribute('tabindex')) {
+      fallback.setAttribute('tabindex', '-1');
+    }
+    fallback?.focus({ preventScroll: true });
+  }
+
+  toggleShortcuts() {
+    if (this.isShortcutsVisible()) {
+      this.hideShortcuts();
+    } else {
+      this.showShortcuts();
+    }
+  }
+
+  showShortcuts() {
+    if (!this.shortcutsOverlay) return;
+    this.lastFocusedElement = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+      ? document.activeElement
+      : null;
+    this.shortcutsOverlay.removeAttribute('inert');
+    this.shortcutsOverlay.classList.add('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'false');
+    this.shortcutsFocusFrame = window.requestAnimationFrame(() => {
+      this.shortcutsFocusFrame = null;
+      if (this.isShortcutsVisible()) (this.shortcutsClose || this.shortcutsPanel)?.focus();
+    });
+  }
+
+  hideShortcuts() {
+    if (!this.shortcutsOverlay || !this.isShortcutsVisible()) return;
+    if (this.shortcutsFocusFrame !== null) {
+      window.cancelAnimationFrame(this.shortcutsFocusFrame);
+      this.shortcutsFocusFrame = null;
+    }
+    this.shortcutsOverlay.setAttribute('inert', '');
+    this.shortcutsOverlay.classList.remove('visible');
+    this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
+    this.restoreShortcutsFocus();
+  }
+
+  openPresenterMode() {
+    if (typeof window.openSlideSagePresenter === 'function') {
+      window.openSlideSagePresenter(this);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new SlidePresentation();
+  const canvas = document.getElementById('deliveryChart');
+  const fallback = document.getElementById('deliveryChartFallback');
+  const theme = getComputedStyle(document.documentElement);
+  const accent = theme.getPropertyValue('--color-accent').trim();
+  const secondary = theme.getPropertyValue('--color-accent-secondary').trim();
+  const muted = theme.getPropertyValue('--color-text-secondary').trim();
+  const border = theme.getPropertyValue('--color-border').trim();
+  let chart;
+  try {
+    chart = new Chart(canvas, {
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          { type: 'bar', label: 'Deployments/week', data: [18, 20, 23, 25, 28, 31], backgroundColor: accent, yAxisID: 'y' },
+          { type: 'line', label: 'Failure rate', data: [11, 10.5, 9.8, 9.1, 8.2, 7], borderColor: secondary, pointBackgroundColor: secondary, tension: 0.3, yAxisID: 'y1' }
+        ]
+      },
+      options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { right: 80 } },
+      plugins: { legend: { labels: { color: muted } } },
+        scales: {
+          x: { ticks: { color: muted }, grid: { display: false } },
+          y: { position: 'left', ticks: { color: muted }, grid: { color: border }, title: { display: true, text: 'Deployments per week', color: muted } },
+          y1: { position: 'right', ticks: { color: muted, callback: value => `${value}%` }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Change failure rate', color: muted } }
+        }
+      }
+    });
+    fallback.hidden = true;
+  } catch (error) {
+    console.error('Delivery chart could not render. The data table remains visible.', error);
+  }
+
+document.addEventListener('slidechange', ({ detail }) => {
+    if (!chart || !detail.slide.contains(canvas)) return;
+    chart.stop();
+    if (detail.reducedMotion) {
+      chart.options.animation = false;
+      chart.update('none');
+      return;
+    }
+    chart.options.animation = { duration: 800, easing: 'easeOutQuart' };
+    chart.reset();
+    chart.update();
+  });
+});
+</script></body></html>

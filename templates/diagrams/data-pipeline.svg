@@ -4,7 +4,7 @@
   <style>
     .pipe-node { transition: filter 0.2s ease; cursor: pointer; }
     .pipe-node:hover { filter: brightness(1.15) drop-shadow(0 3px 10px rgba(0,0,0,0.3)); }
-    .pipe-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: #fff; }
+    .pipe-label { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: var(--diagram-label, #FFFFFF); }
     .pipe-connector { stroke: var(--diagram-arrow, #888); stroke-width: 2.5; fill: none; }
     @keyframes dash-flow {
       to { stroke-dashoffset: -20; }
@@ -27,7 +27,7 @@
   <!-- Node 1 -->
   <g id="node-1-group">
     <rect class="pipe-node" x="30" y="110" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#pipe-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#pipe-shadow)" />
     <text id="node-1-label" x="110" y="146" text-anchor="middle" class="pipe-label">Ingest</text>
   </g>
 
@@ -37,7 +37,7 @@
   <!-- Node 2 -->
   <g id="node-2-group">
     <rect class="pipe-node" x="250" y="110" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-secondary, #50C878)" filter="url(#pipe-shadow)" />
+          fill="var(--diagram-secondary, #009988)" filter="url(#pipe-shadow)" />
     <text id="node-2-label" x="330" y="146" text-anchor="middle" class="pipe-label">Transform</text>
   </g>
 
@@ -47,7 +47,7 @@
   <!-- Node 3 -->
   <g id="node-3-group">
     <rect class="pipe-node" x="470" y="110" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-amber, #F5A623)" filter="url(#pipe-shadow)" />
+          fill="var(--diagram-amber, #EE7733)" filter="url(#pipe-shadow)" />
     <text id="node-3-label" x="550" y="146" text-anchor="middle" class="pipe-label">Validate</text>
   </g>
 
@@ -57,21 +57,21 @@
   <!-- Node 4 -->
   <g id="node-4-group">
     <rect class="pipe-node" x="690" y="110" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-purple, #9B59B6)" filter="url(#pipe-shadow)" />
+          fill="var(--diagram-purple, #3344AA)" filter="url(#pipe-shadow)" />
     <text id="node-4-label" x="770" y="146" text-anchor="middle" class="pipe-label">Store</text>
   </g>
 
   <!-- Node 5 (hidden by default) -->
   <g id="node-5-group" style="display:none;">
     <rect class="pipe-node" x="30" y="210" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-red, #DC5A5A)" filter="url(#pipe-shadow)" />
+          fill="var(--diagram-red, #CC3311)" filter="url(#pipe-shadow)" />
     <text id="node-5-label" x="110" y="246" text-anchor="middle" class="pipe-label">Node 5</text>
   </g>
 
   <!-- Node 6 (hidden by default) -->
   <g id="node-6-group" style="display:none;">
     <rect class="pipe-node" x="250" y="210" width="160" height="60" rx="10" ry="10"
-          fill="var(--diagram-primary, #4A90D9)" filter="url(#pipe-shadow)" />
+          fill="var(--diagram-primary, #0077BB)" filter="url(#pipe-shadow)" />
     <text id="node-6-label" x="330" y="246" text-anchor="middle" class="pipe-label">Node 6</text>
   </g>
 </svg>

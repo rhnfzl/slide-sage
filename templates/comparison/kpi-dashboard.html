@@ -57,7 +57,7 @@
         <div class="kpi-value" data-value="4.2" data-label="Customer Rating" data-trend="neutral">4.2</div>
         <div class="kpi-label">Customer Rating</div>
         <div class="kpi-trend trend-neutral">
-          <span class="trend-arrow">&#8212;</span>
+          <span class="trend-arrow"> - </span>
           <span class="trend-text">No change</span>
         </div>
       </div>
@@ -88,8 +88,8 @@
     flex: 1 1 calc(25% - 1rem);
     min-width: 160px;
     max-width: 280px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
     border-radius: var(--radius, 12px);
     padding: clamp(1rem, 2vw, 1.8rem);
     display: flex;
@@ -101,8 +101,8 @@
   }
 
   .kpi-card:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    border-color: color-mix(in srgb, var(--color-text) 15%, transparent);
   }
 
   /* Large metric number */
@@ -110,14 +110,14 @@
     font-size: clamp(1.8rem, 4vw, 3rem);
     font-weight: 800;
     line-height: 1.1;
-    color: var(--color-accent, #61afef);
+    color: var(--color-accent);
     letter-spacing: -0.02em;
   }
 
   /* Metric label */
   .kpi-label {
     font-size: clamp(0.7rem, 1.2vw, 0.9rem);
-    color: rgba(255, 255, 255, 0.55);
+    color: color-mix(in srgb, var(--color-text) 55%, transparent);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -142,20 +142,20 @@
 
   /* Trend Up: green */
   .trend-up {
-    color: #50c878;
-    background: rgba(80, 200, 120, 0.1);
+    color: var(--chart-positive);
+    background: color-mix(in srgb, var(--chart-positive) 10%, transparent);
   }
 
   /* Trend Down: red */
   .trend-down {
-    color: #e06c75;
-    background: rgba(224, 108, 117, 0.1);
+    color: var(--chart-negative);
+    background: color-mix(in srgb, var(--chart-negative) 10%, transparent);
   }
 
   /* Trend Neutral: grey */
   .trend-neutral {
-    color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.05);
+    color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
   }
 
   /* === Responsive: 2-column on narrow === */
@@ -173,40 +173,6 @@
       flex: 1 1 100%;
       max-width: none;
     }
-  }
-
-  /* === Light Theme Variant === */
-  [data-theme="light"] .kpi-card {
-    background: rgba(0, 0, 0, 0.02);
-    border-color: rgba(0, 0, 0, 0.08);
-  }
-
-  [data-theme="light"] .kpi-card:hover {
-    background: rgba(0, 0, 0, 0.04);
-    border-color: rgba(0, 0, 0, 0.15);
-  }
-
-  [data-theme="light"] .kpi-value {
-    color: var(--color-accent, #4078f2);
-  }
-
-  [data-theme="light"] .kpi-label {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  [data-theme="light"] .trend-up {
-    color: #2d8a4e;
-    background: rgba(45, 138, 78, 0.08);
-  }
-
-  [data-theme="light"] .trend-down {
-    color: #c0392b;
-    background: rgba(192, 57, 43, 0.08);
-  }
-
-  [data-theme="light"] .trend-neutral {
-    color: rgba(0, 0, 0, 0.35);
-    background: rgba(0, 0, 0, 0.04);
   }
 
 </style>

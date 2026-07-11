@@ -1,64 +1,87 @@
-[
-  {
-    "name": "ml-startup-pitch",
-    "prompt": "Create a pitch deck for my ML startup called 'DataForge'. Include a user growth chart showing 1K, 5K, 20K, 80K users over Q1-Q4, a bar chart comparing our model accuracy (94%) vs competitors (87%, 82%), and an architecture diagram showing our microservices setup with API Gateway, Model Service, Data Pipeline, and PostgreSQL.",
-    "expected_features": [
-      "Chart.js or ECharts loaded via CDN",
-      "At least one line/bar chart with user growth data",
-      "Comparison bar chart with accuracy data",
-      "Architecture diagram (SVG template or Mermaid)",
-      "Colorblind-safe palette",
-      "Viewport fitting (100vh slides)",
-      "Keyboard navigation working",
-      "10+ slides"
-    ]
-  },
-  {
-    "name": "api-metrics-review",
-    "prompt": "Here's our API metrics: {\"endpoints\": [{\"path\": \"/users\", \"avg_latency_ms\": 45, \"p99_latency_ms\": 230, \"requests_per_day\": 50000}, {\"path\": \"/orders\", \"avg_latency_ms\": 120, \"p99_latency_ms\": 890, \"requests_per_day\": 25000}, {\"path\": \"/search\", \"avg_latency_ms\": 200, \"p99_latency_ms\": 1500, \"requests_per_day\": 15000}], \"error_rate\": 0.3, \"uptime\": 99.95}. Create a 10-slide technical review with performance charts.",
-    "expected_features": [
-      "JSON data parsed and visualized",
-      "Bar chart for latency comparison",
-      "Multiple charts across slides",
-      "Data table slide",
-      "KPI/metric highlight slides",
-      "10 slides exactly",
-      "Technical/minimal animation style"
-    ]
-  },
-  {
-    "name": "microservices-teaching",
-    "prompt": "Make a teaching presentation about microservices architecture for a university class. Include architecture diagrams showing monolith vs microservices, a sequence diagram for an API call flow, and code examples in Python showing a FastAPI microservice.",
-    "expected_features": [
-      "Architecture diagram (monolith vs microservices)",
-      "Sequence diagram (Mermaid)",
-      "Code slides with Prism.js syntax highlighting",
-      "Python code examples",
-      "Educational structure (intro, concepts, examples, summary)",
-      "Clean, readable layout"
-    ]
-  },
-  {
-    "name": "quick-status-update",
-    "prompt": "Create a quick 5-slide status update with a bar chart comparing Q1 vs Q2 results: Revenue Q1=$2.1M Q2=$2.8M, Users Q1=45K Q2=62K, NPS Q1=42 Q2=51.",
-    "expected_features": [
-      "Exactly 5 slides",
-      "Bar chart with Q1 vs Q2 comparison",
-      "Concise, executive-summary style",
-      "KPI numbers prominently displayed",
-      "Fast generation (minimal interview)"
-    ]
-  },
-  {
-    "name": "incremental-enhancement",
-    "prompt": "Add 3 slides about our new caching layer to this existing presentation at ./presentation.html. The caching layer uses Redis with a 15-minute TTL, reduced average latency by 60%, and handles 100K requests/second. Include a before/after latency chart and a client-server diagram showing the cache.",
-    "expected_features": [
-      "Reads existing HTML file first",
-      "Adds exactly 3 new slides",
-      "Preserves existing slide styles and structure",
-      "Before/after chart",
-      "Client-server diagram with cache",
-      "Matches existing presentation theme"
-    ]
-  }
-]
+{
+  "skill_name": "slide-sage",
+  "evals": [
+    {
+      "id": 0,
+      "name": "ml-startup-pitch",
+      "prompt": "Create a pitch deck for my ML startup called 'DataForge'. Include a user growth chart showing 1K, 5K, 20K, 80K users over Q1-Q4, a bar chart comparing our model accuracy (94%) vs competitors (87%, 82%), and an architecture diagram showing our microservices setup with API Gateway, Model Service, Data Pipeline, and PostgreSQL.",
+      "expected_output": "A 10 or more slide DataForge pitch deck that uses the supplied growth and accuracy values, shows both charts, and explains the microservices architecture with a CSS/HTML or inline SVG diagram.",
+      "assertions": [
+        {"description": "Uses a pinned Chart.js or ECharts CDN for the charts.", "required_strings": ["chart.umd.min.js"]},
+        {"description": "Shows the user-growth values for Q1 through Q4.", "required_strings": ["1K", "5K", "20K", "80K"]},
+        {"description": "Shows the model-accuracy comparison.", "required_strings": ["94%", "87%", "82%"]},
+        {"description": "Shows the requested architecture components.", "required_strings": ["architecture-diagram", "API Gateway", "Model Service", "Data Pipeline", "PostgreSQL"]},
+        {"description": "Uses colorblind-safe chart colors and viewport-fitting slides.", "required_strings": ["#0072B2", "height: 100vh"]},
+        {"description": "Includes keyboard navigation.", "required_strings": ["document.addEventListener('keydown'"]}
+      ],
+      "files": [],
+      "output_fixture": "evals/fixtures/outputs/ml-startup-pitch.html",
+      "checks": {"slide_count": {"min": 10}}
+    },
+    {
+      "id": 1,
+      "name": "api-metrics-review",
+      "prompt": "Here's our API metrics: {\"endpoints\": [{\"path\": \"/users\", \"avg_latency_ms\": 45, \"p99_latency_ms\": 230, \"requests_per_day\": 50000}, {\"path\": \"/orders\", \"avg_latency_ms\": 120, \"p99_latency_ms\": 890, \"requests_per_day\": 25000}, {\"path\": \"/search\", \"avg_latency_ms\": 200, \"p99_latency_ms\": 1500, \"requests_per_day\": 15000}], \"error_rate\": 0.3, \"uptime\": 99.95}. Create a 10-slide technical review with performance charts.",
+      "expected_output": "An exactly 10-slide technical API review that visualizes the supplied endpoint latency and request data, exposes the error rate and uptime, and includes a readable data table.",
+      "assertions": [
+        {"description": "Uses the supplied endpoint data.", "required_strings": ["/users", "45", "230", "50000", "/orders", "120", "890", "25000", "/search", "200", "1500", "15000"]},
+        {"description": "Shows a bar chart for average and p99 latency.", "required_strings": ["type: 'bar'", "avg_latency_ms", "p99_latency_ms"]},
+        {"description": "Includes multiple charts and a data table.", "required_strings": ["id=\"latencyChart\"", "id=\"volumeChart\"", "<table"]},
+        {"description": "Shows the error-rate and uptime KPIs.", "required_strings": ["0.3%", "99.95%"]},
+        {"description": "Uses the technical minimal treatment.", "required_strings": ["data-style=\"technical-minimal\""]}
+      ],
+      "files": [],
+      "output_fixture": "evals/fixtures/outputs/api-metrics-review.html",
+      "checks": {"slide_count": {"exact": 10}}
+    },
+    {
+      "id": 2,
+      "name": "microservices-teaching",
+      "prompt": "Make a teaching presentation about microservices architecture for a university class. Include architecture diagrams showing monolith vs microservices, a sequence flow for an API call, and code examples in Python showing a FastAPI microservice.",
+      "expected_output": "A readable teaching deck that contrasts monoliths and microservices, illustrates an API sequence with a CSS/HTML or inline SVG flow, and contains syntax-highlighted Python FastAPI examples.",
+      "assertions": [
+        {"description": "Compares a monolith with microservices.", "required_strings": ["Monolith", "Microservices"]},
+        {"description": "Uses a CSS or inline-SVG sequence flow.", "required_strings": ["sequence-flow"]},
+        {"description": "Includes highlighted Python FastAPI code.", "required_strings": ["language-python", "FastAPI", "prism.min.js"]},
+        {"description": "Uses an educational introduction, concepts, examples, and summary structure.", "required_strings": ["Introduction", "Concepts", "Examples", "Summary"]},
+        {"description": "Keeps content in the slide viewport.", "required_strings": ["height: 100vh"]}
+      ],
+      "files": [],
+      "output_fixture": "evals/fixtures/outputs/microservices-teaching.html",
+      "checks": {"slide_count": {"min": 5}}
+    },
+    {
+      "id": 3,
+      "name": "quick-status-update",
+      "prompt": "Create a quick 5-slide status update with a bar chart comparing Q1 vs Q2 results: Revenue Q1=$2.1M Q2=$2.8M, Users Q1=45K Q2=62K, NPS Q1=42 Q2=51.",
+      "expected_output": "A concise, executive-ready five-slide status deck with a Q1 versus Q2 comparison chart and prominent Revenue, Users, and NPS KPIs.",
+      "assertions": [
+        {"description": "Uses non-interactive defaults instead of blocking for an interview.", "required_strings": ["data-intake=\"non-interactive defaults\""]},
+        {"description": "States the inferred audience and style choice.", "required_strings": ["Inferred audience: executives", "Inferred style: Ember preset"]},
+        {"description": "Shows a Q1 versus Q2 bar chart.", "required_strings": ["id=\"q1Q2Chart\"", "type: 'bar'"]},
+        {"description": "Displays the supplied Revenue, Users, and NPS values.", "required_strings": ["$2.1M", "$2.8M", "45K", "62K", "NPS 42", "NPS 51"]},
+        {"description": "Uses the concise executive-summary treatment.", "required_strings": ["data-style=\"executive-summary\""]}
+      ],
+      "files": [],
+      "output_fixture": "evals/fixtures/outputs/quick-status-update.html",
+      "checks": {"slide_count": {"exact": 5}}
+    },
+    {
+      "id": 4,
+      "name": "incremental-enhancement",
+      "prompt": "Add 3 slides about our new caching layer to the existing presentation at ./evals/fixtures/incremental-enhancement.html. The caching layer uses Redis with a 15-minute TTL, reduced average latency by 60%, and handles 100K requests/second. Include a before/after latency chart and a client-server diagram showing the cache.",
+      "expected_output": "An enhanced copy of the supplied Ocean Deep fixture that first reads its two-slide structure, preserves its visual language, and appends exactly three caching-layer slides.",
+      "assertions": [
+        {"description": "Records the enhancement input it read.", "required_strings": ["data-source=\"evals/fixtures/incremental-enhancement.html\""]},
+        {"description": "Preserves the existing Northstar slides before adding three more.", "required_strings": ["Northstar platform", "Latency has become the constraint."]},
+        {"description": "Preserves the Ocean Deep theme, typography, and navigation.", "required_strings": ["data-theme=\"ocean-deep\"", "font-family: Georgia", "document.addEventListener('keydown'"]},
+        {"description": "Includes the before-and-after latency reduction.", "required_strings": ["Before and after", "60%"]},
+        {"description": "Includes the Redis client-server diagram and TTL.", "required_strings": ["client-server-diagram", "Redis", "15-minute TTL"]},
+        {"description": "States the capacity while retaining the original deck identity.", "required_strings": ["100K", "Northstar platform"]}
+      ],
+      "files": ["evals/fixtures/incremental-enhancement.html"],
+      "output_fixture": "evals/fixtures/outputs/incremental-enhancement.html",
+      "checks": {"slide_count": {"exact": 5}}
+    }
+  ]
+}

@@ -108,7 +108,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: rgba(255, 255, 255, 0.15);
+    background: color-mix(in srgb, var(--color-text) 15%, transparent);
     transform: translateY(-50%);
   }
 
@@ -134,9 +134,9 @@
     width: clamp(10px, 1.5vw, 14px);
     height: clamp(10px, 1.5vw, 14px);
     border-radius: 50%;
-    background: var(--color-accent, #61afef);
-    border: 2px solid var(--color-bg, #0f0f1a);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent, #61afef) 30%, transparent);
+    background: var(--color-accent);
+    border: 2px solid var(--color-bg);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 30%, transparent);
     position: relative;
     z-index: 2;
     flex-shrink: 0;
@@ -153,14 +153,14 @@
   .milestone-label {
     font-size: clamp(0.7rem, 1.2vw, 0.95rem);
     font-weight: 700;
-    color: var(--color-accent, #61afef);
+    color: var(--color-accent);
     margin: 0 0 0.2rem 0;
     white-space: nowrap;
   }
 
   .milestone-desc {
     font-size: clamp(0.6rem, 1vw, 0.8rem);
-    color: rgba(255, 255, 255, 0.6);
+    color: color-mix(in srgb, var(--color-text) 60%, transparent);
     margin: 0;
     line-height: 1.4;
   }
@@ -221,24 +221,5 @@
       top: auto;
       bottom: auto;
     }
-  }
-
-  /* === Light Theme Variant === */
-  [data-theme="light"] .timeline-track {
-    background: rgba(0, 0, 0, 0.12);
-  }
-
-  [data-theme="light"] .milestone-dot {
-    background: var(--color-accent, #4078f2);
-    border-color: var(--color-bg, #ffffff);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent, #4078f2) 25%, transparent);
-  }
-
-  [data-theme="light"] .milestone-label {
-    color: var(--color-accent, #4078f2);
-  }
-
-  [data-theme="light"] .milestone-desc {
-    color: rgba(0, 0, 0, 0.55);
   }
 </style>

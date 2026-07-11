@@ -1,0 +1,10 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "groupings": [
+    {
+      "title": "slide-sage",
+      "description": "Turn a prompt, PowerPoint, PDF, or existing HTML deck into a data-rich browser presentation with charts, architecture diagrams, code, and viewport-safe navigation.",
+      "skills": ["slide-sage"]
+    }
+  ]
+}

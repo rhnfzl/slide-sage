@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: scripts/render-check <presentation.html> [output.png]
+
+Render one Slide Sage deck with Playwright, fail on browser errors, missing theme
+tokens, or selected-slide overflow, and save a screenshot at 1123 by 794.
+
+Options:
+  --slide <number>          Slide to render (default: 1)
+  --viewport-size <width,height>
+                            Browser viewport (default: 1123,794)
+EOF
+}
+
+if [[ $# -eq 0 ]]; then
+  usage
+  exit 0
+fi
+
+input=""
+output=""
+slide=1
+viewport=1123,794
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    --slide)
+      [[ $# -ge 2 ]] || { usage >&2; exit 2; }
+      slide=$2
+      shift 2
+      ;;
+    --viewport-size)
+      [[ $# -ge 2 ]] || { usage >&2; exit 2; }
+      viewport=$2
+      shift 2
+      ;;
+    -*)
+      usage >&2
+      exit 2
+      ;;
+    *)
+      if [[ -z "$input" ]]; then
+        input=$1
+      elif [[ -z "$output" ]]; then
+        output=$1
+      else
+        usage >&2
+        exit 2
+      fi
+      shift
+      ;;
+  esac
+done
+
+if [[ -z "$input" || ! "$slide" =~ ^[1-9][0-9]*$ ]]; then
+  usage >&2
+  exit 2
+fi
+if [[ -z "$output" ]]; then
+  output="${input%.html}.png"
+fi
+
+if [[ ! -f "$input" ]]; then
+  printf 'Presentation not found: %s\n' "$input" >&2
+  exit 1
+fi
+
+input_path=$(cd "$(dirname "$input")" && pwd)/$(basename "$input")
+output_parent=$(dirname "$output")
+mkdir -p "$output_parent"
+output_path=$(cd "$output_parent" && pwd)/$(basename "$output")
+
+NODE_PATH="$(npm root -g)${NODE_PATH:+:$NODE_PATH}" node - --slide "$slide" --viewport-size "$viewport" "$input_path" "$output_path" <<'NODE'
+const { pathToFileURL } = require('node:url');
+
+const [, , slideFlag, slideValue, viewportFlag, viewport, input, output] = process.argv;
+if (slideFlag !== '--slide' || viewportFlag !== '--viewport-size' || !input || !output) {
+  throw new Error('render-check requires --slide, --viewport-size, input, and output');
+}
+const slideNumber = Number(slideValue);
+const [width, height] = viewport.split(',').map(Number);
+if (!Number.isInteger(slideNumber) || slideNumber < 1 || !Number.isInteger(width) || !Number.isInteger(height)) {
+  throw new Error(`invalid viewport size: ${viewport}`);
+}
+
+let chromium;
+try {
+  ({ chromium } = require('playwright'));
+} catch (error) {
+  throw new Error('Playwright is required. Run npm install --global playwright@1.58.0 first.');
+}
+
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width, height } });
+    const errors = [];
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.goto(pathToFileURL(input).href, { waitUntil: 'networkidle' });
+    await page.waitForSelector('html[data-slide-sage-print-ready="true"]');
+    const totalSlides = await page.locator('.slide').count();
+    if (slideNumber > totalSlides) throw new Error(`deck has ${totalSlides} slides; cannot select slide ${slideNumber}`);
+    for (let index = 1; index < slideNumber; index += 1) await page.keyboard.press('ArrowRight');
+    await page.waitForFunction((target) => {
+      const slides = [...document.querySelectorAll('.slide')];
+      return slides.findIndex((slide) => slide.classList.contains('active')) === target - 1;
+    }, slideNumber);
+    await page.waitForTimeout(900);
+    const result = await page.evaluate(() => {
+      const slide = document.querySelector('.slide.active');
+      const tokens = ['--color-bg-primary', '--color-text-primary', '--color-accent'];
+      return {
+        hasActiveSlide: Boolean(slide),
+        overflows: slide && (slide.scrollHeight > slide.clientHeight || slide.scrollWidth > slide.clientWidth),
+        missingTokens: tokens.filter((token) => !getComputedStyle(document.documentElement).getPropertyValue(token).trim()),
+      };
+    });
+    if (!result.hasActiveSlide) throw new Error('deck has no active slide');
+    if (result.overflows) throw new Error('active slide overflows the reference viewport');
+    if (result.missingTokens.length) throw new Error(`missing theme tokens: ${result.missingTokens.join(', ')}`);
+    if (errors.length) throw new Error(`browser errors: ${errors.join(' | ')}`);
+    await page.screenshot({ path: output });
+    console.log(`Rendered slide ${slideNumber} from ${input} to ${output} at ${width}x${height}`);
+  } finally {
+    await browser.close();
+  }
+})().catch((error) => {
+  console.error(`render-check: ${error.message}`);
+  process.exit(1);
+});
+NODE
