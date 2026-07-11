@@ -25,6 +25,9 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11: Full-diff CodeRabbit review found one enhanced-fixture slide-isolation defect. It was fixed with a regression test, browser navigation proof, and a second-eye SHIP review.
 - 2026-07-11: GitHub Pages is enabled with the Actions build type at `https://rhnfzl.github.io/slide-sage/`. The gallery will deploy after the PR merges because the deployment workflow runs from `main`.
 - 2026-07-11: PR #1 is open against `main` and its `evals` workflow passed. Deployment and the first release tag remain post-merge actions so they run from the reviewed mainline code.
+- 2026-07-11: PR #1 merged as `01e4dbd`; the mainline evals workflow and Pages deployment both passed. The gallery and all three example decks return HTTP 200.
+- 2026-07-11: Published `v2.0.0` and its GitHub Release after the version-consistency workflow passed.
+- 2026-07-11: Remote installation with Skills CLI 1.5.16 clones the repository but installs only `SKILL.md`. `--full-depth` has the same result, so full-payload distribution remains blocked pending a packaging-layout or upstream-CLI decision.
 - (append dated one-line entries here as phases complete)
 
 ---
@@ -40,6 +43,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - [x] 7. Add `SECURITY.md` + condensed Trust section in README
 - [x] 8. Verify locally: `npx skills add ./ --list` resolves one skill with all support dirs
   - [x] Install into an isolated temporary agent home and assert `references/`, `templates/`, `assets/`, and `scripts/` are present
+  - [ ] Verify a cloned-source install copies the full payload (current remote install copies only `SKILL.md`)
 
 ## Phase 2 - README, banner, visual proof (Ship 1)
 
@@ -47,9 +51,9 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - [x] 10. Drop competitor comparison table; add one honest positioning paragraph + gallery link (name pptx skill for native PPTX)
 - [x] 11. Build `examples/slide-sage-intro.html` + 2-3 more decks (metrics review, architecture teaching) using the skill itself; add `!examples/**/*.html` gitignore negation
 - [x] 12. Compose banner `assets/banner.webp` from the demo deck's best slides
-- [ ] 13. GitHub Pages `index.html` gallery linking live example decks; wire into README
+- [x] 13. GitHub Pages `index.html` gallery linking live example decks; wire into README
   - [x] Gallery source, deployment workflow, README link, and Pages setting are configured
-  - [ ] First deployment requires the workflow to run from merged `main`
+  - [x] First deployment ran successfully from merged `main`
 
 ## Phase 3 - Output quality (Ship 2)
 
@@ -73,9 +77,9 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - [x] 25. Gap-driven interview + hard non-interactive rule; align AGENTS.md and SKILL.md wording; optional visual-preview only when style unspecified + browser available
 - [x] 26. Rewrite frontmatter description: all 3 modes + trigger vocab (slide deck, pitch deck, PowerPoint, pptx, convert, PDF) + short not-for clause; move library catalog out
 - [x] 27. Migrate `evals/evals.json` to reference schema (skill_name/id/expected_output/assertions); remove Mermaid refs; add enhancement fixture; name a concrete runner (GH Action + local script)
-- [ ] 28. `CHANGELOG.md` + tag-driven `release.yml` with version-consistency guard; CHANGELOG re-install note for existing users; wire one example-deck render-check into CI; cut first tagged release
+- [x] 28. `CHANGELOG.md` + tag-driven `release.yml` with version-consistency guard; CHANGELOG re-install note for existing users; wire one example-deck render-check into CI; cut first tagged release
   - [x] Release automation, migration note, and CI render check implemented and verified locally
-  - [ ] First `v2.0.0` tag and GitHub Release require an approved commit and push
+  - [x] First `v2.0.0` tag and GitHub Release were published from merged `main`
 
 ## Phase 6 - Cross-repo consistency (Ship 3)
 
@@ -84,8 +88,8 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 
 ## Definition of done
 
-- [ ] All items checked and reviewed
-- [ ] `npx skills add rhnfzl/slide-sage` installs a working, full-payload skill
-- [ ] README renders with banner; Pages gallery live
-- [ ] Evals run green via the named runner
-- [ ] First release tagged; PR(s) opened for your review
+- [ ] All items checked and reviewed (the cloned-source install check remains blocked)
+- [ ] `npx skills add rhnfzl/slide-sage` installs a working, full-payload skill (current install copies only `SKILL.md`)
+- [x] README renders with banner; Pages gallery live
+- [x] Evals run green via the named runner
+- [x] First release tagged; PR(s) opened for your review
