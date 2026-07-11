@@ -8,10 +8,11 @@ from tempfile import TemporaryDirectory
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SKILL_ROOT = ROOT / "skills" / "slide-sage"
 
 
 def read(relative_path: str) -> str:
-    return (ROOT / relative_path).read_text(encoding="utf-8")
+    return (SKILL_ROOT / relative_path).read_text(encoding="utf-8")
 
 
 def test_prism_is_pinned_to_130_with_sri_in_executable_snippets() -> None:
@@ -29,8 +30,8 @@ def test_prism_is_pinned_to_130_with_sri_in_executable_snippets() -> None:
 
 
 def test_pdf_export_and_opt_in_offline_delivery_are_real() -> None:
-    export_pdf = ROOT / "scripts" / "export-pdf"
-    inline_vendor = ROOT / "scripts" / "inline-vendor.py"
+    export_pdf = SKILL_ROOT / "scripts" / "export-pdf"
+    inline_vendor = SKILL_ROOT / "scripts" / "inline-vendor.py"
     assert export_pdf.is_file()
     assert export_pdf.stat().st_mode & 0o111
     export_source = export_pdf.read_text(encoding="utf-8")
@@ -112,7 +113,7 @@ def test_examples_inherit_the_accessible_runtime_and_chart_fallbacks() -> None:
 
 
 def test_static_validator_is_documented() -> None:
-    validator = ROOT / "scripts" / "validate"
+    validator = SKILL_ROOT / "scripts" / "validate"
     assert validator.is_file()
     assert validator.stat().st_mode & 0o111
     content = validator.read_text(encoding="utf-8")
@@ -121,7 +122,7 @@ def test_static_validator_is_documented() -> None:
     assert "scripts/validate" in read("scripts/README.md")
     result = subprocess.run(
         [str(validator), "examples/metrics-review.html"],
-        cwd=ROOT,
+        cwd=SKILL_ROOT,
         check=False,
         capture_output=True,
         text=True,
@@ -130,7 +131,7 @@ def test_static_validator_is_documented() -> None:
 
 
 def test_static_validator_accepts_documented_prism_markup() -> None:
-    validator = ROOT / "scripts" / "validate"
+    validator = SKILL_ROOT / "scripts" / "validate"
     with TemporaryDirectory() as directory:
         deck = Path(directory) / "prism-deck.html"
         deck.write_text(
@@ -140,7 +141,7 @@ def test_static_validator_accepts_documented_prism_markup() -> None:
         )
         result = subprocess.run(
             [str(validator), str(deck)],
-            cwd=ROOT,
+            cwd=SKILL_ROOT,
             check=False,
             capture_output=True,
             text=True,
@@ -149,7 +150,7 @@ def test_static_validator_accepts_documented_prism_markup() -> None:
 
 
 def test_offline_converter_rejects_unvendored_css_imports() -> None:
-    converter = ROOT / "scripts" / "inline-vendor.py"
+    converter = SKILL_ROOT / "scripts" / "inline-vendor.py"
     with TemporaryDirectory() as directory:
         fixtures = (
             '<!doctype html><style>@import "//example.invalid/theme.css";</style><p>Deck</p>',
@@ -163,7 +164,7 @@ def test_offline_converter_rejects_unvendored_css_imports() -> None:
             deck.write_text(source, encoding="utf-8")
             result = subprocess.run(
                 [str(converter), str(deck)],
-                cwd=ROOT,
+                cwd=SKILL_ROOT,
                 check=False,
                 capture_output=True,
                 text=True,

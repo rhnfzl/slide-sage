@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SKILL_ROOT = ROOT / "skills" / "slide-sage"
 INTAKE_RULE = (
     "Infer audience and style from a detailed prompt and state the choice in one line. "
     "Ask only when the prompt is genuinely thin. "
@@ -15,7 +16,7 @@ INTAKE_RULE = (
 
 
 def read(relative_path: str) -> str:
-    return (ROOT / relative_path).read_text(encoding="utf-8")
+    return (SKILL_ROOT / relative_path).read_text(encoding="utf-8")
 
 
 def frontmatter_description(content: str) -> str:

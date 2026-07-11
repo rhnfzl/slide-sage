@@ -9,12 +9,23 @@ from tempfile import TemporaryDirectory
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SKILL_ROOT = ROOT / "skills" / "slide-sage"
 
 
 def read(relative_path: str) -> str:
+    path = SKILL_ROOT / relative_path
+    assert path.is_file(), relative_path
+    return path.read_text(encoding="utf-8")
+
+
+def read_repository(relative_path: str) -> str:
     path = ROOT / relative_path
     assert path.is_file(), relative_path
     return path.read_text(encoding="utf-8")
+
+
+def test_00_runtime_payload_uses_the_nested_skill_root() -> None:
+    assert (SKILL_ROOT / "SKILL.md").is_file(), "skills/slide-sage/SKILL.md"
 
 
 def test_01_eval_bundle_uses_the_reference_schema_and_real_enhancement_fixture() -> None:
@@ -68,21 +79,21 @@ def test_01_eval_bundle_uses_the_reference_schema_and_real_enhancement_fixture()
 
 
 def test_02_local_eval_runner_checks_the_bundle_and_bad_input() -> None:
-    runner = ROOT / "scripts" / "run-evals"
+    runner = SKILL_ROOT / "scripts" / "run-evals"
     assert runner.is_file()
     assert runner.stat().st_mode & 0o111
 
     result = subprocess.run(
-        [str(runner)], cwd=ROOT, check=False, capture_output=True, text=True
+        [str(runner)], cwd=SKILL_ROOT, check=False, capture_output=True, text=True
     )
     assert result.returncode == 0, result.stderr + result.stdout
     assert "PASS 0 ml-startup-pitch" in result.stdout
     assert "5 fixture acceptance checks passed" in result.stdout
 
-    fixture = ROOT / "evals" / "fixtures" / "outputs" / "quick-status-update.html"
+    fixture = SKILL_ROOT / "evals" / "fixtures" / "outputs" / "quick-status-update.html"
     result = subprocess.run(
         [str(runner), "--id", "quick-status-update", "--output", str(fixture)],
-        cwd=ROOT,
+        cwd=SKILL_ROOT,
         check=False,
         capture_output=True,
         text=True,
@@ -97,7 +108,7 @@ def test_02_local_eval_runner_checks_the_bundle_and_bad_input() -> None:
         invalid.write_text('{"skill_name":"slide-sage","evals":[]}', encoding="utf-8")
         result = subprocess.run(
             [str(runner), "--path", str(invalid)],
-            cwd=ROOT,
+            cwd=SKILL_ROOT,
             check=False,
             capture_output=True,
             text=True,
@@ -110,7 +121,7 @@ def test_02_local_eval_runner_checks_the_bundle_and_bad_input() -> None:
         deck.write_text('<!doctype html><section class="slide">Only one slide</section>', encoding="utf-8")
         result = subprocess.run(
             [str(runner), "--id", "quick-status-update", "--output", str(deck)],
-            cwd=ROOT,
+            cwd=SKILL_ROOT,
             check=False,
             capture_output=True,
             text=True,
@@ -126,7 +137,7 @@ def test_02_local_eval_runner_checks_the_bundle_and_bad_input() -> None:
         )
         result = subprocess.run(
             [str(runner), "--id", "quick-status-update", "--output", str(deck)],
-            cwd=ROOT,
+            cwd=SKILL_ROOT,
             check=False,
             capture_output=True,
             text=True,
@@ -136,18 +147,33 @@ def test_02_local_eval_runner_checks_the_bundle_and_bad_input() -> None:
     assert "Inferred style: Ember preset" in result.stderr
 
 
-def test_03_ci_runs_the_eval_runner_and_a_real_example_render_check() -> None:
-    workflow = read(".github/workflows/evals.yml")
+def test_03_ci_runs_the_eval_runner_and_representative_example_render_checks() -> None:
+    workflow = read_repository(".github/workflows/evals.yml")
     assert "pull_request:" in workflow
-    assert "python3 scripts/run-evals" in workflow
-    assert "scripts/validate examples/metrics-review.html" in workflow
-    assert "scripts/render-check --slide 3 --viewport-size 1123,794 examples/metrics-review.html" in workflow
-    assert "scripts/render-check --slide 3 --viewport-size 1123,500 examples/metrics-review.html" in workflow
-    assert "metrics-chart-reference.png" in workflow
-    assert "metrics-chart-short.png" in workflow
+    assert "python3 skills/slide-sage/scripts/run-evals" in workflow
+    assert "skills/slide-sage/scripts/validate skills/slide-sage/examples/metrics-review.html" in workflow
+    for command in (
+        "scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html",
+        "scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html",
+        "scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html",
+        "scripts/render-check --slide 2 --viewport-size 1123,500 skills/slide-sage/examples/architecture-teaching.html",
+        "scripts/render-check --slide 5 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html",
+        "scripts/render-check --slide 5 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html",
+    ):
+        assert command in workflow
+    for artifact in (
+        "metrics-chart-reference.png",
+        "metrics-chart-short.png",
+        "architecture-diagram-reference.png",
+        "architecture-diagram-short.png",
+        "intro-code-reference.png",
+        "intro-code-short.png",
+    ):
+        assert f"artifacts/{artifact}" in workflow
+    assert "path: artifacts/*.png" in workflow
     assert "actions/upload-artifact@v4" in workflow
 
-    render_check = ROOT / "scripts" / "render-check"
+    render_check = SKILL_ROOT / "scripts" / "render-check"
     assert render_check.is_file()
     assert render_check.stat().st_mode & 0o111
     source = render_check.read_text(encoding="utf-8")
@@ -156,21 +182,55 @@ def test_03_ci_runs_the_eval_runner_and_a_real_example_render_check() -> None:
 
 
 def test_04_release_workflow_guards_versions_and_changelog_documents_upgrade() -> None:
-    changelog = read("CHANGELOG.md")
-    assert "## 2.0.0 - 2026-07-11" in changelog
-    assert "npx skills add rhnfzl/slide-sage" in changelog
-    assert "git clone" in changelog
+    version = "2.0.1"
+    changelog = read_repository("CHANGELOG.md")
+    marker = f"## {version} - 2026-07-12"
+    assert marker in changelog
+    release_notes = changelog.split(marker, maxsplit=1)[1].split("\n## ", maxsplit=1)[0]
+    assert "npx skills add rhnfzl/slide-sage" in release_notes
+    assert "git clone" in release_notes
+    assert "skills/slide-sage/SKILL.md" in release_notes
 
-    workflow = read(".github/workflows/release.yml")
+    plugin = json.loads(read_repository(".claude-plugin/plugin.json"))
+    assert plugin["version"] == version
+    assert f'  version: "{version}"' in read("SKILL.md")
+
+    workflow = read_repository(".github/workflows/release.yml")
     for token in (
         "tags:",
         "v[0-9]+.[0-9]+.[0-9]+",
         ".claude-plugin/plugin.json",
-        "SKILL.md",
+        "skills/slide-sage/SKILL.md",
         "CHANGELOG.md",
         "gh release create",
     ):
         assert token in workflow
+
+
+def test_05_cloned_source_install_copies_complete_payload() -> None:
+    required = (
+        "SKILL.md",
+        "AGENTS.md",
+        "assets",
+        "references",
+        "templates",
+        "scripts",
+        "evals",
+        "examples",
+        "THIRD_PARTY_NOTICES.md",
+    )
+    with TemporaryDirectory() as directory:
+        result = subprocess.run(
+            ["npx", "--yes", "skills", "add", f"file://{ROOT}", "--agent", "codex", "--yes", "--copy"],
+            cwd=directory,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        assert result.returncode == 0, result.stderr + result.stdout
+        installed = Path(directory) / ".agents" / "skills" / "slide-sage"
+        assert all((installed / item).exists() for item in required)
 
 
 if __name__ == "__main__":

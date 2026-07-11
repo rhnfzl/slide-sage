@@ -3,7 +3,7 @@ name: slide-sage
 description: Create or enhance a data-rich, single-file HTML slide deck or pitch deck. Use when the user asks for a new presentation, to convert a PowerPoint (.pptx) or PDF into an HTML deck, or to improve an existing HTML presentation. Not for native PowerPoint editing or high-fidelity PPTX export.
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   author: rhnfzl
 ---
 

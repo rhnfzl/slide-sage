@@ -8,10 +8,11 @@ from xml.etree import ElementTree
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SKILL_ROOT = ROOT / "skills" / "slide-sage"
 
 
 def read(relative_path: str) -> str:
-    return (ROOT / relative_path).read_text(encoding="utf-8")
+    return (SKILL_ROOT / relative_path).read_text(encoding="utf-8")
 
 
 def test_theme_bridge_and_defaults() -> None:
@@ -35,13 +36,13 @@ def test_theme_bridge_and_defaults() -> None:
         assert consumer in css
     for example in ("examples/architecture-teaching.html", "examples/metrics-review.html", "examples/slide-sage-intro.html"):
         assert css in read(example), example
-    for template in (ROOT / "templates" / "comparison").glob("*.html"):
+    for template in (SKILL_ROOT / "templates" / "comparison").glob("*.html"):
         assert '[data-theme="light"]' not in template.read_text(encoding="utf-8")
     assert '[data-theme="light"]' not in read("references/code-highlighting.md")
 
 
 def test_eight_tone_first_presets() -> None:
-    presets = sorted((ROOT / "references" / "presets").glob("*.md"))
+    presets = sorted((SKILL_ROOT / "references" / "presets").glob("*.md"))
     assert len(presets) == 8
     style_guide = read("references/style-guide.md")
     assert "Tone-first matching" in style_guide
@@ -83,7 +84,7 @@ def test_skill_requires_truthful_chart_data_and_anti_slop() -> None:
 
 
 def test_diagram_templates_use_current_palette_and_parse() -> None:
-    templates = sorted((ROOT / "templates" / "diagrams").glob("*.svg"))
+    templates = sorted((SKILL_ROOT / "templates" / "diagrams").glob("*.svg"))
     assert len(templates) == 17
     legacy = ("#4A90D9", "#50C878", "#F5A623", "#DC5A5A", "#9B59B6")
     for template in templates:
