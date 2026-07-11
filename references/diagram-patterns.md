@@ -902,6 +902,8 @@ Use the same CSS custom properties as the surrounding slides for diagram colors:
 
 ### Arrowhead Marker Definition
 
+Use this generic marker only when every directional line uses the same default arrow color. When a diagram uses more than one stroke color, define one marker per color as required by Rule 3.
+
 Include once in `<defs>`:
 
 ```xml
@@ -1172,10 +1174,10 @@ When an arrow between two boxes carries a text label (e.g., "HTTP", "Streamable 
 <rect x="285" ... width="230"/>  <!-- ends at 515 -->
 <rect x="570" .../>              <!-- gap = 55px -->
 
-<!-- GOOD: 95px gap - label fits comfortably -->
+<!-- GOOD: 145px gap - label fits with the required padding -->
 <rect x="290" ... width="220"/>  <!-- ends at 510 -->
-<rect x="605" .../>              <!-- gap = 95px -->
-<text x="557" y="82" text-anchor="middle">Streamable HTTP</text>
+<rect x="655" .../>              <!-- gap = 145px -->
+<text x="582" y="82" text-anchor="middle">Streamable HTTP</text>
 ```
 
 ### Rule 18: Center Rows of Equally-Spaced Boxes

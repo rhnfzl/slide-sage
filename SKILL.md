@@ -14,7 +14,7 @@ Create data-rich, interactive HTML presentations as single files with charts, di
 ## Core Principles
 
 1. **Data-First** - Charts, diagrams, and metrics are first-class citizens, not afterthoughts
-2. **Single File** - Every presentation is one HTML file with inline CSS/JS. Libraries from CDN only
+2. **Single HTML Runtime** - Keep presentation HTML, CSS, and JavaScript in one file. Use an `assets/` directory only for many or large images. Load libraries from CDN only.
 3. **Viewport Fitting (NON-NEGOTIABLE)** - Every slide fits exactly within 100vh. No scrolling. Content overflows? Split into multiple slides
 4. **Adaptive Intelligence** - When given raw data, act as narrative director. When given a clear outline, act as layout executor
 5. **Colorblind Safe** - All data visualization uses accessible color palettes by default
@@ -462,6 +462,7 @@ These apply to EVERY slide in EVERY presentation:
 - Code blocks: `max-height: min(55vh, 400px); overflow: hidden;`
 - Include height breakpoints: @media (max-height: 700px), 600px, 500px
 - Include `prefers-reduced-motion` support
+- Include `@media print` styles that show every slide, hide navigation, and preserve backgrounds
 - Never negate CSS functions directly - use `calc(-1 * clamp(...))`
 
 **If content doesn't fit → split into multiple slides. Never scroll.**

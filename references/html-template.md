@@ -45,7 +45,7 @@ Base HTML structure for AI-generated slide presentations. This is the canonical 
   </div>
 
   <!-- Keyboard shortcuts overlay -->
-  <div class="shortcuts-overlay" id="shortcutsOverlay">
+  <div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true">
     <div class="shortcuts-panel">
       <h3>Keyboard Shortcuts</h3>
       <table>
@@ -274,13 +274,15 @@ class SlidePresentation {
 
   toggleShortcuts() {
     if (this.shortcutsOverlay) {
-      this.shortcutsOverlay.classList.toggle('visible');
+      const nowVisible = this.shortcutsOverlay.classList.toggle('visible');
+      this.shortcutsOverlay.setAttribute('aria-hidden', String(!nowVisible));
     }
   }
 
   hideShortcuts() {
     if (this.shortcutsOverlay) {
       this.shortcutsOverlay.classList.remove('visible');
+      this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
     }
   }
 }
@@ -412,7 +414,7 @@ These print-specific styles are included in every presentation:
 
 .shortcuts-panel h3 {
   margin: 0 0 1.2rem 0;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   color: var(--color-heading, #cdd6f4);
 }
 
@@ -423,7 +425,7 @@ These print-specific styles are included in every presentation:
 
 .shortcuts-panel td {
   padding: 0.4rem 0;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1.3vw, 0.9rem);
 }
 
 .shortcuts-panel td:first-child {
@@ -437,12 +439,12 @@ These print-specific styles are included in every presentation:
   border-radius: 4px;
   padding: 2px 6px;
   font-family: var(--font-mono, monospace);
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.1vw, 0.8rem);
 }
 
 .shortcuts-dismiss {
   margin: 1rem 0 0 0;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.1vw, 0.8rem);
   opacity: 0.6;
   text-align: center;
 }

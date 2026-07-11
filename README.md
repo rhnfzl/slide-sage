@@ -106,7 +106,7 @@ A modern browser is enough for generated decks. Python 3.11+ plus the packages i
 
 - Installing copies files. It does not run code or add a postinstall hook.
 - Slide Sage adds no telemetry or analytics.
-- CDN imports are browser-only, version-pinned, and included only when a deck uses them.
+- Package CDN imports are browser-only, version-pinned, and included only when a deck uses them. Web fonts follow the preset's supplied Google Fonts stylesheet.
 - Python scripts run only on explicit invocation.
 - Speaker notes and embedded data remain readable inside a shared HTML file.
 

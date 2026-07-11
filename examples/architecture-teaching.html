@@ -772,7 +772,7 @@ blockquote {
 
 <span class="code-string">Commit the effect and dedupe record together.</span></pre></div></section>
 <!-- NOTES: Replay safety starts with a durable event identity and an idempotent consumer contract. -->
-</main><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div><div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div><div class="shortcuts-overlay" id="shortcutsOverlay"><div class="shortcuts-panel"><h3>Keyboard Shortcuts</h3><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div><script>
+</main><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="slide-counter" id="slideCounter"></div><div class="nav-arrows"><button class="nav-arrow" id="navPrev" aria-label="Previous slide">&#8592;</button><button class="nav-arrow" id="navNext" aria-label="Next slide">&#8594;</button></div><div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true"><div class="shortcuts-panel"><h3>Keyboard Shortcuts</h3><table><tr><td><kbd>&#8594;</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr><tr><td><kbd>&#8592;</kbd> / <kbd>Shift+Space</kbd></td><td>Previous slide</td></tr><tr><td><kbd>Home</kbd></td><td>First slide</td></tr><tr><td><kbd>End</kbd></td><td>Last slide</td></tr><tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr></table><p class="shortcuts-dismiss">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</p></div></div><script>
 class SlidePresentation {
   constructor() {
     this.slides = document.querySelectorAll('.slide');
@@ -971,13 +971,15 @@ class SlidePresentation {
 
   toggleShortcuts() {
     if (this.shortcutsOverlay) {
-      this.shortcutsOverlay.classList.toggle('visible');
+      const nowVisible = this.shortcutsOverlay.classList.toggle('visible');
+      this.shortcutsOverlay.setAttribute('aria-hidden', String(!nowVisible));
     }
   }
 
   hideShortcuts() {
     if (this.shortcutsOverlay) {
       this.shortcutsOverlay.classList.remove('visible');
+      this.shortcutsOverlay.setAttribute('aria-hidden', 'true');
     }
   }
 }
