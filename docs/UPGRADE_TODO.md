@@ -29,6 +29,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11: Published `v2.0.0` and its GitHub Release after the version-consistency workflow passed.
 - 2026-07-11 (superseded): Remote installation with Skills CLI 1.5.16 cloned the repository but installed only a root `SKILL.md`. `--full-depth` had the same result. This historical failure led to the nested-runtime decision below and is not current installation guidance.
 - 2026-07-11: The user authorized reopening the root-layout decision. The runtime now lives under `skills/slide-sage/`, so cloned-source installs copy the complete payload. Root marketplace metadata stays at `./`, and a root `SKILL.md` is intentionally absent.
+- 2026-07-12: CodeRabbit reviewed 40 findings. The new plan-path and timeout findings were fixed; the other 38 target 100% unchanged payload moves from the prior merged baseline.
 - (append dated one-line entries here as phases complete)
 
 ---

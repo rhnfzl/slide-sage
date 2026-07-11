@@ -218,6 +218,7 @@ def test_05_cloned_source_install_copies_complete_payload() -> None:
             check=False,
             capture_output=True,
             text=True,
+            timeout=60,
         )
         assert result.returncode == 0, result.stderr + result.stdout
         installed = Path(directory) / ".agents" / "skills" / "slide-sage"
