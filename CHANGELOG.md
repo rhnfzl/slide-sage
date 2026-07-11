@@ -6,10 +6,13 @@ release tag. The release workflow fails if they drift.
 
 ## Unreleased
 
+## 2.0.1 - 2026-07-12
+
 ### Fixed
 
-- Moved the complete runtime payload under `skills/slide-sage/` so cloned-source
-  installs copy the skill guide, agent guide, and support directories together.
+- `npx skills add rhnfzl/slide-sage` now installs the complete presentation
+  skill, including its guides, references, templates, scripts, examples,
+  evals, and assets.
 
 ## 2.0.0 - 2026-07-11
 
