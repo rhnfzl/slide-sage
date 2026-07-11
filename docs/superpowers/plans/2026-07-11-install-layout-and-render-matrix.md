@@ -89,16 +89,16 @@ git commit -m "fix: install the complete Slide Sage payload"
 - Modify: `.github/workflows/evals.yml`, `tests/test_eval_release_contract.py`, `docs/UPGRADE_TODO.md`
 
 **Interfaces:**
-- CI runs six `scripts/render-check` commands: one chart slide, one diagram slide, and one code-oriented slide at `1123,794` and `1123,500`.
+- CI runs six `skills/slide-sage/scripts/render-check` commands: one chart slide, one diagram slide, and one code-oriented slide at `1123,794` and `1123,500`.
 - Each command writes a uniquely named `artifacts/*.png` file, and the upload glob includes all six files.
 
 - [x] **Step 1: Extend the failing workflow contract test.**
 
 ```python
 for command in (
-    "scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html",
-    "scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html",
-    "scripts/render-check --slide 5 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html",
+    "skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html",
+    "skills/slide-sage/scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html",
+    "skills/slide-sage/scripts/render-check --slide 5 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html",
 ):
     assert command in workflow
 ```
