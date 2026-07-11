@@ -28,14 +28,18 @@ jobs:
         run: |
           npm install --global playwright@1.58.0
           playwright install --with-deps chromium
-      - name: Render the metrics chart at reference and short viewports
+      - name: Render representative slides at reference and short viewports
         run: |
           skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html artifacts/metrics-chart-reference.png
           skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html artifacts/metrics-chart-short.png
+          skills/slide-sage/scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html artifacts/architecture-diagram-reference.png
+          skills/slide-sage/scripts/render-check --slide 2 --viewport-size 1123,500 skills/slide-sage/examples/architecture-teaching.html artifacts/architecture-diagram-short.png
+          skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html artifacts/intro-code-reference.png
+          skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html artifacts/intro-code-short.png
       - name: Upload render evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: metrics-chart-render
-          path: artifacts/metrics-chart-*.png
+          name: representative-slide-renders
+          path: artifacts/*.png
           if-no-files-found: ignore

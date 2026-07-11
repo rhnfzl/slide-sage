@@ -80,6 +80,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - [x] 27. Migrate `skills/slide-sage/evals/evals.json` to reference schema (skill_name/id/expected_output/assertions); remove Mermaid refs; add enhancement fixture; name a concrete runner (GH Action + local script)
 - [x] 28. `CHANGELOG.md` + tag-driven `release.yml` with version-consistency guard; CHANGELOG re-install note for existing users; wire one example-deck render-check into CI; cut first tagged release
   - [x] Release automation, migration note, and CI render check implemented and verified locally
+  - [x] CI renders chart, diagram, and code-oriented slides at reference and short viewports
   - [x] First `v2.0.0` tag and GitHub Release were published from merged `main`
 
 ## Phase 6 - Cross-repo consistency (Ship 3)

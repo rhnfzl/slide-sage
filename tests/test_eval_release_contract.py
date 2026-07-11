@@ -147,15 +147,30 @@ def test_02_local_eval_runner_checks_the_bundle_and_bad_input() -> None:
     assert "Inferred style: Ember preset" in result.stderr
 
 
-def test_03_ci_runs_the_eval_runner_and_a_real_example_render_check() -> None:
+def test_03_ci_runs_the_eval_runner_and_representative_example_render_checks() -> None:
     workflow = read_repository(".github/workflows/evals.yml")
     assert "pull_request:" in workflow
     assert "python3 skills/slide-sage/scripts/run-evals" in workflow
     assert "skills/slide-sage/scripts/validate skills/slide-sage/examples/metrics-review.html" in workflow
-    assert "skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html" in workflow
-    assert "skills/slide-sage/scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html" in workflow
-    assert "metrics-chart-reference.png" in workflow
-    assert "metrics-chart-short.png" in workflow
+    for command in (
+        "scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/metrics-review.html",
+        "scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/metrics-review.html",
+        "scripts/render-check --slide 2 --viewport-size 1123,794 skills/slide-sage/examples/architecture-teaching.html",
+        "scripts/render-check --slide 2 --viewport-size 1123,500 skills/slide-sage/examples/architecture-teaching.html",
+        "scripts/render-check --slide 3 --viewport-size 1123,794 skills/slide-sage/examples/slide-sage-intro.html",
+        "scripts/render-check --slide 3 --viewport-size 1123,500 skills/slide-sage/examples/slide-sage-intro.html",
+    ):
+        assert command in workflow
+    for artifact in (
+        "metrics-chart-reference.png",
+        "metrics-chart-short.png",
+        "architecture-diagram-reference.png",
+        "architecture-diagram-short.png",
+        "intro-code-reference.png",
+        "intro-code-short.png",
+    ):
+        assert f"artifacts/{artifact}" in workflow
+    assert "path: artifacts/*.png" in workflow
     assert "actions/upload-artifact@v4" in workflow
 
     render_check = SKILL_ROOT / "scripts" / "render-check"
