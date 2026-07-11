@@ -23,6 +23,7 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11: Ship 2 Phases 3-4 passed contract, browser, PDF, offline, lint, and static validation. Codex second-eye passed. CodeRabbit full-diff findings were addressed; a final retry stalled during reviewer setup without emitting findings.
 - 2026-07-11: Ship 3 behavior, executable fixture acceptance evals, CI render checks, and release automation passed local and cross-agent review. The sibling-repo audit found the requested packaging convention already present in all three repos, so no Phase 6 edits were needed. `human-html` had unrelated local changes and was left untouched.
 - 2026-07-11: Full-diff CodeRabbit review found one enhanced-fixture slide-isolation defect. It was fixed with a regression test, browser navigation proof, and a second-eye SHIP review.
+- 2026-07-11: GitHub Pages is enabled with the Actions build type at `https://rhnfzl.github.io/slide-sage/`. The gallery will deploy after the PR merges because the deployment workflow runs from `main`.
 - (append dated one-line entries here as phases complete)
 
 ---
@@ -46,6 +47,8 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - [x] 11. Build `examples/slide-sage-intro.html` + 2-3 more decks (metrics review, architecture teaching) using the skill itself; add `!examples/**/*.html` gitignore negation
 - [x] 12. Compose banner `assets/banner.webp` from the demo deck's best slides
 - [ ] 13. GitHub Pages `index.html` gallery linking live example decks; wire into README
+  - [x] Gallery source, deployment workflow, README link, and Pages setting are configured
+  - [ ] First deployment requires the workflow to run from merged `main`
 
 ## Phase 3 - Output quality (Ship 2)
 
