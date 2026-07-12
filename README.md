@@ -95,7 +95,7 @@ Use Slide Sage when the final delivery can be HTML or PDF and the material benef
 | Deck | Shows |
 |---|---|
 | [Slide Sage introduction](skills/slide-sage/examples/slide-sage-intro.html) | Product story, chart, diagram, and code in one deck |
-| [Engineering metrics review](skills/slide-sage/examples/metrics-review.html) | KPI hierarchy and a sourced trend chart |
+| [Engineering metrics review](skills/slide-sage/examples/metrics-review.html) | KPI hierarchy and a labeled sample trend chart |
 | [Event-driven architecture](skills/slide-sage/examples/architecture-teaching.html) | A technical teaching flow with CSS diagrams and code |
 
 Open any example in a browser. Use arrow keys to navigate, `?` for shortcuts, and `skills/slide-sage/scripts/export-pdf skills/slide-sage/examples/metrics-review.html` for a PDF. Browser Print > Save as PDF remains a fallback.
@@ -108,7 +108,7 @@ A modern browser is enough for generated decks. Python 3.11+ plus the packages i
 
 - Installing copies files. It does not run code or add a postinstall hook.
 - Slide Sage adds no telemetry or analytics.
-- Package CDN imports are browser-only, version-pinned, and included only when a deck uses them. `skills/slide-sage/scripts/inline-vendor.py` is opt-in, embeds only its supported pinned libraries, removes web-font imports, and refuses remaining static remote assets.
+- Package CDN imports are browser-only, version-pinned, and included only when a deck uses them. A deck that uses charts or web fonts needs a network connection for those; it is fully offline only when it has no charts or after `skills/slide-sage/scripts/inline-vendor.py` bakes the libraries in. That script is opt-in, embeds only its supported pinned libraries, removes web-font imports, and refuses remaining static remote assets.
 - Python scripts run only on explicit invocation.
 - Speaker notes and embedded data remain readable inside a shared HTML file.
 

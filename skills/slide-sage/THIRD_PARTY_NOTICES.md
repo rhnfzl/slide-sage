@@ -248,6 +248,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Source: <https://github.com/d3/d3>
 
+### ISC License
+
 ```text
 Copyright 2010-2023 Mike Bostock
 
