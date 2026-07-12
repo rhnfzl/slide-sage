@@ -92,10 +92,10 @@ Based on content types, decide which CDN libraries to include. Do NOT ask the us
 | Heatmap, sankey, treemap | ECharts 6.1 | `cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js` |
 | Custom statistical charts | D3.js v7 | `cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` |
 | Code syntax highlighting | Prism.js | `cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js` |
-| Number animations | CountUp.js | `cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js` |
-| Typing effects (title slides) | Typed.js | `cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js` |
-| Hand-drawn diagram accents | Rough.js | `cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js` |
-| Generative backgrounds | q5.js | `cdn.jsdelivr.net/npm/q5@2.1.2/q5.min.js` |
+| Number animations | CountUp.js | `cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js` |
+| Typing effects (title slides) | Typed.js | `cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js` |
+| Hand-drawn diagram accents | Rough.js | `cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js` |
+| Generative backgrounds | q5.js | `cdn.jsdelivr.net/npm/q5@4.7.4/q5.js` |
 | Icons for diagrams/content | Lucide (inline) | Inline SVG paths from `templates/icons/lucide-sprite.svg` - no CDN needed |
 
 **Default**: If the presentation has only text, include NO extra libraries. CSS animations suffice. Use CDN libraries by default. If the user explicitly needs offline delivery, create the deck first, run `scripts/inline-vendor.py`, and keep `THIRD_PARTY_NOTICES.md` with the offline copy. Do not call a deck offline if the converter reports an unsupported static remote asset.

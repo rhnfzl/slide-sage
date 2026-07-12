@@ -7,8 +7,6 @@
 | Bar, line, pie, doughnut, scatter, radar, polar, bubble | Chart.js 4.4 | `https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` | ~65KB |
 | Heatmap, sankey, treemap, candlestick, funnel | ECharts 6.1 | `https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js` | ~370KB |
 | Custom/bespoke statistical | D3.js v7 | `https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` | ~80KB |
-| Network/dependency graph | Sigma.js v3 + graphology | `https://cdn.jsdelivr.net/npm/sigma@3.0.0/build/sigma.min.js` + `https://cdn.jsdelivr.net/npm/graphology@0.25.4/dist/graphology.umd.min.js` | ~60KB+20KB |
-| Calendar heatmap | Frappe Charts | `https://cdn.jsdelivr.net/npm/frappe-charts@2.0.0/dist/frappe-charts.min.umd.js` | ~35KB |
 
 **Selection rule**: Use Chart.js unless the chart type requires another library. Chart.js covers 80%+ of presentation needs with the smallest footprint.
 

@@ -790,7 +790,7 @@ For single-file presentations, inline the SVG directly instead of using `<object
 Add a sketch/whiteboard aesthetic using Rough.js (~9KB gzipped). Replace clean SVG shapes with hand-drawn equivalents.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js" integrity="sha384-rvEjR85HduidawDBR0uRyGb+TbNBzSPDPOYWWom7LyPTmZXv2OztrBvPBvmn17XN" crossorigin="anonymous"></script>
 <script>
 function sketchify(svgElement) {
   const rc = rough.svg(svgElement);
