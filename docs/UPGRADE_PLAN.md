@@ -273,13 +273,13 @@ Nested-runtime packaging. Keeps the one command as the headline, preserves root 
 23. **Align all three repos** (`slide-sage`, `../human-html`, `../explore-unknowns`).
     - Confirm the three share marketplace metadata, manifests, `skills.sh.json`, SECURITY, CHANGELOG, and release automation.
       Slide Sage's runtime is `skills/slide-sage/SKILL.md` and must not regain a root `SKILL.md`.
-    - **Status (verified 2026-07-12): OPEN, and larger than "light touch".** The same install bug that forced Slide
-      Sage's relocation also affects the other two: `../human-html` and `../explore-unknowns` are still root-layout, so
-      `npx skills add rhnfzl/human-html` and `.../explore-unknowns` ship **only `SKILL.md`** and drop every support file
-      the skill depends on (human_html_artifacts.py, references/, hooks/, staged reference files). Both are effectively
-      non-functional on remote install today. True "valid install behavior" requires relocating both into
-      `skills/<name>/` mirroring Slide Sage. That is a breaking change to two separate shipped repos (their own tags,
-      installs) and needs an explicit go-ahead before it is done - it is not a slide-sage-repo edit.
+    - **Status (updated 2026-07-12): IN PROGRESS.** The same install bug that forced Slide Sage's relocation also
+      affected the other two (root-layout -> `npx skills add` ships only `SKILL.md` and drops every support file). The
+      fix is to relocate each into `skills/<name>/` mirroring Slide Sage:
+      - `../explore-unknowns`: **DONE** - relocated and merged (PR #2); a live remote install now ships the full payload.
+      - `../human-html`: relocation **open in PR #8** (https://github.com/rhnfzl/human-html/pull/8), awaiting review/merge.
+        It is the larger case (a dual npx-skill + Claude Code plugin with a slash-command and hooks), handled in that repo.
+      This item closes when human-html PR #8 merges.
 
 ---
 

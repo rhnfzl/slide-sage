@@ -89,11 +89,11 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 ## Phase 6 - Cross-repo consistency (Ship 3)
 
 - [ ] 29. Align `../human-html` and `../explore-unknowns` to the same packaging convention; apply only consistency deltas, do not rewrite their content
-  - OPEN (corrected 2026-07-12). The earlier "convention already present in all three" note was wrong. Both `../human-html`
-    and `../explore-unknowns` are still root-layout, so they ship BROKEN via remote `npx skills add` (only `SKILL.md`,
-    support files dropped) - the same bug that forced Slide Sage's relocation. True consistency requires relocating both
-    into `skills/<name>/`. That is a breaking change to two separate shipped repos and awaits an explicit go-ahead; it is
-    not a Slide Sage edit.
+  - IN PROGRESS (updated 2026-07-12). Root-layout repos ship BROKEN via remote `npx skills add` (only `SKILL.md`,
+    support files dropped) - the same bug that forced Slide Sage's relocation. Fix = relocate each into `skills/<name>/`.
+    - `../explore-unknowns`: DONE - relocated and merged (PR #2, cef9c03); live remote install verified to ship the full payload.
+    - `../human-html`: relocation OPEN in PR #8 (https://github.com/rhnfzl/human-html/pull/8), awaiting review/merge. This
+      item 29 closes when that merges. (Done in the human-html repo, not a Slide Sage edit.)
 
 ## Definition of done
 
