@@ -1,7 +1,7 @@
 # Slide Sage Upgrade Plan
 
-Status: approved baseline, implementation in progress
-Date: 2026-07-11
+Status: COMPLETE - built, verified, and released as v2.1.0 (2026-07-12). All 23 items done, including Phase 6 cross-repo (all three repos relocated and installing full payloads via remote npx).
+Date: 2026-07-11 (last updated 2026-07-12)
 Owner: Rehan
 
 ## What this is, in plain language
@@ -273,13 +273,13 @@ Nested-runtime packaging. Keeps the one command as the headline, preserves root 
 23. **Align all three repos** (`slide-sage`, `../human-html`, `../explore-unknowns`).
     - Confirm the three share marketplace metadata, manifests, `skills.sh.json`, SECURITY, CHANGELOG, and release automation.
       Slide Sage's runtime is `skills/slide-sage/SKILL.md` and must not regain a root `SKILL.md`.
-    - **Status (updated 2026-07-12): IN PROGRESS.** The same install bug that forced Slide Sage's relocation also
-      affected the other two (root-layout -> `npx skills add` ships only `SKILL.md` and drops every support file). The
-      fix is to relocate each into `skills/<name>/` mirroring Slide Sage:
-      - `../explore-unknowns`: **DONE** - relocated and merged (PR #2); a live remote install now ships the full payload.
-      - `../human-html`: relocation **open in PR #8** (https://github.com/rhnfzl/human-html/pull/8), awaiting review/merge.
-        It is the larger case (a dual npx-skill + Claude Code plugin with a slash-command and hooks), handled in that repo.
-      This item closes when human-html PR #8 merges.
+    - **Status (updated 2026-07-12): DONE.** The same install bug that forced Slide Sage's relocation also affected the
+      other two (root-layout -> `npx skills add` ships only `SKILL.md` and drops every support file). The fix was to
+      relocate each into `skills/<name>/` mirroring Slide Sage. All three now install their full payload via remote npx:
+      - `../explore-unknowns`: relocated and merged (PR #2); live remote install verified.
+      - `../human-html`: relocated and merged (PR #8); live remote install verified (full payload, 20 files). It was the
+        larger case (a dual npx-skill + Claude Code plugin with a slash-command and hooks using `$CLAUDE_PLUGIN_ROOT`),
+        handled in that repo.
 
 ---
 
@@ -303,9 +303,10 @@ Nested-runtime packaging. Keeps the one command as the headline, preserves root 
 
 - Live real-time collaboration, hosted SaaS, or accounts (Slide Sage stays local-first, single-file).
 - Native high-fidelity PPTX export (documented as a known limitation; point users to Anthropic's pptx skill for that need).
-- Relocating `../human-html` and `../explore-unknowns` into `skills/<name>/` as part of *this* Slide Sage work. It is
-  the correct fix for their broken remote install (see Phase 6) but is a separate, breaking change to those repos and
-  needs its own go-ahead; it is tracked, not silently deferred.
+- (Resolved 2026-07-12, no longer out of scope) Relocating `../human-html` and `../explore-unknowns` into
+  `skills/<name>/` was initially deferred as a separate, breaking change to those repos. Once the shared remote-install
+  bug was understood, it was done in each repo with an explicit go-ahead (explore-unknowns PR #2, human-html PR #8).
+  See Phase 6.
 
 ## Open implementation details (decided at build time, not blocking)
 

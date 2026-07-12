@@ -31,7 +31,8 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 - 2026-07-11: The user authorized reopening the root-layout decision. The runtime now lives under `skills/slide-sage/`, so cloned-source installs copy the complete payload. Root marketplace metadata stays at `./`, and a root `SKILL.md` is intentionally absent.
 - 2026-07-12: CodeRabbit reviewed 40 findings. The new plan-path and timeout findings were fixed; the other 38 target 100% unchanged payload moves from the prior merged baseline.
 - 2026-07-12: The reopened installer and render work passed all contracts, cloned-source installation, independent review, and two zero-finding incremental CodeRabbit reviews. Version 2.0.1 is ready for the merged-mainline release.
-- 2026-07-12: Independent plan-conformance verification (8 adversarial verifiers vs docs/UPGRADE_PLAN.md). Result: 22/23 items done and correct in the Slide Sage repo; only LOW nitpicks internally. Confirmed first-hand: relocation to skills/slide-sage/ IS required (root-layout ships only SKILL.md, proven by an isolated npx test) so the shipped decision is correct; Prism 1.29->1.30 + SRI landed; no Mermaid in evals; zero em dashes; validator clean; evals 5/5 green; Pages + 3 decks HTTP 200. Fixed the "sourced"->"labeled sample" wording, an explicit README offline sentence, and a D3 ISC subheader. Corrected item 29 to OPEN (the other two repos ship broken on remote install).
+- 2026-07-12: Independent plan-conformance verification (8 adversarial verifiers vs docs/UPGRADE_PLAN.md). Result: 22/23 items done and correct in the Slide Sage repo; only LOW nitpicks internally. Confirmed first-hand: relocation to skills/slide-sage/ IS required (root-layout ships only SKILL.md, proven by an isolated npx test) so the shipped decision is correct; Prism 1.29->1.30 + SRI landed; no Mermaid in evals; zero em dashes; validator clean; evals 5/5 green; Pages + 3 decks HTTP 200. Fixed the "sourced"->"labeled sample" wording, an explicit README offline sentence, and a D3 ISC subheader. Corrected item 29 to OPEN (the other two repos ship broken on remote install) - superseded by the closure entry below.
+- 2026-07-12: Completed the full SRI sweep + broken-CDN-reference repairs (q5/Sigma/Frappe were 404 stubs), restored network-graph (Cytoscape) + calendar-heatmap (Frappe) viz, and released Slide Sage as v2.1.0 (SRI hardening + ECharts CVE-2026-45249 fix). Phase 6 closed: explore-unknowns (PR #2) and human-html (PR #8) both relocated and merged in their own repos; a live `npx skills add rhnfzl/human-html` installs the full 20-file payload. Item 29 now DONE -> all 23 items complete.
 - (append dated one-line entries here as phases complete)
 
 ---
@@ -88,16 +89,17 @@ Mark each item `[x]` when done AND reviewed (Codex second-eye + CodeRabbit both 
 
 ## Phase 6 - Cross-repo consistency (Ship 3)
 
-- [ ] 29. Align `../human-html` and `../explore-unknowns` to the same packaging convention; apply only consistency deltas, do not rewrite their content
-  - IN PROGRESS (updated 2026-07-12). Root-layout repos ship BROKEN via remote `npx skills add` (only `SKILL.md`,
-    support files dropped) - the same bug that forced Slide Sage's relocation. Fix = relocate each into `skills/<name>/`.
-    - `../explore-unknowns`: DONE - relocated and merged (PR #2, cef9c03); live remote install verified to ship the full payload.
-    - `../human-html`: relocation OPEN in PR #8 (https://github.com/rhnfzl/human-html/pull/8), awaiting review/merge. This
-      item 29 closes when that merges. (Done in the human-html repo, not a Slide Sage edit.)
+- [x] 29. Align `../human-html` and `../explore-unknowns` to the same packaging convention; apply only consistency deltas, do not rewrite their content
+  - DONE (2026-07-12). Root-layout repos shipped BROKEN via remote `npx skills add` (only `SKILL.md`, support files
+    dropped) - the same bug that forced Slide Sage's relocation. Fix was to relocate each into `skills/<name>/`. All
+    three repos now install their full payload via remote npx:
+    - `../explore-unknowns`: relocated and merged (PR #2, cef9c03); live remote install verified.
+    - `../human-html`: relocated and merged (PR #8); live `npx skills add rhnfzl/human-html` verified to install the
+      full payload (engine, references, hooks, templates, etc. - 20 files, not just SKILL.md). Done in that repo.
 
 ## Definition of done
 
-- [~] All Slide Sage items checked and reviewed (22/23; item 29 cross-repo is OPEN and needs a go-ahead on two separate repos). The cloned-source install contract passes; final review sign-off is complete for the Slide Sage repo.
+- [x] All items checked and reviewed (23/23; item 29 cross-repo complete: explore-unknowns and human-html both relocated and merged in their own repos). The cloned-source install contract passes; final review sign-off is complete.
 - [x] `npx skills add rhnfzl/slide-sage` installs a working, full-payload skill from `skills/slide-sage/`
 - [x] README renders with banner; Pages gallery live
 - [x] Evals run green via the named runner
