@@ -31,7 +31,7 @@ GOOGLE_FONT_PREFIXES = (
 )
 EXACT_SCRIPTS = {
     "https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js": "Chart.js 4.4.7",
-    "https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js": "ECharts 5.5.1",
+    "https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js": "ECharts 6.1.0",
     "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js": "D3 7.9.0",
 }
 ATTRIBUTE_RE = re.compile(
