@@ -7,6 +7,8 @@
 | Bar, line, pie, doughnut, scatter, radar, polar, bubble | Chart.js 4.4 | `https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` | ~65KB |
 | Heatmap, sankey, treemap, candlestick, funnel | ECharts 6.1 | `https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js` | ~370KB |
 | Custom/bespoke statistical | D3.js v7 | `https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` | ~80KB |
+| Network / dependency graph | Cytoscape.js 3 | `https://cdn.jsdelivr.net/npm/cytoscape@3.34.0/dist/cytoscape.min.js` | ~134KB |
+| Calendar / activity heatmap | Frappe Charts 1.6 | `https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js` | ~18KB |
 
 **Selection rule**: Use Chart.js unless the chart type requires another library. Chart.js covers 80%+ of presentation needs with the smallest footprint.
 
@@ -547,6 +549,92 @@ const svg = d3.select('#container').append('svg')
   .style('height', 'auto')
   .style('max-height', 'min(55vh, 420px)');
 ```
+
+---
+
+## Cytoscape.js Patterns (Network Graphs)
+
+Use Cytoscape for dependency graphs, service maps, and node-link diagrams. Sigma.js v3 ships only ESM/CJS builds (no CDN UMD global), so Cytoscape is the CDN-friendly choice for a single-file deck.
+
+### Setup
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.34.0/dist/cytoscape.min.js" integrity="sha384-K+k+ywfDuvV9dwg+bwsVE0WGkrTnqFamaER+ydBgMFQTtlI0jdI9no9AjkQHwh/T" crossorigin="anonymous"></script>
+```
+
+### Dependency Graph in a Slide
+
+```html
+<div id="depGraph" role="img" aria-label="Service dependency graph: the API node depends on the Database and the Cache." style="width:100%; height:min(60vh,460px);"></div>
+```
+
+```javascript
+const cy = cytoscape({
+  container: document.getElementById('depGraph'),
+  elements: [
+    { data: { id: 'api', label: 'API' } },
+    { data: { id: 'db', label: 'Database' } },
+    { data: { id: 'cache', label: 'Cache' } },
+    { data: { source: 'api', target: 'db' } },
+    { data: { source: 'api', target: 'cache' } },
+  ],
+  style: [
+    { selector: 'node', style: { 'background-color': '#0077BB', label: 'data(label)', color: '#fff', 'text-valign': 'center', 'text-halign': 'center', 'font-size': 12 } },
+    { selector: 'edge', style: { width: 2, 'line-color': '#888', 'target-arrow-color': '#888', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier' } },
+  ],
+  layout: { name: 'cose', animate: false },
+});
+// The built-in `cose` layout with `animate: false` runs synchronously, so the
+// graph is fully settled when this call returns; it needs no animation-settle
+// hook (unlike the animated Chart.js / ECharts paths). A canvas does not reflow
+// on its own, so re-fit it to its container on viewport resize and again just
+// before printing (the print stylesheet can change the slide's size):
+window.addEventListener('resize', () => cy.resize());
+window.addEventListener('beforeprint', () => cy.resize());
+```
+
+Give each node a fill from the colorblind-safe categorical palette shown in the Chart.js pattern. Place the same visible fallback list, visually-hidden adjacency table (which node connects to which), and `<noscript>` summary shown in the Chart.js pattern after the container so the relationships are readable without JavaScript, and hide that fallback once `cytoscape()` returns. Cytoscape is CDN-only: like Rough.js, CountUp.js, Typed.js, and q5, it is not baked in by `scripts/inline-vendor.py`, so a fully offline deck needs a chart-free design or one of the vendored libraries (Chart.js, ECharts, D3, Prism).
+
+---
+
+## Frappe Charts Patterns (Calendar / Activity Heatmap)
+
+Use Frappe Charts for GitHub-style calendar/activity heatmaps (deploys per day, commits, incidents). The UMD global is `frappe.Chart`.
+
+### Setup
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js" integrity="sha384-JQa9VKO4+ZAEaRWDOmQM5LPHQTv8t9B4y8kBn36iar33TxUZByrYAa3o+PsU7hYk" crossorigin="anonymous"></script>
+```
+
+### Calendar Heatmap in a Slide
+
+```html
+<div id="activityHeatmap" role="img" aria-label="Sample daily deploy activity from January to March, with a recurring mid-week peak."></div>
+<p class="caption">SAMPLE DATA, replace with real counts before sharing</p>
+```
+
+```javascript
+// dataPoints keys are Unix timestamps in SECONDS; the value is that day's count.
+// Fill these from the user's real numbers. The values below are an obviously
+// labeled SAMPLE pattern for layout only: replace them and add a visible
+// "SAMPLE DATA" badge plus a speaker note before sharing. Never invent counts.
+const dataPoints = {};
+const start = new Date(2024, 0, 1);  // local-time constructor; matches how Frappe buckets each key by day
+const end = new Date(2024, 3, 1);
+for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+  dataPoints[Math.floor(d.getTime() / 1000)] = (d.getDate() * 7) % 12;  // SAMPLE: replace with a real count
+}
+new frappe.Chart('#activityHeatmap', {
+  type: 'heatmap',
+  data: { dataPoints, start, end },
+  countLabel: 'Deploys',
+  discreteDomains: 0, // 0 = continuous, 1 = month-separated
+  height: 180,
+});
+```
+
+Frappe renders SVG (no canvas), so it prints cleanly with no settle step. Because these are sample counts, keep the visible `SAMPLE DATA` caption above the heatmap until real numbers replace it, and add a speaker note stating the values are illustrative. Place the same visible fallback table, visually-hidden data table, and `<noscript>` summary shown in the Chart.js pattern after the container, and hide the visible fallback once the chart renders. Frappe is CDN-only and not baked in by `scripts/inline-vendor.py`, so a fully offline deck needs a chart-free design or a vendored library (Chart.js, ECharts, D3, Prism).
 
 ---
 

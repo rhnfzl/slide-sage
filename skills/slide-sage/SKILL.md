@@ -91,6 +91,8 @@ Based on content types, decide which CDN libraries to include. Do NOT ask the us
 | Bar, line, pie, scatter, radar charts | Chart.js 4.4 | `cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` |
 | Heatmap, sankey, treemap | ECharts 6.1 | `cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js` |
 | Custom statistical charts | D3.js v7 | `cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` |
+| Network/dependency graph | Cytoscape.js | `cdn.jsdelivr.net/npm/cytoscape@3.34.0/dist/cytoscape.min.js` |
+| Calendar/activity heatmap | Frappe Charts | `cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js` |
 | Code syntax highlighting | Prism.js | `cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js` |
 | Number animations | CountUp.js | `cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js` |
 | Typing effects (title slides) | Typed.js | `cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js` |
