@@ -223,7 +223,7 @@ const balancedChartOptions = {
 
 ```html
 <!-- CDN -->
-<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js" integrity="sha384-BqV2KvVZRFB68l6NJ8nNRT9pasWg2JUfbs8tBkuQm+KafN2y+nWPg+wPMaAm5CYl" crossorigin="anonymous"></script>
 ```
 
 ```js
@@ -436,7 +436,7 @@ function prepareDramaticChartForEntry(chart) {
 
 ```html
 <!-- CountUp.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js" integrity="sha384-BqV2KvVZRFB68l6NJ8nNRT9pasWg2JUfbs8tBkuQm+KafN2y+nWPg+wPMaAm5CYl" crossorigin="anonymous"></script>
 ```
 
 ```js
@@ -523,7 +523,7 @@ document.querySelectorAll('.digit-roller').forEach(initDigitRoller);
 
 ```html
 <!-- q5.js CDN (lightweight p5.js alternative) -->
-<script src="https://cdn.jsdelivr.net/npm/q5@2.1.2/q5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/q5@4.7.4/q5.js" integrity="sha384-ur7nimB9JM1iKrMbK3laywwS1x3TDbDAJ88FYeph7TJTSIN3tg27nGktp/CHHN1Y" crossorigin="anonymous"></script>
 ```
 
 ```js
@@ -589,7 +589,7 @@ function initParticles(canvasParent) {
 
 ```html
 <!-- Typed.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js" integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
 ```
 
 ```js
@@ -795,13 +795,13 @@ function getChartAnimationConfig(reducedMotion = false) {
 
 ```html
 <!-- CountUp.js - number animation (balanced + dramatic) -->
-<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.min.js" integrity="sha384-BqV2KvVZRFB68l6NJ8nNRT9pasWg2JUfbs8tBkuQm+KafN2y+nWPg+wPMaAm5CYl" crossorigin="anonymous"></script>
 
 <!-- Typed.js - typing effect (dramatic only) -->
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js" integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
 
 <!-- q5.js - particle effects (dramatic only) -->
-<script src="https://cdn.jsdelivr.net/npm/q5@2.1.2/q5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/q5@4.7.4/q5.js" integrity="sha384-ur7nimB9JM1iKrMbK3laywwS1x3TDbDAJ88FYeph7TJTSIN3tg27nGktp/CHHN1Y" crossorigin="anonymous"></script>
 
 <!-- Chart.js - data visualization (all levels) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" integrity="sha384-vsrfeLOOY6KuIYKDlmVH5UiBmgIdB1oEf7p01YgWHuqmOHfZr374+odEv96n9tNC" crossorigin="anonymous"></script>
