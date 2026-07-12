@@ -272,9 +272,14 @@ Nested-runtime packaging. Keeps the one command as the headline, preserves root 
 
 23. **Align all three repos** (`slide-sage`, `../human-html`, `../explore-unknowns`).
     - Confirm the three share marketplace metadata, manifests, `skills.sh.json`, SECURITY, CHANGELOG, and release automation.
-      Slide Sage's runtime is `skills/slide-sage/SKILL.md` and must not regain a root `SKILL.md`; apply only the needed
-      consistency deltas to the other two and do not rewrite their content.
-    - *Why:* they become a coherent "rhnfzl skills" set with valid install behavior, even where their runtime layouts differ.
+      Slide Sage's runtime is `skills/slide-sage/SKILL.md` and must not regain a root `SKILL.md`.
+    - **Status (verified 2026-07-12): OPEN, and larger than "light touch".** The same install bug that forced Slide
+      Sage's relocation also affects the other two: `../human-html` and `../explore-unknowns` are still root-layout, so
+      `npx skills add rhnfzl/human-html` and `.../explore-unknowns` ship **only `SKILL.md`** and drop every support file
+      the skill depends on (human_html_artifacts.py, references/, hooks/, staged reference files). Both are effectively
+      non-functional on remote install today. True "valid install behavior" requires relocating both into
+      `skills/<name>/` mirroring Slide Sage. That is a breaking change to two separate shipped repos (their own tags,
+      installs) and needs an explicit go-ahead before it is done - it is not a slide-sage-repo edit.
 
 ---
 
@@ -298,7 +303,9 @@ Nested-runtime packaging. Keeps the one command as the headline, preserves root 
 
 - Live real-time collaboration, hosted SaaS, or accounts (Slide Sage stays local-first, single-file).
 - Native high-fidelity PPTX export (documented as a known limitation; point users to Anthropic's pptx skill for that need).
-- Relocating another repo to a `skills/<name>/` subfolder. Slide Sage's user-authorized runtime layout is already resolved above.
+- Relocating `../human-html` and `../explore-unknowns` into `skills/<name>/` as part of *this* Slide Sage work. It is
+  the correct fix for their broken remote install (see Phase 6) but is a separate, breaking change to those repos and
+  needs its own go-ahead; it is tracked, not silently deferred.
 
 ## Open implementation details (decided at build time, not blocking)
 
