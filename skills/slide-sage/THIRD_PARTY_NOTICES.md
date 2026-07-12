@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-## Apache ECharts 5.5.1
+## Apache ECharts 6.1.0
 
 Source: <https://github.com/apache/echarts>
 

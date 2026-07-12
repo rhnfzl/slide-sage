@@ -89,7 +89,7 @@ Based on content types, decide which CDN libraries to include. Do NOT ask the us
 | Need | Library | CDN |
 |------|---------|-----|
 | Bar, line, pie, scatter, radar charts | Chart.js 4.4 | `cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` |
-| Heatmap, sankey, treemap | ECharts 5.5 | `cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js` |
+| Heatmap, sankey, treemap | ECharts 6.1 | `cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js` |
 | Custom statistical charts | D3.js v7 | `cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js` |
 | Code syntax highlighting | Prism.js | `cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js` |
 | Number animations | CountUp.js | `cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js` |
