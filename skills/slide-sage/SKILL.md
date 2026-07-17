@@ -3,7 +3,7 @@ name: slide-sage
 description: Create or enhance a data-rich, single-file HTML slide deck or pitch deck. Use when the user asks for a new presentation, to convert a PowerPoint (.pptx) or PDF into an HTML deck, or to improve an existing HTML presentation. Not for native PowerPoint editing or high-fidelity PPTX export.
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   author: rhnfzl
 ---
 
@@ -55,8 +55,36 @@ When an interactive response would materially change the deck, ask one focused q
 |---|---|
 | No data provided but the topic requires factual chart data | "Do you have the numbers and their source?" |
 | Scope is too ambiguous to choose a useful slide count | "Roughly how many slides? (5 for a quick update, 15+ for a deep dive)" |
+| The prompt does not say who reads the slide | "Will you present this live, send it to be read on its own, or both?" |
+| The prompt does not say how much prose belongs beside the visuals | "Diagram-led, balanced, or text-rich?" |
 
-**Never ask about**: animation level (detect from audience), library choices (auto-select), file format (auto-detect), presenter mode (use JSON notes when presenter mode is included), or brand information when a named preset is sufficient.
+**Never ask about**: animation level (detect from audience), library choices (auto-select), file format (auto-detect), presenter mode (included automatically whenever the deck has speaker notes, see Reader and density), or brand information when a named preset is sufficient.
+
+### Reader and density
+
+These two answers decide more about whether a deck lands than the preset does, and **neither is inferable from the audience**. A leadership deck can be diagram-led or text-rich. The same deck can be presented or forwarded. Treat both as genuine gaps unless the prompt states them, because a prompt almost never does.
+
+**Reader** decides WHERE the context lives:
+
+| Answer | Slide face | Speaker notes |
+|---|---|---|
+| `present` | Stays clean. The room reads the slide, the presenter reads the notes. | Carry the recall material. Presenter mode ships. |
+| `send` | Must carry the context. Nobody is there to explain it. | Fold onto the slide instead. A note nobody opens is a note nobody reads. |
+| `both` (default) | Readable standalone. | Carry the extra depth. Presenter mode ships. |
+
+**Density** decides HOW MUCH prose sits beside the visual:
+
+| Answer | Shape of a content slide |
+|---|---|
+| `diagram-led` | Diagram or example is the slide. At most 3 short lines, and only for what the diagram cannot say. |
+| `balanced` (default) | One plain-language lead sentence, the diagram, then 4 to 6 points. |
+| `text-rich` | Full sentences. The reason, the tradeoff, and the caveat all sit on the slide face. |
+
+Ask both in one turn when both are missing. State the inferred answers in one line when the prompt gives them.
+
+**The failure this prevents.** Terse and dense are both wrong when guessed, and guessing tends to overcorrect: a deck stripped to diagrams starves the presenter of anything to recall from, and a deck padded to explain everything walls off the room it is shown to. "Too much text" on a previous deck does NOT mean `diagram-led` on the next one; it means the reader and density were never separated. Ask instead of swinging.
+
+**Never let the presenter's half be invisible.** If the recall material only exists in a place the presenter cannot see while presenting, it does not exist. Speaker notes without presenter mode are exactly that failure.
 
 ### Large decks
 
@@ -151,7 +179,7 @@ Conditionally read (based on Phase 2 analysis):
 - `references/diagram-patterns.md` - If architecture/flow diagrams
 - `references/animation-guide.md` - For animation patterns at detected level
 - `references/code-highlighting.md` - If code snippets
-- `references/presenter-mode.md` - If user explicitly requests presenter view
+- `references/presenter-mode.md` - Whenever the deck has speaker notes, which is every deck whose reader is `present` or `both`. Not optional: notes the presenter cannot open during the talk are notes that do not exist. Skip only for a `send` deck, where the notes are folded onto the slide instead.
 
 ### Step 2: Plan Slide Structure
 
@@ -170,6 +198,16 @@ Before generating, plan the slide deck:
    - Image: 1 heading + 1 image (max-height: min(50vh, 400px))
 4. **Key takeaway / Summary slide** - If 8+ slides
 5. **Closing slide** - Thank you, contact, or call to action
+
+The numbers above are the `balanced` default. The density answer from Phase 1 scales the prose, never the viewport rule:
+
+| Density | Content slide | Diagram and chart slides |
+|---|---|---|
+| `diagram-led` | 1 heading + at most 3 short lines | The visual is the slide. Add a line only for what the visual cannot say. |
+| `balanced` | 1 heading + 1 lead sentence + 4-6 bullets | Visual + 2-3 supporting lines |
+| `text-rich` | 1 heading + 4-6 full sentences, carrying the reason and the caveat | Visual + the explanation that would otherwise be a speaker note |
+
+Density changes how much goes on a slide. It never changes the 100vh rule. Content that does not fit still splits into another slide at every density.
 
 **Content exceeds limits? Split into multiple slides. Never cram, never scroll.**
 
@@ -384,6 +422,10 @@ This ensures the presentation respects the chosen theme and can be re-themed by 
 
 Run `scripts/validate presentation.html`. It checks class integrity, inline-style density, and theme-variable references without requiring browser automation. When a browser is available, also capture two or three representative slides and inspect console errors and overflow before delivery.
 
+#### Check 6: The presenter can reach their own notes
+
+If the deck has a `speaker-notes` block, presenter mode must be wired, or the notes are unreachable during the talk and the presenter is left recalling from memory. Confirm both: the notes block covers every slide, and pressing `P` opens them. A `send` deck has no notes to reach because its context is on the slide face instead. Never ship notes with no way to open them.
+
 ### Output
 
 1. Write the HTML file to the user's specified path (or suggest a reasonable filename like `presentation.html`)
@@ -391,8 +433,9 @@ Run `scripts/validate presentation.html`. It checks class integrity, inline-styl
    - How to open: "Open in any browser"
    - Keyboard shortcuts: "Use arrow keys to navigate, '?' for help"
    - PDF export: "Run `scripts/export-pdf presentation.html`; Browser Print > Save as PDF remains a fallback"
-   - Presenter mode: "Press 'P' for presenter view with readable JSON speaker notes when presenter mode is included"
+   - Presenter mode: "Press 'P' for presenter view with your speaker notes" whenever the deck ships notes. Say it plainly, because a presenter who does not know the notes are there gets no value from them.
 3. Note the tech stack used: "Built with [Chart.js, Prism.js] via CDN"
+4. State the reader and density the deck was built at, in one line ("Built diagram-led, for presenting live; press P for your notes"). It tells the user what to push back on if it reads wrong.
 
 ### Do NOT
 

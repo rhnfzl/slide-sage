@@ -33,6 +33,32 @@ def test_gap_driven_intake_is_identical_and_never_blocks() -> None:
     assert "In a one-shot, non-interactive, subagent, or CI run, continue with clearly-labeled `SAMPLE DATA` only." in read("SKILL.md")
 
 
+def test_intake_asks_reader_and_density() -> None:
+    """Audience does not imply either one, so both are asked rather than guessed.
+
+    Guessing them overcorrects: a deck stripped to diagrams starves the presenter of
+    recall material, and a padded one walls off the room.
+    """
+    for path in ("AGENTS.md", "SKILL.md"):
+        content = read(path)
+        assert "Reader and density" in content, path
+        assert "Will you present this live, send it to be read on its own, or both?" in content, path
+        assert "Diagram-led, balanced, or text-rich?" in content, path
+
+
+def test_presenter_mode_ships_whenever_speaker_notes_exist() -> None:
+    """Speaker notes with no way to open them are the bug this guards.
+
+    A `<script id="speaker-notes">` block is invisible unless presenter mode is wired,
+    which left the presenter recalling from memory while their own notes sat in the file.
+    """
+    for path in ("AGENTS.md", "SKILL.md"):
+        content = read(path)
+        assert "When user requests presenter view" not in content, path
+        assert "If user explicitly requests presenter view" not in content, path
+        assert "without presenter mode" in content, path
+
+
 def test_frontmatter_triggers_all_modes_without_a_library_catalog() -> None:
     description = frontmatter_description(read("SKILL.md"))
     for trigger in ("slide deck", "pitch deck", "PowerPoint", "pptx", "convert", "PDF"):
