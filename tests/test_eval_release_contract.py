@@ -182,9 +182,9 @@ def test_03_ci_runs_the_eval_runner_and_representative_example_render_checks() -
 
 
 def test_04_release_workflow_guards_versions_and_changelog_documents_upgrade() -> None:
-    version = "2.1.0"
+    version = "2.2.0"
     changelog = read_repository("CHANGELOG.md")
-    marker = f"## {version} - 2026-07-12"
+    marker = f"## {version} - 2026-07-17"
     assert marker in changelog
     release_notes = changelog.split(marker, maxsplit=1)[1].split("\n## ", maxsplit=1)[0]
     assert "npx skills add rhnfzl/slide-sage" in release_notes

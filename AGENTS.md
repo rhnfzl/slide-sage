@@ -35,6 +35,17 @@ Infer audience and style from a detailed prompt and state the choice in one line
 
 When an interactive response would materially change the deck, ask one focused question. The visual preview is optional and must not delay generation.
 
+### Reader and density (ask when the prompt does not say)
+
+Two answers decide whether a deck lands, and **neither can be inferred from the audience**. A leadership deck can be diagram-led or text-rich; the same deck can be presented or forwarded. A prompt almost never states either, so both are usually genuine gaps.
+
+- **"Will you present this live, send it to be read on its own, or both?"** decides WHERE the context lives. `present` and `both` keep the slide clean and put the recall material in speaker notes, which means presenter mode ships. `send` folds that context onto the slide face, because nobody is there to explain it.
+- **"Diagram-led, balanced, or text-rich?"** decides HOW MUCH prose sits beside the visual. `diagram-led` is the visual plus at most 3 lines. `balanced` (default) is a lead sentence, the visual, then 4 to 6 points. `text-rich` puts the reason and the caveat on the slide face.
+
+Terse and dense are both wrong when guessed, and guessing overcorrects. A deck stripped to diagrams starves the presenter of anything to recall from; a padded deck walls off the room it is shown to. "Too much text last time" does not mean `diagram-led` this time, it means reader and density were never separated. Ask instead of swinging.
+
+Notes the presenter cannot open during the talk do not exist. Never ship a `speaker-notes` block without presenter mode.
+
 ## Reference Files (load on demand)
 
 | File | When to Load |
@@ -46,7 +57,7 @@ When an interactive response would materially change the deck, ask one focused q
 | `skills/slide-sage/references/diagram-patterns.md` | When slides have architecture/flow diagrams |
 | `skills/slide-sage/references/animation-guide.md` | When choosing animation intensity |
 | `skills/slide-sage/references/code-highlighting.md` | When slides have code snippets |
-| `skills/slide-sage/references/presenter-mode.md` | When user requests presenter view |
+| `skills/slide-sage/references/presenter-mode.md` | Whenever the deck has speaker notes (reader is `present` or `both`). Not optional. |
 | `skills/slide-sage/references/css-class-inventory.md` | Always (CSS class lookup + inline style rules) |
 
 ## Non-Negotiable Rules
